@@ -22,35 +22,37 @@ class AuthController extends AbstractController
     /**
      * @param Request $request
      * @param UserRepository $userRepository
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
      * @Route ("/login", name="login")
      */
-    public function loginUser(Request $request, UserRepository $userRepository): Response
+    public function loginUser(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        $datalogin = $request->getContent();
-        $datalogin = json_decode($datalogin, true);
-        $email = $datalogin['email'];
-        $user = $userRepository->findOneBy(['email' =>$email]);
-        if (!$user) return $this->json(['message' => 'The user does not exist']);
+        $dataLogin = $request->getContent();
+        $dataLogin = json_decode($dataLogin, true);
+        $email = $dataLogin['email'];
+        $user = $userRepository->findOneBy(['email' => $email]);
+        if (!$user || !$passwordEncoder->isPasswordValid($user, $dataLogin['mdp'])) {
+            return $this->json([
+                'message' => 'email or password is wrong.',
+            ]);
+        }
         $key = "example_key";
-
         $payload = [
             "email" => $email,
             "exp" => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
         ];
-
         $jwt = JWT::encode($payload, $key, 'HS256');
         return $this->json([
-            'message' => 'success',
+            'message' => 'success login',
             'token' => sprintf('Bearer %s', $jwt)
         ]);
     }
 
-
     /**
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @return JsonResponse
      * @Route ("/register", name="register")
      */
@@ -63,12 +65,12 @@ class AuthController extends AbstractController
         $user = new User();
         $user
             ->setEmail($email)
-            ->setPassword($passwordEncoder->encodePassword($user,$plainPassword))
+            ->setPassword($passwordEncoder->encodePassword($user, $plainPassword))
             ->setIsAuthorize(true);
         $em->persist($user);
         $em->flush();
         return $this->json([
-            'message' => 200
+            'message' => 'you account has been created'
         ]);
     }
 }
