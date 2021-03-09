@@ -21,7 +21,7 @@ const routes = [
 
 const router = new VueRouter({
     // Delete # on routes
-    mode:"history",
+    // mode:"history",
     routes
 });
 new Vue({
