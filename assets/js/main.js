@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
 import Axios from 'axios'
+import vuetify from './plugins/vuetify'
 
 // Import the styles directly. (Or you could add them via script tags.)
 import 'bootstrap/dist/css/bootstrap.css';
@@ -39,4 +40,5 @@ const router = new VueRouter({
 new Vue({
     render: h => h(App),
     router,
+    vuetify,
 }).$mount('#app')

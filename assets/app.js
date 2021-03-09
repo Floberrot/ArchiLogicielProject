@@ -13,3 +13,6 @@ import './bootstrap';
 
 //VueJs
 import './js/main.js';
+
+//Vuetify
+import './js/plugins/vuetify.js'
