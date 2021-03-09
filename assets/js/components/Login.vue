@@ -1,8 +1,10 @@
 <template>
   <div class="card">
-    <form action="" class="form-control">
-      <input type="text" placeholder="pseudo">
-      <input type="password" placeholder="mdp">
+    <form action="">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="pseudo">
+        <input type="password" class="form-control" placeholder="mdp">
+      </div>
     </form>
   </div>
 </template>
