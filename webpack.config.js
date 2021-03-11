@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -29,7 +30,7 @@ Encore
     .splitEntryChunks()
 
     // Activation de Vue.js
-    .enableVueLoader()
+    // .enableVueLoader()
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
@@ -58,8 +59,14 @@ Encore
         config.corejs = 3;
     })
 
+    //Vue.js / Vuetify
     // enables Sass/SCSS support
     .enableSassLoader()
+    .enableTypeScriptLoader()
+    .enableVueLoader(() => {}, {
+        useJsx: true
+    })
+    .addPlugin(new VuetifyLoaderPlugin())
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

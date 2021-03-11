@@ -30,6 +30,13 @@
       >
         Learn More
       </v-btn>
+
+      <v-btn
+          depressed
+          color="error"
+      >
+        Error
+      </v-btn>
     </v-card-actions>
 
     <v-expand-transition>
@@ -46,8 +53,9 @@
         </v-card-text>
         <v-card-actions class="pt-0">
           <v-btn
+            depressed
+            color="error"
             text
-            color="teal accent-4"
             @click="reveal = false"
           >
             Close
