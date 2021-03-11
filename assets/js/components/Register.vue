@@ -1,14 +1,31 @@
 <template>
-  <div class="card">
-    <h1>Inscription</h1>
-    <form action="" @submit.prevent="registerUser">
-      <div class="form-group">
-        <input type="email" v-model="email" class="form-control" placeholder="email">
-        <input type="password" v-model="mdp" class="form-control" placeholder="mdp">
-        <button type="submit">S'inscrire</button>
-      </div>
-    </form>
-  </div>
+  <v-card class="mx-auto" max-width="344">
+    <v-form ref="form" @submit.prevent="registerUser">
+      <v-text-field
+        v-model="email"
+        :rules="emailRules"
+        label="E-mail"
+        required
+      ></v-text-field>
+
+      <v-text-field
+        v-model="mdp"
+        type="password"
+        label="Password"
+        required
+      ></v-text-field>
+
+      <v-text-field
+        v-model="mdp2"
+        type="password"
+        label="Confirmer le mot de passe"
+      ></v-text-field>
+
+      <v-btn type="submit" color="success" class="mr-4">
+        Inscription
+      </v-btn>
+    </v-form>
+  </v-card>
 </template>
 
 <script>
@@ -18,12 +35,17 @@ name: "Register",
     return{
       email: '',
       mdp: '',
+      mdp2: '',
+      emailRules: [
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      ],
     }
   },
   methods: {
     registerUser() {
       this.$axios
-          .post('register', {
+          .post('/register', {
             email: this.email,
             mdp: this.mdp
           })

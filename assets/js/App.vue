@@ -1,15 +1,19 @@
 <template>
   <v-app>
-    <div>
+    <navbar/>
+    <v-content>
       <router-view></router-view>
-      <router-link to="register">register</router-link>
-    </div>
+    </v-content>
   </v-app>
 </template>
 
 <script>
+import Navbar from './components/Navbar'
 export default {
-name: "App",
+  name: "App",
+  components: {
+    Navbar,
+  },
 }
 </script>
 
