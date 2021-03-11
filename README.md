@@ -1,7 +1,10 @@
 # ArchiLogicielProject
+To install the project, begin by write these commands :
 
-Composer install
+Composer install,
+
 Yarn install
 
-# To compil, 
-yarn encore dev
+# To compil with webpack :
+Yarn encore dev
+Or Yarn watch 

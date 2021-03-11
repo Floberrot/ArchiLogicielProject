@@ -1,15 +1,27 @@
 {
+    "web-types": "web-types.json",
     "devDependencies": {
         "@symfony/stimulus-bridge": "^2.0.0",
         "@symfony/webpack-encore": "^1.0.0",
+        "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",
+        "@vue/babel-preset-jsx": "^1.2.4",
+        "axios": "^0.21.1",
         "bootstrap-vue": "^2.21.2",
         "core-js": "^3.0.0",
+        "deepmerge": "^4.2.2",
         "regenerator-runtime": "^0.13.2",
+        "sass": "^1.30.0",
+        "sass-loader": "10.1.1",
         "stimulus": "^2.0.0",
-        "vue": "2.5",
+        "ts-loader": "8.0.1",
+        "typescript": "^4.2.3",
+        "vue": "2.6",
+        "vue-class-component": "^7.2.6",
         "vue-loader": "15.9.5",
+        "vue-property-decorator": "^9.1.2",
         "vue-router": "^3.5.1",
-        "vue-template-compiler": "^2.6.12",
+        "vue-template-compiler": "2.6.12",
+        "vuetify-loader": "^1.7.2",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
@@ -19,5 +31,10 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "sass": "^1.32.8",
+        "sass-loader": "10.1.1",
+        "vuetify": "^2.4.6"
     }
 }
