@@ -3,9 +3,9 @@
 namespace App\Builder;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Vehicle as Vehicle;
+use App\Entity\Vehicle;
 
-class CarBuilder extends Vehicle implements IVehicleBuilder
+class CarBuilder implements IVehicleBuilder
 {
     private $vehicle;
 
@@ -13,6 +13,7 @@ class CarBuilder extends Vehicle implements IVehicleBuilder
     {
         $this->vehicle->setLabel($label);
     }
+
 
     public function setBrand($brand)
     {

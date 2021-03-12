@@ -4,8 +4,6 @@ namespace App\Builder;
 
 use App\Builder\CarBuilder;
 use App\Builder\UtilityVehicleBuilder as UtilityVehicleBuilder;
-use phpDocumentor\Reflection\Types\This;
-use function Symfony\Component\Translation\t;
 
 class Director
 {
