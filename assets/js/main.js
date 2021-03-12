@@ -22,12 +22,18 @@ Vue.use(
 
 const routes = [
     {
-        path: '/login', name:'login',
-        component: () => import('./components/Login.vue')
+        path: '/', name:'Home',
+        component: () => import('./pages/Home.vue')
     },
     {
-        path: '/register', name:'register',
-        component: () => import('./components/Register.vue')
+        path: '/login', name:'login',
+        component: () => import('./pages/Auth.vue')
+    },
+    {
+        /* TODO gestion parametre (id vehicule) */
+        /* TODO gestion edition */
+        path: '/detail', name:'detail',
+        component: () => import('./pages/Detail.vue')
     }
 ]
 
