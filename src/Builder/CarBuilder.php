@@ -9,41 +9,45 @@ class CarBuilder implements IVehicleBuilder
 {
     private $vehicle;
 
-    public function setLabel($label)
+    public function __construct(Vehicle $vehicle)
     {
-        $this->vehicle->setLabel($label);
+        $this->vehicle = $vehicle;
     }
 
-
-    public function setBrand($brand)
+    public function setLabel()
     {
-        $this->vehicle->setBrand($brand);
+        $this->vehicle->label = "Label du véhicule";
     }
 
-    public function setConceptionDate($conceptionDate)
-    {
-        $this->vehicle->setConceptionDate($conceptionDate);
-    }
+    // public function setBrand()
+    // {
+    //     $this->vehicle->brand = "Marque du véhicule";
+    // }
 
-    public function setLastControl($lastControl)
-    {
-        $this->vehicle->setLastControl($lastControl);
-    }
+    // public function setConceptionDate()
+    // {
+    //     $this->vehicle->ConceptionDate =  "Année de concéption du véhicule";
+    // }
 
-    public function setFuel($fuel)
-    {
-        $this->vehicle->setFuel($fuel);
-    }
+    // public function setLastControl()
+    // {
+    //     $this->vehicle->lastControl = "Date du dernier controle technique du véhicule";
+    // }
 
-    public function setLicence($licence)
-    {
-        $this->vehicle->setLicence($licence);
-    }
+    // public function setFuel()
+    // {
+    //     $this->vehicle->fuel = "Carburant du véhicule";
+    // }
 
-    public function setLicenceType($licenceType)
-    {
-        $this->vehicle->setLicenceType($licenceType);
-    }
+    // public function setLicence()
+    // {
+    //     $this->vehicle->licence = "Permis du véhicule";
+    // }
+
+    // public function setLicenceType()
+    // {
+    //     $this->vehicle->licenceType = "Type de permis du véhicule";
+    // }
 
     public function getCar()
     {

@@ -7,11 +7,12 @@ use Monolog\Handler\SamplingHandler;
 
 interface IVehicleBuilder
 {
-    public function setLabel($label);
-    public function setBrand($brand);
-    public function setConceptionDate($conceptionDate);
-    public function setLastControl($lastControl);
-    public function setFuel($fuel);
-    public function setLicence($licence);
-    public function setLicenceType($licenceType);
+    public function setLabel();
+    // public function setBrand();
+    // public function setConceptionDate();
+    // public function setLastControl();
+    // public function setFuel();
+    // public function setLicence();
+    // public function setLicenceType();
+    public function getCar();
 }

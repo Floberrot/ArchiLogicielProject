@@ -20,7 +20,8 @@ class Vehicle
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $label;
+    //J'ai passé la variable en public pour la portabilité de cette variable
+    public $label;
 
     public function getId(): ?int
     {
