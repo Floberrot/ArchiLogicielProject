@@ -22,24 +22,26 @@ class ApiController extends AbstractController
         $type = "UtilityVehicle";
         $director = new Director();
 
-        //Je fais un if car le switch case ne fonctionne pas. Il entre dans les deux cas et me sort les deux dumps (si tu veux tester fais toi plaisir)
-        if ($type === "Car"){
-            $car = $director->buildVehicle(new CarBuilder(new Vehicle));
-            dump("car");
-        } elseif ($type === "UtilityVehicle") {
-            $car = $director->buildVehicle(new UtilityVehicleBuilder(new Vehicle));
-            dump("car utilitaire");
-        }
-
-        // switch ($type)
-        // {
-        //     case ("Car"):
-        //         $car = $director->buildVehicle(new CarBuilder(new Vehicle));
-        //         dump("car");
-        //     case ("UtilityVehicle"):
-        //         $car = $director->buildVehicle(new UtilityVehicleBuilder(new Vehicle));
-        //         dump("car utilitaire");
+        // if ($type === "Car"){
+        //     $car = $director->buildVehicle(new CarBuilder(new Vehicle));
+        //     dump("car");
+        // } elseif ($type === "UtilityVehicle") {
+        //     $car = $director->buildVehicle(new UtilityVehicleBuilder(new Vehicle));
+        //     dump("car utilitaire");
         // }
+
+        switch ($type)
+        {
+            case ("Car"):
+                $car = $director->buildVehicle(new CarBuilder(new Vehicle));
+                dump("car");
+                break;
+            case ("UtilityVehicle"):
+                $car = $director->buildVehicle(new UtilityVehicleBuilder(new Vehicle));
+                dump("car utilitaire");
+                break;
+            default: "Error";
+        }
 
         return new JsonResponse([
             'label' => $car->label,
