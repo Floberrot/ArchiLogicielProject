@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,14 +17,26 @@ class ApiController extends AbstractController
 {
     /**
      * @Route ("/api/vehicle", name="api")
+     * @return JsonResponse
      */
-    public function createVehicle(Request $request)
+    public function createVehicle(Request $request, EntityManagerInterface $entityManager) : JsonResponse
     {
         $director = new Director();
+//        $data = $request->getContent();
+//        $decode = json_decode($data);
         $type = 'Car';
         $label = 'test';
         $vehicle = $director->buildVehicle($type);
-        $vehicle->setLabel($label);
-        
+        $vehicle->setLabelBuilder($label);
+        $vehicle->setBrandBuilder($label);
+        $vehicle->setBrandBuilder("marque");
+        $vehicle->setConceptionDateBuilder(new \DateTime());
+        $vehicle->setLastControlBuilder(new \DateTime());
+        $vehicle->setFuelBuilder("diesel");
+        $vehicle->setLicenceBuilder("permis b");
+
+        $entityManager->persist($vehicle);
+        $entityManager->flush();
+        return new JsonResponse('ok', 200, [], true);
     }
 }

@@ -21,17 +21,17 @@ class UtilityVehicle
      * @ORM\OneToOne(targetEntity=Vehicle::class, inversedBy="utilityVehicle", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $vehicle;
+    public $vehicle;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $max_load;
+    public $max_load;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $trunk_capacity;
+    public $trunk_capacity;
 
     public function getId(): ?int
     {

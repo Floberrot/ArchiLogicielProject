@@ -26,27 +26,27 @@ class Vehicle
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $brand;
+    public $brand;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $conception_date;
+    public $conception_date;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $last_control;
+    public $last_control;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $fuel;
+    public $fuel;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $licence;
+    public $licence;
 
     /**
      * @ORM\OneToOne(targetEntity=UtilityVehicle::class, mappedBy="vehicle", cascade={"persist", "remove"})

@@ -12,7 +12,11 @@ class Director
     public function buildVehicle($type)
     {
 //         $builder->setLabel();
-//         return $builder->getCar();
+//         $builder->setBrand();
+//         $builder->setConceptionDate();
+//         $builder->setLastControl();
+//         $builder->setFuel();
+//         $builder->setLicence();
 
         switch ($type)
         {
@@ -22,5 +26,7 @@ class Director
                 return $car = new UtilityVehicleBuilder(new UtilityVehicle);
             default: "Error";
         }
+
+//        return $builder->getCar();
     }
 }
