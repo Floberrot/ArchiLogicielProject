@@ -33,7 +33,7 @@ class AuthController extends AbstractController
                 'message' => 'email or password is wrong.',
             ]);
         }
-        $key = "example_key";
+        $key = "secret_key";
         $payload = [
             "email" => $email,
             "exp" => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
