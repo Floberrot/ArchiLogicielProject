@@ -3,33 +3,24 @@
 namespace App\Builder;
 
 use App\Builder\CarBuilder;
-use App\Builder\UtilityVehicleBuilder as UtilityVehicleBuilder;
+use App\Builder\UtilityVehicleBuilder;
+use App\Entity\UtilityVehicle;
+use App\Entity\Vehicle;
 
 class Director
 {
-    // private $carBuilder;
-    // private $utilityVehicleBuilder;
-
-    // public function __construct(CarBuilder $carBuilder, UtilityVehicleBuilder $utilityVehicleBuilder)
-    // {
-    //     $this->carBuilder = $carBuilder;
-    //     $this->utilityVehicleBuilder = $utilityVehicleBuilder;
-    // }
-
-    // public function buildVehicle($type)
-    // {
-    //     switch ($type)
-    //     {
-    //         case ("Car"):
-    //             return $this->carBuilder;
-    //         case ("UtilityVehicle"):
-    //             return $this->utilityVehicleBuilder;
-    //     }
-    // }
-
-    public function buildVehicle(IVehicleBuilder $builder)
+    public function buildVehicle($type)
     {
-     $builder->setLabel();
-     return $builder->getCar();
+//         $builder->setLabel();
+//         return $builder->getCar();
+
+        switch ($type)
+        {
+            case ("Car"):
+                return $car = new CarBuilder(new Vehicle);
+            case ("UtilityVehicle"):
+                return $car = new UtilityVehicleBuilder(new UtilityVehicle);
+            default: "Error";
+        }
     }
 }

@@ -10,41 +10,20 @@ use App\Builder\Director;
 use App\Builder\CarBuilder;
 use App\Builder\UtilityVehicleBuilder;
 use App\Entity\Vehicle;
+use Symfony\Component\HttpFoundation\Request;
 
 class ApiController extends AbstractController
 {
     /**
-     * @Route ("/api", name="api")
-     * @return JsonResponse
+     * @Route ("/api/vehicle", name="api")
      */
-    public function index() : JsonResponse
+    public function createVehicle(Request $request)
     {
-        $type = "UtilityVehicle";
         $director = new Director();
-
-        // if ($type === "Car"){
-        //     $car = $director->buildVehicle(new CarBuilder(new Vehicle));
-        //     dump("car");
-        // } elseif ($type === "UtilityVehicle") {
-        //     $car = $director->buildVehicle(new UtilityVehicleBuilder(new Vehicle));
-        //     dump("car utilitaire");
-        // }
-
-        switch ($type)
-        {
-            case ("Car"):
-                $car = $director->buildVehicle(new CarBuilder(new Vehicle));
-                dump("car");
-                break;
-            case ("UtilityVehicle"):
-                $car = $director->buildVehicle(new UtilityVehicleBuilder(new Vehicle));
-                dump("car utilitaire");
-                break;
-            default: "Error";
-        }
-
-        return new JsonResponse([
-            'label' => $car->label,
-        ], 200, [], false);
+        $type = 'Car';
+        $label = 'test';
+        $vehicle = $director->buildVehicle($type);
+        $vehicle->setLabel($label);
+        
     }
 }

@@ -3,51 +3,28 @@
 namespace App\Builder;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\UtilityVehicle;
 use App\Entity\Vehicle;
 
-class UtilityVehicleBuilder implements IVehicleBuilder
+
+class UtilityVehicleBuilder extends Vehicle implements IVehicleBuilder 
 {
     private $utilityVehicle;
 
-    public function __construct(Vehicle $utilityVehicle)
+    public function __construct(UtilityVehicle $utilityVehicle)
     {
         $this->utilityVehicle = $utilityVehicle;
     }
 
-    public function setLabel()
-    {
-        $this->utilityVehicle->label = "Label du véhicule utilitaire";
-    }
+     public function setTrunkCapacity()
+     {
+         $this->utilityVehicle->trunk_capacity = "Permis du véhicule utilitaire";
+     }
 
-    // public function setBrand()
-    // {
-    //     $this->utilityVehicle->brand = "Marque du véhicule utilitaire";
-    // }
-
-    // public function setConceptionDate()
-    // {
-    //     $this->utilityVehicle->ConceptionDate =  "Année de concéption du véhicule utilitaire";
-    // }
-
-    // public function setLastControl()
-    // {
-    //     $this->utilityVehicle->lastControl = "Date du dernier controle technique du véhicule utilitaire";
-    // }
-
-    // public function setFuel()
-    // {
-    //     $this->utilityVehicle->fuel = "Carburant du véhicule utilitaire";
-    // }
-
-    // public function setLicence()
-    // {
-    //     $this->utilityVehicle->licence = "Permis du véhicule utilitaire";
-    // }
-
-    // public function setLicenceType()
-    // {
-    //     $this->utilityVehicle->licenceType = "Type de permis du véhicule utilitaire";
-    // }
+     public function setMaxLoad()
+     {
+         $this->utilityVehicle->max_load = "Permis du véhicule utilitaire";
+     }
 
     public function getCar()
     {
