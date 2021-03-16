@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=UtilityVehicleRepository::class)
  */
-class UtilityVehicle
+class UtilityVehicle extends Vehicle
 {
     /**
      * @ORM\Id
@@ -21,12 +21,12 @@ class UtilityVehicle
      * @ORM\OneToOne(targetEntity=Vehicle::class, inversedBy="utilityVehicle", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    public $vehicle;
+    private $vehicle;
 
     /**
      * @ORM\Column(type="float")
      */
-    public $max_load;
+    private $max_load;
 
     /**
      * @ORM\Column(type="float")

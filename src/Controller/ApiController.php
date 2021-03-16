@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Builder\VehicleBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,31 +13,34 @@ use App\Builder\CarBuilder;
 use App\Builder\UtilityVehicleBuilder;
 use App\Entity\Vehicle;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class ApiController extends AbstractController
 {
     /**
      * @Route ("/api/vehicle", name="api")
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return JsonResponse
      */
     public function createVehicle(Request $request, EntityManagerInterface $entityManager) : JsonResponse
     {
-        $director = new Director();
-//        $data = $request->getContent();
-//        $decode = json_decode($data);
-        $type = 'Car';
-        $label = 'test';
-        $vehicle = $director->buildVehicle($type);
-        $vehicle->setLabelBuilder($label);
-        $vehicle->setBrandBuilder($label);
-        $vehicle->setBrandBuilder("marque");
-        $vehicle->setConceptionDateBuilder(new \DateTime());
-        $vehicle->setLastControlBuilder(new \DateTime());
-        $vehicle->setFuelBuilder("diesel");
-        $vehicle->setLicenceBuilder("permis b");
+        $res = [
+            "type" => "Motorcycle",
+            "ResultLabel" => "Label",
+            "ResultBrand" => "Merco",
+            "ResultConceptionDate" => (\DateTime::createFromFormat('Y-m-d', "2018-09-09")),
+            "ResultLastControl" => (\DateTime::createFromFormat('Y-m-d', "2018-09-09")),
+            "ResultFuel" => "Diesel",
+            "ResultLicence" => "Permis b",
+            "resultAccessories" => true,
+        ];
 
+        $vehicle = VehicleBuilder::createVehicle($res);
+//        dd($vehicle);
         $entityManager->persist($vehicle);
         $entityManager->flush();
+
         return new JsonResponse('ok', 200, [], true);
     }
 }

@@ -20,38 +20,42 @@ class Vehicle
     /**
      * @ORM\Column(type="string", length=255)
      */
-    //J'ai passé la variable en public pour la portabilité de cette variable
-    public $label;
+    private $label;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    public $brand;
+    private $brand;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public $conception_date;
+    private $conception_date;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    public $last_control;
+    private $last_control;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    public $fuel;
+    private $fuel;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    public $licence;
+    private $licence;
 
     /**
      * @ORM\OneToOne(targetEntity=UtilityVehicle::class, mappedBy="vehicle", cascade={"persist", "remove"})
      */
     private $utilityVehicle;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Motorcycle::class, mappedBy="vehicle", cascade={"persist", "remove"})
+     */
+    private $motorcycle;
 
 
     public function getId(): ?int
@@ -144,6 +148,23 @@ class Vehicle
         }
 
         $this->utilityVehicle = $utilityVehicle;
+
+        return $this;
+    }
+
+    public function getMotorcycle(): ?Motorcycle
+    {
+        return $this->motorcycle;
+    }
+
+    public function setMotorcycle(Motorcycle $motorcycle): self
+    {
+        // set the owning side of the relation if necessary
+        if ($motorcycle->getVehicle() !== $this) {
+            $motorcycle->setVehicle($this);
+        }
+
+        $this->motorcycle = $motorcycle;
 
         return $this;
     }
