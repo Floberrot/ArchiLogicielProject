@@ -57,7 +57,8 @@ class ApiController extends AbstractController
     }
 
     /**
-     * Supprime un véhicule de la DB
+     * Supprime un véhicule de la DB.
+     * Dans le cas ou il y a un véhicule particulier (véhicule utilitaire, moto etc...), il se supprime en cascade.
      * @Route ("/api/vehicle/{idToDelete}", name="delete_vehicle", methods={"DELETE"})
      * @param Request $request
      * @param EntityManagerInterface $entityManager
@@ -69,7 +70,6 @@ class ApiController extends AbstractController
         if ($this->request->getMethod() === "DELETE") {
             $vehicleToDelete = new Vehicle();
             // On fait une requête pour trouver l'entité associé à l'id.
-            // Dans le cas ou il y a un véhicule particulier (véhicule utilitaire, moto etc...), il se supprime en cascade.
             $vehicleToDelete = $vehicleRepository->find($idToDelete);
             if(!$vehicleToDelete) {
                 return new JsonResponse('Erreur lors de la suppression, ce véhicule n\'exite pas', 500, [], true);
@@ -82,6 +82,6 @@ class ApiController extends AbstractController
         } else {
             return new JsonResponse('La methode de requête est mauvaise', 500, [], true);
         }
-    
     }
+    // TODO : Comment faire le detail d'un vehicule.?
 }
