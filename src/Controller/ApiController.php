@@ -46,4 +46,13 @@ class ApiController extends AbstractController
 
         return new JsonResponse('ok', 200, [], true);
     }
+
+    /**
+     * 
+     */
+    public function deleteVehicle() :JsonResponse
+    {
+        
+        return new JsonResponse('Vehicle deleted', 200, [], true);
+    }
 }
