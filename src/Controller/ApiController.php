@@ -46,4 +46,12 @@ class ApiController extends AbstractController
 
         return new JsonResponse('ok', 200, [], true);
     }
+    
+    /**
+     * @Route("/api/vehicle", name=)
+     */
+    public function showVehicles()
+    {
+
+    }
 }
