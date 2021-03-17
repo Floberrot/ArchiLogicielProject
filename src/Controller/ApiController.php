@@ -26,7 +26,7 @@ class ApiController extends AbstractController
     public function createVehicle(Request $request, EntityManagerInterface $entityManager) : JsonResponse
     {
         $res = [
-            "type" => "Motorcycle",
+            "type" => "Car",
             "ResultLabel" => "Label",
             "ResultBrand" => "Merco",
             "ResultConceptionDate" => (\DateTime::createFromFormat('Y-m-d', "2018-09-09")),

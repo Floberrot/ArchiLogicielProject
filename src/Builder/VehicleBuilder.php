@@ -23,9 +23,10 @@ class VehicleBuilder
                 ->setLicence($res["ResultLicence"]);
         $entityManager->persist($vehicle);
 
-        $vehicleTypeBuilder = new VehicleTypeBuilder($entityManager);
-        $checkVehicleType = $vehicleTypeBuilder->vehicleType($res, $vehicle);
-
+        if ($res["type"] != "Car") {
+            $vehicleTypeBuilder = new VehicleTypeBuilder($entityManager);
+            $vehicleTypeBuilder->vehicleType($res, $vehicle);
+        }
 
         return $vehicle;
     }
