@@ -4,6 +4,7 @@ namespace App\Builder;
 
 use App\Entity\Motorcycle;
 use App\Entity\UtilityVehicle;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class VehicleTypeBuilder
@@ -11,28 +12,38 @@ use App\Entity\UtilityVehicle;
  */
 class VehicleTypeBuilder
 {
-    static function vehicleType($res)
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    public function vehicleType($res, $vehicle)
     {
         if($res["type"] === "UtilityVehicle") {
-            return VehicleTypeBuilder::createUtilityVehicle($res);
+            return $this->createUtilityVehicle($res, $vehicle);
         } else if($res["type"] === "Motorcycle") {
-            return VehicleTypeBuilder::createMotorcycle($res);
+            return $this->createMotorcycle($res, $vehicle);
         }
     }
 
-    static function createUtilityVehicle($res): UtilityVehicle
+    public function createUtilityVehicle($res, $vehicle): UtilityVehicle
     {
-        $vehicle = new UtilityVehicle();
-        $vehicle->setMaxLoad($res["resultMaxLoad"])
+        $utilityVehicle = new UtilityVehicle();
+        $utilityVehicle->setVehicle($vehicle)
+                ->setMaxLoad($res["resultMaxLoad"])
                 ->setTrunkCapacity($res["resultTrunkCapacity"]);
-        return $vehicle;
+        $this->entityManager->persist($utilityVehicle);
+        return $utilityVehicle;
     }
 
-    static function createMotorcycle($res): Motorcycle
+    public function createMotorcycle($res, $vehicle): Motorcycle
     {
-        $vehicle = new Motorcycle();
-        $vehicle->setAccessories($res["resultAccessories"]);
-//        dump($vehicle);
-        return $vehicle;
+        $motorcycle = new Motorcycle();
+        $motorcycle->setVehicle($vehicle)
+                ->setAccessories($res["resultAccessories"]);
+        $this->entityManager->persist($motorcycle);
+        return $motorcycle;
     }
 }

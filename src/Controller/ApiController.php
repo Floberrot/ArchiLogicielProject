@@ -36,9 +36,9 @@ class ApiController extends AbstractController
             "resultAccessories" => true,
         ];
 
-        $vehicle = VehicleBuilder::createVehicle($res);
-//        dd($vehicle);
-        $entityManager->persist($vehicle);
+        $vehicleBuilder = new VehicleBuilder();
+        $vehicleBuilder->createVehicle($res, $entityManager);
+
         $entityManager->flush();
 
         return new JsonResponse('ok', 200, [], true);

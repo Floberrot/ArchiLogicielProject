@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=UtilityVehicleRepository::class)
  */
-class UtilityVehicle extends Vehicle
+class UtilityVehicle
 {
     /**
      * @ORM\Id

@@ -12,7 +12,7 @@ use App\Entity\Vehicle;
  */
 class VehicleBuilder
 {
-    static function createVehicle($res): Vehicle
+    static function createVehicle($res, $entityManager): Vehicle
     {
         $vehicle = new Vehicle();
         $vehicle->setLabel($res["ResultLabel"])
@@ -21,11 +21,12 @@ class VehicleBuilder
                 ->setLastControl($res["ResultLastControl"])
                 ->setFuel($res["ResultFuel"])
                 ->setLicence($res["ResultLicence"]);
+        $entityManager->persist($vehicle);
 
-//        return VehicleTypeBuilder::vehicleType($res);
+        $vehicleTypeBuilder = new VehicleTypeBuilder($entityManager);
+        $checkVehicleType = $vehicleTypeBuilder->vehicleType($res, $vehicle);
 
-        $build = VehicleTypeBuilder::vehicleType($res);
-//        dump($build);
+
         return $vehicle;
     }
 }
