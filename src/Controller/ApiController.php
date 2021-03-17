@@ -68,7 +68,8 @@ class ApiController extends AbstractController
         // On vérifie que la méthode est bien "DELETE"
         if ($this->request->getMethod() === "DELETE") {
             $vehicleToDelete = new Vehicle();
-            // On fait une requête pour trouver l'entité associé à l'id
+            // On fait une requête pour trouver l'entité associé à l'id.
+            // Dans le cas ou il y a un véhicule particulier (véhicule utilitaire, moto etc...), il se supprime en cascade.
             $vehicleToDelete = $vehicleRepository->find($idToDelete);
             if(!$vehicleToDelete) {
                 return new JsonResponse('Erreur lors de la suppression, ce véhicule n\'exite pas', 500, [], true);
