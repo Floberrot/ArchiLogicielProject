@@ -26,7 +26,7 @@ class Motorcycle
     /**
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $accessories;
+    private $helmetAvailable;
 
     public function getId(): ?int
     {
@@ -45,14 +45,14 @@ class Motorcycle
         return $this;
     }
 
-    public function getAccessories(): ?bool
+    public function getHelmetAvailable(): ?bool
     {
-        return $this->accessories;
+        return $this->helmetAvailable;
     }
 
-    public function setAccessories(?bool $accessories): self
+    public function setHelmetAvailable(?bool $helmetAvailable): self
     {
-        $this->accessories = $accessories;
+        $this->helmetAvailable = $helmetAvailable;
 
         return $this;
     }
