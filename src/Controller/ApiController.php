@@ -18,26 +18,29 @@ use Symfony\Component\Validator\Constraints\DateTime;
 class ApiController extends AbstractController
 {
     /**
-     * @Route ("/api/vehicle", name="api")
+     * Créer un nouveau Vehicule
+     * @Route ("/api/vehicle", name="create_vehicle", methods={"POST"})
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return JsonResponse
      */
     public function createVehicle(Request $request, EntityManagerInterface $entityManager) : JsonResponse
     {
+        // Résultats de la requête (Json decode à faire)
         $res = [
-            "type" => "Car",
+            "type" => "UtilityVehicle",
             "ResultLabel" => "Label",
             "ResultBrand" => "Merco",
             "ResultConceptionDate" => new \DateTime(),
             "ResultLastControl" => new \DateTime(),
             "ResultFuel" => "Diesel",
             "ResultLicence" => "Permis b",
-            "resultAccessories" => true,
+            "resultMaxLoad" => "10.5",
+            "resultTrunkCapacity" => "10.5",
         ];
-
+        // Création d'un nouveau véhicule
         $vehicleBuilder = new VehicleBuilder();
-        $vehicleBuilder->createVehicle($res, $entityManager);
+        $vehicleBuilder->setAndCheckVehicleType($res, $entityManager);
 
         $entityManager->flush();
 

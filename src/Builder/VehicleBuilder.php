@@ -12,7 +12,14 @@ use App\Entity\Vehicle;
  */
 class VehicleBuilder
 {
-    static function createVehicle($res, $entityManager): Vehicle
+    /**
+     * Créer un nouveau véhicule standard.
+     * Dans le cas ou le type est différent de "Car", on appel les fonctions du Builder
+     * @param $res
+     * @param $entityManager
+     * @return Vehicle
+     */
+    static function setAndCheckVehicleType($res, $entityManager): Vehicle
     {
         $vehicle = new Vehicle();
         $vehicle->setLabel($res["ResultLabel"])
@@ -25,7 +32,7 @@ class VehicleBuilder
 
         if ($res["type"] != "Car") {
             $vehicleTypeBuilder = new VehicleTypeBuilder($entityManager);
-            $vehicleTypeBuilder->vehicleType($res, $vehicle);
+            $vehicleTypeBuilder->determineVehicleType($res, $vehicle);
         }
 
         return $vehicle;
