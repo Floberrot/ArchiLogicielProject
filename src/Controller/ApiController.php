@@ -57,6 +57,7 @@ class ApiController extends AbstractController
     }
 
     /**
+     * Supprime un véhicule de la DB
      * @Route ("/api/vehicle/{idToDelete}", name="delete_vehicle", methods={"DELETE"})
      * @param Request $request
      * @param EntityManagerInterface $entityManager
