@@ -23,10 +23,12 @@ class VehicleDetailsBuilder
     }
 
     /**
+     * Cette fonction set les valeurs standard d'un véhicule dans un tableau.
+     * Dans le cas ou le véhicule est "spécial" on set les champs associés.
      * @param mixed $vehicleEnity
      * @param mixed $arrayOfVehicles
      */
-    public function detailsBuilder($vehicleEntity, $arrayOfVehicles, $idDetails)
+    public function detailsBuilder($vehicleEntity, &$arrayOfVehicles, $idDetails)
     {
         // Set un véhicule standard
         $arrayOfVehicles['label'] = $vehicleEntity->getLabel();
@@ -36,29 +38,35 @@ class VehicleDetailsBuilder
         $arrayOfVehicles['last_control'] = $vehicleEntity->getLastControl();
         $arrayOfVehicles['fuel'] = $vehicleEntity->getFuel();
         // Si le véhicule a le champ motorcycle non vide, c'est que c'est une moto, on affiche donc ces données
-        if ($vehicleEntity->getMotocycle()) $this->detailsMotorcycle($idDetails);
+        if ($vehicleEntity->getMotorcycle()) {
+            $this->detailsMotorcycle($idDetails, $arrayOfVehicles);
+        }
         // Idem pour un véhicule utilitaire.
-        if ($vehicleEntity->getUtilityVehicle()) $this->detailsUtilityVehicle($idDetails);
+        if ($vehicleEntity->getUtilityVehicle()) {
+            $this->detailsUtilityVehicle($idDetails, $arrayOfVehicles);
+        }
     }
 
     /**
+     * Set les champs d'une moto dans un tableau
      * @param mixed $idDetails
      */
-    public  function detailsMotorcycle($idDetails)
+    public function detailsMotorcycle($idDetails, &$arrayOfVehicles)
     {
         $moto = new Motorcycle();
         $moto = $this->motorcycleRepository->findOneBy(['vehicle' => $idDetails]);
-        $dataOfVehicles['helmet_available'] = $moto->getHelmetAvailable();
+        $arrayOfVehicles['helmet_available'] = $moto->getHelmetAvailable();
     }
 
     /**
+     * Set les champs d'un véhicule utilitaire dans un tableau.
      * @param mixed $idDetails
      */
-    public function detailsUtilityVehicle($idDetails)
+    public function detailsUtilityVehicle($idDetails, &$arrayOfVehicles)
     {
         $utilityVehicle = new UtilityVehicle();
         $utilityVehicle = $this->utilityVehicleRepository->findOneBy(['vehicle' => $idDetails]);
-        $dataOfVehicles['max_load'] = $utilityVehicle->getMaxLoad();
-        $dataOfVehicles['trunk_capacity'] = $utilityVehicle->getTrunkCapacity();
+        $arrayOfVehicles['max_load'] = $utilityVehicle->getMaxLoad();
+        $arrayOfVehicles['trunk_capacity'] = $utilityVehicle->getTrunkCapacity();
     }
 }

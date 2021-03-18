@@ -98,7 +98,7 @@ class ApiController extends AbstractController
     /**
      * Cette fonction affiche les détails d'un seul véhicule.
      * Vérification du type si il en a un evidemment.
-     * @Route("api/vehicle/{idDetails}", name="detail_vehicle", methods={"GET"})
+     * @Route("/api/vehicle/{idDetails}", name="detail_vehicle", methods={"GET"})
      * @param $idDetails
      * @return JsonResponse
      */
@@ -107,9 +107,10 @@ class ApiController extends AbstractController
         $vehicleEntity = new Vehicle(); 
         // Cherche un véhicule grâce à son id.
         $vehicleEntity = $this->vehicleRepository->find($idDetails);
+        $arrayOfVehicles = [];
         // Appel la class pour afficher les détails d'un véhicule.
         $vehicleDetailClass = new VehicleDetailsBuilder($this->motorcycleRepository, $this->utilityVehicleRepository);
-        $vehicleDetailClass->detailsBuilder($vehicleEntity, $arrayOfVehicles = [], $idDetails);
+        $vehicleDetailClass->detailsBuilder($vehicleEntity, $arrayOfVehicles, $idDetails);
         // Voir avec Fabien ce qu'il veut exactement comme retour
         return new JsonResponse(
             [
