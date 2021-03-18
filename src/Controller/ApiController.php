@@ -22,7 +22,6 @@ class ApiController extends AbstractController
     private $motorcycleRepository;
     private $utilityVehicleRepository;
 
-
     public function __construct(
         EntityManagerInterface $entityManager,
         VehicleRepository $vehicleRepository,
@@ -45,6 +44,7 @@ class ApiController extends AbstractController
     public function createVehicle(Request $request) : JsonResponse
     {
         // Résultats de la requête (Json decode à faire)
+        // Champ type en bdd ?
         $res = [
             "type" => "UtilityVehicle",
             "ResultLabel" => "Label",
