@@ -1,13 +1,15 @@
 <template>
-  <v-card class="mx-auto" max-width="30vw" rounded>
-      <v-card-text>
+  <v-container class="customCenter">
+    <v-card rounded>
+      <v-card-text class="card" align="center" justify="center">
           <login-form v-if="isLogin" />
           <register-form v-if="!isLogin" />
           <a class="d-flex justify-space-around mb-6" @click="switchForm()">
             {{ btnTitle }}
           </a>
       </v-card-text>
-  </v-card>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -35,4 +37,17 @@ export default {
 </script>
 
 <style scoped>
+.customCenter {
+  position: absolute;
+  overflow: hidden;
+
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card{
+  width: 40vw;
+}
 </style>

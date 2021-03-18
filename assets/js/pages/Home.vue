@@ -1,7 +1,7 @@
-<template>
+<template class="customWidth">
   <v-row justify="center">
     <v-col cols="12">
-      <v-btn icon>
+      <v-btn icon @click="openDialog">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <v-simple-table fixed-header height="80vh">
@@ -34,7 +34,7 @@
               </v-btn>
             </td>
             <td>
-              <v-btn icon>
+              <v-btn icon @click="redirectDetail">
                 <v-icon>mdi-eye</v-icon>
               </v-btn>
             </td>
@@ -42,15 +42,24 @@
         </tbody>
       </v-simple-table>
     </v-col>
+    <create-vehicle-dialog
+        v-if="dialog"
+        ref="dialog"
+      />
   </v-row>
 </template>
 
 <script>
+import createVehicleDialog from '../components/createVehicleDialog'
+import CreateVehicleDialog from '../components/createVehicleDialog.vue';
 export default {
   name: "Home",
+  components: {
+    CreateVehicleDialog,
+  },
   data() {
     return {
-      vehicles: [
+     vehicles: [
           {
             label: '206',
             brand: 'Peugeot',
@@ -156,10 +165,22 @@ export default {
             brand: 'Renault',
           },
       ],
+      dialog: true,
     };
   },
+  methods: {
+    redirectDetail () {
+      this.$router.push('detail');
+    },
+    openDialog () {
+        this.$refs.dialog.show()
+    },
+  }
 };
 </script>
 
 <style scoped>
+.customWidth {
+  width: 100vw;
+}
 </style>

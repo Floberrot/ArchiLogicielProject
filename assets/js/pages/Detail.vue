@@ -1,7 +1,7 @@
-<template>
+<template class="overflowHidden">
   <v-row justify="center" d-flex align-center mt-6>
     <v-col cols="12">
-      <v-btn icon>
+      <v-btn plain icon class="py-7" @click="redirectHome">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
       <v-sheet
@@ -29,8 +29,16 @@ export default {
       
     };
   },
+  methods: {
+    redirectHome () {
+      this.$router.push('/');
+    }
+  }
 };
 </script>
 
 <style scoped>
+.overflowHidden{
+  overflow: hidden;
+}
 </style>
