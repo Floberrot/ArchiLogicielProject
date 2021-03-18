@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Builder\VehicleDetailsBuilder;
 use App\Entity\Vehicle;
+use App\Repository\MotorcycleRepository;
+use App\Repository\UtilityVehicleRepository;
 use App\Repository\VehicleRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,11 +19,20 @@ class ApiController extends AbstractController
 
     private $entityManager;
     private $vehicleRepository;
+    private $motorcycleRepository;
+    private $utilityVehicleRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, VehicleRepository $vehicleRepository)
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        VehicleRepository $vehicleRepository,
+        MotorcycleRepository $motorcycleRepository,
+        UtilityVehicleRepository $utilityVehicleRepository)
     {
         $this->entityManager = $entityManager;
         $this->vehicleRepository = $vehicleRepository;
+        $this->motorcycleRepository = $motorcycleRepository;
+        $this->utilityVehicleRepository = $utilityVehicleRepository;
     }
 
     /**
@@ -93,17 +104,17 @@ class ApiController extends AbstractController
      */
     public function detailVehicle($idDetails) : JsonResponse
     {
-        $vehicleEntity = new Vehicle();
-        $vehicleDetailClass = new VehicleDetailsBuilder();
+        $vehicleEntity = new Vehicle(); 
         // Cherche un véhicule grâce à son id.
         $vehicleEntity = $this->vehicleRepository->find($idDetails);
-        $vehicleDetailClass->detailVehicle($vehicleEntity, $arrayOfVehicles = [], $idDetails);
-
+        // Appel la class pour afficher les détails d'un véhicule.
+        $vehicleDetailClass = new VehicleDetailsBuilder($this->motorcycleRepository, $this->utilityVehicleRepository);
+        $vehicleDetailClass->detailsBuilder($vehicleEntity, $arrayOfVehicles = [], $idDetails);
         // Voir avec Fabien ce qu'il veut exactement comme retour
         return new JsonResponse(
             [
                 'detailVehicle' => $arrayOfVehicles
             ]
-            );
+        );
     }
 }
