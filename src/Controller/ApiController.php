@@ -6,23 +6,24 @@ use App\Builder\VehicleBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Builder\Director;
-use App\Builder\CarBuilder;
-use App\Builder\UtilityVehicleBuilder;
-use App\Entity\Motorcycle;
-use App\Entity\UtilityVehicle;
+use App\Builder\VehicleDetailsBuilder;
 use App\Entity\Vehicle;
-use App\Repository\MotorcycleRepository;
-use App\Repository\UtilityVehicleRepository;
 use App\Repository\VehicleRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\DateTime;
-use Symfony\Component\Validator\Constraints\Json;
 
 class ApiController extends AbstractController
 {
+
+    private $entityManager;
+    private $vehicleRepository;
+
+    public function __construct(EntityManagerInterface $entityManager, VehicleRepository $vehicleRepository)
+    {
+        $this->entityManager = $entityManager;
+        $this->vehicleRepository = $vehicleRepository;
+    }
+
     /**
      * Créer un nouveau Vehicule
      * @Route ("/api/vehicle", name="create_vehicle", methods={"POST"})
@@ -30,7 +31,7 @@ class ApiController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return JsonResponse
      */
-    public function createVehicle(Request $request, EntityManagerInterface $entityManager) : JsonResponse
+    public function createVehicle(Request $request) : JsonResponse
     {
         // Résultats de la requête (Json decode à faire)
         $res = [
@@ -46,9 +47,9 @@ class ApiController extends AbstractController
         ];
         // Création d'un nouveau véhicule
         $vehicleBuilder = new VehicleBuilder();
-        $vehicleBuilder->setAndCheckVehicleType($res, $entityManager);
+        $vehicleBuilder->setAndCheckVehicleType($res, $this->entityManager);
 
-        $entityManager->flush();
+        $this->entityManager->flush();
 
         return new JsonResponse('ok', 200, [], true);
     }
@@ -59,10 +60,10 @@ class ApiController extends AbstractController
      * @param VehicleRepository $vehicleRepository
      * @return JsonResponse
      */
-    public function showVehicles(VehicleRepository $vehicleRepository) : JsonResponse
+    public function showVehicles() : JsonResponse
     {
         $allVehicle = new Vehicle();
-        $allVehicle = $vehicleRepository->findAll();
+        $allVehicle = $this->vehicleRepository->findAll();
         $vehicleToDisplay = [];
         foreach ($allVehicle as $oneVehicle)
         {
@@ -72,7 +73,6 @@ class ApiController extends AbstractController
             $dataOfVehicles['label'] = $label;
             $dataOfVehicles['brand'] = $brand;
             $dataOfVehicles['licence'] = $licence;
-            
             array_push($vehicleToDisplay, $dataOfVehicles);
         }
         // Voir avec Fabien ce qu'il veut comme valeur de retour.
@@ -91,32 +91,18 @@ class ApiController extends AbstractController
      * @param $idDetails
      * @return JsonResponse
      */
-    public function detailVehicle($idDetails, VehicleRepository $vehicleRepository, MotorcycleRepository $motorcycleRepository, UtilityVehicleRepository $utilityVehicleRepository) : JsonResponse
+    public function detailVehicle($idDetails) : JsonResponse
     {
-        $detailVehicle = new Vehicle();
-        $detailVehicle = $vehicleRepository->find($idDetails);
-        $detailToDisplay = [];
-        // A faire dans une autre fonction ? Voir builder de création
-        $dataOfVehicles['label'] = $detailVehicle->getLabel();
-        $dataOfVehicles['brand'] = $detailVehicle->getBrand();
-        $dataOfVehicles['licence'] = $detailVehicle->getLicence();
-        $dataOfVehicles['conception_date'] = $detailVehicle->getConceptionDate();
-        $dataOfVehicles['last_control'] = $detailVehicle->getLastControl();
-        $dataOfVehicles['fuel'] = $detailVehicle->getFuel();
-        if ($detailVehicle->getMotorcycle()) {
-            $moto = new Motorcycle();
-            $moto = $motorcycleRepository->findOneBy(['vehicle' => $idDetails]);
-            $dataOfVehicles['helmet_available'] = $moto->getHelmetAvailable();
-        } else if ($detailVehicle->getUtilityVehicle()) {
-            $utilityVehicle = new UtilityVehicle();
-            $utilityVehicle = $utilityVehicleRepository->findOneBy(['vehicle' => $idDetails]);
-            $dataOfVehicles['max_load'] = $utilityVehicle->getMaxLoad();
-            $dataOfVehicles['trunk_capacity'] = $utilityVehicle->getTrunkCapacity();
-        }
+        $vehicleEntity = new Vehicle();
+        $vehicleDetailClass = new VehicleDetailsBuilder();
+        // Cherche un véhicule grâce à son id.
+        $vehicleEntity = $this->vehicleRepository->find($idDetails);
+        $vehicleDetailClass->detailVehicle($vehicleEntity, $arrayOfVehicles = [], $idDetails);
+
         // Voir avec Fabien ce qu'il veut exactement comme retour
         return new JsonResponse(
             [
-                'detailVehicle' => $dataOfVehicles
+                'detailVehicle' => $arrayOfVehicles
             ]
             );
     }
