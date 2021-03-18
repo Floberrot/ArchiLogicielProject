@@ -46,4 +46,15 @@ class ApiController extends AbstractController
 
         return new JsonResponse('ok', 200, [], true);
     }
+
+
+    /**
+     * @param mixed $idToEdit
+     * @Route("/api/vehicle/{idToEdit}", name="edit_vehicle", methods={"PUT"})
+     * @return JsonResponse
+     */
+    public function editVehicle($idToEdit) : JsonResponse
+    {
+        return new JsonResponse('edit ok', 200, [], true);
+    }
 }
