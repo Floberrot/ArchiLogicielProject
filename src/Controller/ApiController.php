@@ -58,7 +58,7 @@ class ApiController extends AbstractController
     {
         $vehicleToEdit = $vehicleRepository->find($idToEdit);
 
-        // Nous recevrons ici les résultats su Front.
+        // Nous recevrons ici les résultats du Front.
         $resEdit = [
             "type" => "UtilityVehicle",
             "ResultLabel" => "Test update 45",
@@ -81,7 +81,8 @@ class ApiController extends AbstractController
         
         // Enregistre le véhicule standard.
         $entityManager->persist($vehicleToEdit);
-
+        
+        // Mise a jour de la table moto si elle existe
         $moto = $vehicleToEdit->getMotorcycle();
         $utilityVehicle = $vehicleToEdit->getUtilityVehicle();
         if ($moto) {
@@ -90,6 +91,7 @@ class ApiController extends AbstractController
                 ->setHelmetAvailable($resEdit['helmetAvailable']);
             $entityManager->persist($moto);
         }
+        // Idem pour un véhicule utilitaire :)
         if ($utilityVehicle) {
             $utilityVehicle
                 ->setVehicle($vehicleToEdit)
@@ -97,6 +99,7 @@ class ApiController extends AbstractController
                 ->setTrunkCapacity($resEdit['resultTrunkCapacity']);
             $entityManager->persist($utilityVehicle);
         }
+        // Save en bdd
         $entityManager->flush();
 
         return new JsonResponse('edit ok', 200, [], true);
