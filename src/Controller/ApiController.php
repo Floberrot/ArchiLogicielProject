@@ -63,6 +63,63 @@ class ApiController extends AbstractController
 
         return new JsonResponse('ok', 200, [], true);
     }
+
+
+    /**
+     * @param mixed $idToEdit
+     * @Route("/api/vehicle/{idToEdit}", name="edit_vehicle", methods={"PUT"})
+     * @return JsonResponse
+     */
+    public function editVehicle($idToEdit, VehicleRepository $vehicleRepository, EntityManagerInterface $entityManager) : JsonResponse
+    {
+        $vehicleToEdit = $vehicleRepository->find($idToEdit);
+
+        // Nous recevrons ici les résultats du Front.
+        $resEdit = [
+            "type" => "UtilityVehicle",
+            "ResultLabel" => "Test update 45",
+            "ResultBrand" => "ptite lambo",
+            "ResultConceptionDate" => new \DateTime(),
+            "ResultLastControl" => new \DateTime(),
+            "ResultFuel" => "sp95",
+            "ResultLicence" => "Permis ouais",
+            "resultMaxLoad" => "1000",
+            "resultTrunkCapacity" => "2000.1",
+        ];
+
+        $vehicleToEdit
+            ->setLabel($resEdit['ResultLabel'])
+            ->setBrand($resEdit["ResultBrand"])
+            ->setConceptionDate($resEdit["ResultConceptionDate"])
+            ->setLastControl($resEdit["ResultLastControl"])
+            ->setFuel($resEdit["ResultFuel"])
+            ->setLicence($resEdit["ResultLicence"]);
+        
+        // Enregistre le véhicule standard.
+        $entityManager->persist($vehicleToEdit);
+        
+        // Mise a jour de la table moto si elle existe
+        $moto = $vehicleToEdit->getMotorcycle();
+        $utilityVehicle = $vehicleToEdit->getUtilityVehicle();
+        if ($moto) {
+            $moto
+                ->setVehicle($vehicleToEdit)
+                ->setHelmetAvailable($resEdit['helmetAvailable']);
+            $entityManager->persist($moto);
+        }
+        // Idem pour un véhicule utilitaire :)
+        if ($utilityVehicle) {
+            $utilityVehicle
+                ->setVehicle($vehicleToEdit)
+                ->setMaxLoad($resEdit['resultMaxLoad'])
+                ->setTrunkCapacity($resEdit['resultTrunkCapacity']);
+            $entityManager->persist($utilityVehicle);
+        }
+        // Save en bdd
+        $entityManager->flush();
+
+        return new JsonResponse('edit ok', 200, [], true);
+    }
     
     /**
      * Cette fonction affiche tous les véhicules de la DB
