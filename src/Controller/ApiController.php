@@ -33,7 +33,6 @@ class ApiController extends AbstractController
         $this->motorcycleRepository = $motorcycleRepository;
         $this->utilityVehicleRepository = $utilityVehicleRepository;
     }
-
     /**
      * Créer un nouveau Vehicule
      * @Route ("/api/vehicle", name="create_vehicle", methods={"POST"})
@@ -41,8 +40,8 @@ class ApiController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return JsonResponse
      */
-    public function createVehicle(Request $request) : JsonResponse
-    {
+  public function createVehicle(Request $request) : JsonResponse
+  {
         // Résultats de la requête (Json decode à faire)
         // Champ type en bdd ?
         $res = [
@@ -94,7 +93,6 @@ class ApiController extends AbstractController
         );
     }
 
-
     /**
      * Cette fonction affiche les détails d'un seul véhicule.
      * Vérification du type si il en a un evidemment.
@@ -117,5 +115,33 @@ class ApiController extends AbstractController
                 'detailVehicle' => $detailOneVehicle
             ]
         );
+    }
+
+    /**
+     * Supprime un véhicule de la DB.
+     * Dans le cas ou il y a un véhicule particulier (véhicule utilitaire, moto etc...), il se supprime en cascade.
+     * @Route ("/api/vehicle/{idToDelete}", name="delete_vehicle", methods={"DELETE"})
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return JsonResponse
+     */
+    public function deleteVehicle($idToDelete, VehicleRepository $vehicleRepository) :JsonResponse
+    {
+        // On vérifie que la méthode est bien "DELETE"
+         if ($this->request->getCurrentRequest()->getMethod() === "DELETE") {
+            $vehicleToDelete = new Vehicle();
+            // On fait une requête pour trouver l'entité associé à l'id.
+            $vehicleToDelete = $vehicleRepository->find($idToDelete);
+            if(!$vehicleToDelete) {
+                return new JsonResponse('Erreur lors de la suppression, ce véhicule n\'exite pas', 500, [], true);
+            }
+            $this->entityManager->remove($vehicleToDelete);
+            $this->entityManager->flush();
+            
+            //$this->entityManager->remove($vehicleToDelete);
+            return new JsonResponse('Vehicule supprimé', 200, [], true);
+        } else {
+            return new JsonResponse('La methode de requête est mauvaise', 500, [], true);
+        }
     }
 }
