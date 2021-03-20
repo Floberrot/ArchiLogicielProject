@@ -20,15 +20,21 @@ class ApiController extends AbstractController
 
     private $entityManager;
     private $vehicleRepository;
+    private $motorcycleRepository;
+    private $utilityVehicleRepository;
     protected $request;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         VehicleRepository $vehicleRepository,
+        MotorcycleRepository $motorcycleRepository,
+        UtilityVehicleRepository $utilityVehicleRepository,
         RequestStack $request)
     {
         $this->entityManager = $entityManager;
         $this->vehicleRepository = $vehicleRepository;
+        $this->motorcycleRepository = $motorcycleRepository;
+        $this->utilityVehicleRepository = $utilityVehicleRepository;
         $this->request = $request;
     }
     /**
@@ -70,6 +76,7 @@ class ApiController extends AbstractController
      */
     public function editVehicle($idToEdit) : JsonResponse
     {
+        // TODO : refacto la fonction !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         $vehicleToEdit = $this->vehicleRepository->find($idToEdit);
 
         // Nous recevrons ici les résultats du Front.
@@ -129,7 +136,7 @@ class ApiController extends AbstractController
     {
         $allVehicle = new Vehicle();
         $allVehicle = $this->vehicleRepository->findAll();
-        $vehicleToDisplay = [];
+        $vehiclesToDisplay = [];
         foreach ($allVehicle as $oneVehicle)
         {
             $label = $oneVehicle->getLabel();
@@ -138,12 +145,12 @@ class ApiController extends AbstractController
             $dataOfVehicles['label'] = $label;
             $dataOfVehicles['brand'] = $brand;
             $dataOfVehicles['licence'] = $licence;
-            array_push($vehicleToDisplay, $dataOfVehicles);
+            array_push($vehiclesToDisplay, $dataOfVehicles);
         }
         // Voir avec Fabien ce qu'il veut comme valeur de retour.
         return new JsonResponse(
             [
-                'arrayOfVehicles' => $vehicleToDisplay
+                'arrayOfVehicles' => $vehiclesToDisplay
             ]
         );
     }
