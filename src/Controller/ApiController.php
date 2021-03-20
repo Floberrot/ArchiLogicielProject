@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Builder\VehicleBuilder;
+use App\Services\SetResultFrontIntoArray;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Builder\VehicleDetailsBuilder;
 use App\Entity\Vehicle;
+use Exception;
 use App\Repository\MotorcycleRepository;
 use App\Repository\UtilityVehicleRepository;
 use App\Repository\VehicleRepository;
@@ -24,64 +25,22 @@ class ApiController extends AbstractController
     private $motorcycleRepository;
     private $utilityVehicleRepository;
     protected $request;
+    private $setResultFrontIntoArray;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         VehicleRepository $vehicleRepository,
         MotorcycleRepository $motorcycleRepository,
         UtilityVehicleRepository $utilityVehicleRepository,
-        RequestStack $request)
+        RequestStack $request,
+        SetResultFrontIntoArray $setResultFrontIntoArray)
     {
         $this->entityManager = $entityManager;
         $this->vehicleRepository = $vehicleRepository;
         $this->motorcycleRepository = $motorcycleRepository;
         $this->utilityVehicleRepository = $utilityVehicleRepository;
         $this->request = $request;
-    }
-
-    /**
-     * @param $data
-     * @return array
-     * @throws Exception
-     */
-    public function setResultIntoArray($data): array
-    {
-        //Récupération des données
-        $type = $data['resultType'];
-        $label = $data['resultLabel'];
-        $brand = $data['resultBrand'];
-        $conceptionDate = new \DateTime($data['resultConceptionDate']);
-        $lastControl = new \DateTime($data['resultLastControl']);
-        $fuel = $data['resultFuel'];
-        $licence = $data['resultLicence'];
-
-        //Création du tableau de données
-        $dataArray = [
-            "type" => $type,
-            "label" => $label,
-            "brand" => $brand,
-            "conceptionDate" => $conceptionDate,
-            "lastControl" => $lastControl,
-            "fuel" => $fuel,
-            "licence" => $licence
-        ];
-
-        //Ajoute au tableau les données nécessaires
-        switch ($type) {
-            case "UtilityVehicle":
-                $maxLoad = $data['resultMaxLoad'];
-                $trunkCapacity = $data['resultTrunkCapacity'];
-                //Ajoute les données dans le tableau
-                $dataArray["maxLoad"] = $maxLoad;
-                $dataArray["trunkCapacity"] = $trunkCapacity;
-                break;
-            case "Motorcycle":
-                $helmetAvailable = $data['resultHelmetAvailable'];
-                //Ajoute les données dans le tableau
-                $dataArray["helmetAvailable"] = $helmetAvailable;
-                break;
-        }
-        return $dataArray;
+        $this->setResultFrontIntoArray = $setResultFrontIntoArray;
     }
 
     /**
@@ -90,13 +49,14 @@ class ApiController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return JsonResponse
+     * @throws Exception
      */
   public function createVehicle() : JsonResponse
   {
         // Résultats de la requête (Json decode à faire)
         // Champ type en bdd ?
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
-        $data = $this->setResultIntoArray($dataReceive);
+        $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
         // Création d'un nouveau véhicule
         $vehicleBuilder = new VehicleBuilder();
         $vehicleBuilder->setAndCheckVehicleType($data, $this->entityManager);
@@ -111,6 +71,7 @@ class ApiController extends AbstractController
      * @param mixed $idToEdit
      * @Route("/api/vehicle/{idToEdit}", name="edit_vehicle", methods={"PUT"})
      * @return JsonResponse
+     * @throws Exception
      */
     public function editVehicle($idToEdit) : JsonResponse
     {
@@ -119,7 +80,7 @@ class ApiController extends AbstractController
         $vehicleToEdit = $this->vehicleRepository->find($idToEdit);
 
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
-        $data = $this->setResultIntoArray($dataReceive);
+        $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
 
         $vehicleToEdit
             ->setLabel($data['label'])
