@@ -51,7 +51,7 @@ class ApiController extends AbstractController
 
     /**
      * @param mixed $idToEdit
-     * @Route("/api/vehicle/{idToEdit}", name="edit_vehicle")
+     * @Route("/api/vehicle/{idToEdit}", name="edit_vehicle", methods={"PUT"})
      * @return JsonResponse
      */
     public function editVehicle($idToEdit, VehicleRepository $vehicleRepository, EntityManagerInterface $entityManager) : JsonResponse
@@ -62,7 +62,7 @@ class ApiController extends AbstractController
         $resEdit = [
             "type" => "UtilityVehicle",
             "ResultLabel" => "Test update 45",
-            "ResultBrand" => "FERRARI",
+            "ResultBrand" => "ptite lambo",
             "ResultConceptionDate" => new \DateTime(),
             "ResultLastControl" => new \DateTime(),
             "ResultFuel" => "sp95",
