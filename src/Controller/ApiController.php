@@ -14,14 +14,15 @@ use App\Builder\UtilityVehicleBuilder;
 use App\Entity\Vehicle;
 use App\Repository\VehicleRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class ApiController extends AbstractController
 {
     private $entityManager;
-    private $request;
+    protected $request;
 
-    public function __construct(EntityManagerInterface $entityManager, Request $request)
+    public function __construct(EntityManagerInterface $entityManager, RequestStack $request)
     {
         $this->entityManager = $entityManager;
         $this->request = $request;
@@ -67,7 +68,7 @@ class ApiController extends AbstractController
     public function deleteVehicle($idToDelete, VehicleRepository $vehicleRepository) :JsonResponse
     {
         // On vérifie que la méthode est bien "DELETE"
-        if ($this->request->getMethod() === "DELETE") {
+         if ($this->request->getCurrentRequest()->getMethod() === "DELETE") {
             $vehicleToDelete = new Vehicle();
             // On fait une requête pour trouver l'entité associé à l'id.
             $vehicleToDelete = $vehicleRepository->find($idToDelete);
