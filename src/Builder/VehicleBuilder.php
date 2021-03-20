@@ -22,12 +22,12 @@ class VehicleBuilder
     static function setAndCheckVehicleType($res, $entityManager): Vehicle
     {
         $vehicle = new Vehicle();
-        $vehicle->setLabel($res["ResultLabel"])
-                ->setBrand($res["ResultBrand"])
-                ->setConceptionDate($res["ResultConceptionDate"])
-                ->setLastControl($res["ResultLastControl"])
-                ->setFuel($res["ResultFuel"])
-                ->setLicence($res["ResultLicence"]);
+        $vehicle->setLabel($res["label"])
+                ->setBrand($res["brand"])
+                ->setConceptionDate($res["conceptionDate"])
+                ->setLastControl($res["lastControl"])
+                ->setFuel($res["fuel"])
+                ->setLicence($res["licence"]);
         $entityManager->persist($vehicle);
 
         if ($res["type"] != "Car") {

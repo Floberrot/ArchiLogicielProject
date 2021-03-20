@@ -46,8 +46,8 @@ class VehicleTypeBuilder
         $utilityVehicle = new UtilityVehicle();
         $utilityVehicle
             ->setVehicle($vehicle)
-            ->setMaxLoad($res["resultMaxLoad"])
-            ->setTrunkCapacity($res["resultTrunkCapacity"]);
+            ->setMaxLoad($res["maxLoad"])
+            ->setTrunkCapacity($res["trunkCapacity"]);
         $this->entityManager->persist($utilityVehicle);
         return $utilityVehicle;
     }
@@ -63,7 +63,7 @@ class VehicleTypeBuilder
         $motorcycle = new Motorcycle();
         $motorcycle
             ->setVehicle($vehicle)
-            ->setHelmetAvailable($res["resultAccessories"]);
+            ->setHelmetAvailable($res["helmetAvailable"]);
         $this->entityManager->persist($motorcycle);
         return $motorcycle;
     }
