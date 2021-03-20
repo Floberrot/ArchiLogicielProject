@@ -67,4 +67,5 @@ class VehicleTypeBuilder
         $this->entityManager->persist($motorcycle);
         return $motorcycle;
     }
+
 }
