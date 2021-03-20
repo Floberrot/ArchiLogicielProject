@@ -107,14 +107,14 @@ class ApiController extends AbstractController
         $vehicleEntity = new Vehicle(); 
         // Cherche un véhicule grâce à son id.
         $vehicleEntity = $this->vehicleRepository->find($idDetails);
-        $arrayOfVehicles = [];
+        $detailOneVehicle = [];
         // Appel la class pour afficher les détails d'un véhicule.
         $vehicleDetailClass = new VehicleDetailsBuilder($this->motorcycleRepository, $this->utilityVehicleRepository);
-        $vehicleDetailClass->detailsBuilder($vehicleEntity, $arrayOfVehicles, $idDetails);
+        $vehicleDetailClass->detailsBuilder($vehicleEntity, $detailOneVehicle, $idDetails);
         // Voir avec Fabien ce qu'il veut exactement comme retour
         return new JsonResponse(
             [
-                'detailVehicle' => $arrayOfVehicles
+                'detailVehicle' => $detailOneVehicle
             ]
         );
     }
