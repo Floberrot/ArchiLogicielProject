@@ -41,26 +41,29 @@ class UserController extends AbstractController
         $authorize = $dataReceive['isAuthorize'];
         $role = $dataReceive['role'];
         $message = "";
+        $user = $this->userRepository->find($idToAuthorize);
 
         //Set les données si l'utilisateur est autorisé
         switch ($authorize){
             case true:
-                $user = $this->userRepository->find($idToAuthorize);
                 $user->setIsAuthorize($authorize);
                 $user->setRole($role);
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
                 $message = "Accès autorisé";
                 break;
             case false:
+                $user->setIsAuthorize($authorize);
+                $user->setRole($role);
                 $message = "Accès refusé";
                 break;
         }
-        return new JsonResponse(
-            [
-                "message" => $message,
-            ], 200, [], true
-        );
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+        return $this->json(["message" => $message, "code" => 200, true]);
+//        return new JsonResponse(
+//            [
+//                "message" => $message,
+//            ], 200, [], true
+//        );
     }
 
     /**
@@ -71,12 +74,12 @@ class UserController extends AbstractController
     public function getNewUserRequest(): JsonResponse
     {
         $allNewUser = $this->userRepository->findBy(['isAuthorize' => false]);
+        return $this->json(["allNewUser" => $allNewUser, "code" => 200, true]);
 //        return new JsonResponse(
 //            [
 //                "allNewUser" => $allNewUser
 //            ], 200, [], true
 //        );
-        return $this->json(["allNewUser" => $allNewUser, "code" => 200, true]);
     }
 
 }
