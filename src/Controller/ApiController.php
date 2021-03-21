@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Builder\VehicleDetailsBuilder;
+use App\Builder\VehicleEditBuilder;
 use App\Entity\Vehicle;
 use Exception;
 use App\Repository\MotorcycleRepository;
@@ -75,9 +76,9 @@ class ApiController extends AbstractController
      */
     public function editVehicle($idToEdit) : JsonResponse
     {
-        // TODO : refacto la fonction !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // TODO : On envoie au front toutes les informations du véhhicule à éditer. Dans le formulaire d'édition on renverra tous les champs, même ceux que l'utilisateur n'a pas changé.
         $vehicleToEdit = $this->vehicleRepository->find($idToEdit);
+
 
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
@@ -91,25 +92,12 @@ class ApiController extends AbstractController
             ->setLicence($data["licence"]);
         
         // Enregistre le véhicule standard.
+
         $this->entityManager->persist($vehicleToEdit);
+        $vehicleEditBuilder = new VehicleEditBuilder($this->entityManager);
+        $vehicleEditBuilder->editMotorcycle($vehicleToEdit, $data);
+        $vehicleEditBuilder->editUtilityVehicle($vehicleToEdit, $data);
         
-        // Mise a jour de la table moto si elle existe
-        $moto = $vehicleToEdit->getMotorcycle();
-        $utilityVehicle = $vehicleToEdit->getUtilityVehicle();
-        if ($moto) {
-            $moto
-                ->setVehicle($vehicleToEdit)
-                ->setHelmetAvailable($data['helmetAvailable']);
-            $this->entityManager->persist($moto);
-        }
-        // Idem pour un véhicule utilitaire :)
-        if ($utilityVehicle) {
-            $utilityVehicle
-                ->setVehicle($vehicleToEdit)
-                ->setMaxLoad($data['maxLoad'])
-                ->setTrunkCapacity($data['trunkCapacity']);
-            $this->entityManager->persist($utilityVehicle);
-        }
         // Save en bdd
         $this->entityManager->flush();
 
