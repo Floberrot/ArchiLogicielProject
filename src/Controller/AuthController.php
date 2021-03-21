@@ -69,9 +69,4 @@ class AuthController extends AbstractController
             'message' => 'you account has been created'
         ]);
     }
-
-    public function autorizeUser()
-    {
-
-    }
 }
