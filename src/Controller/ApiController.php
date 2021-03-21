@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Builder\VehicleDetailsBuilder;
+use App\Builder\VehicleEditBuilder;
 use App\Entity\Vehicle;
 use App\Repository\MotorcycleRepository;
 use App\Repository\UtilityVehicleRepository;
@@ -72,7 +73,12 @@ class ApiController extends AbstractController
      */
     public function editVehicle($idToEdit, VehicleRepository $vehicleRepository, EntityManagerInterface $entityManager) : JsonResponse
     {
+<<<<<<< Updated upstream
         $vehicleToEdit = $vehicleRepository->find($idToEdit);
+=======
+        // TODO : On envoie au front toutes les informations du véhhicule à éditer. Dans le formulaire d'édition on renverra tous les champs, même ceux que l'utilisateur n'a pas changé.
+        $vehicleToEdit = $this->vehicleRepository->find($idToEdit);
+>>>>>>> Stashed changes
 
         // Nous recevrons ici les résultats du Front.
         $resEdit = [
@@ -96,6 +102,7 @@ class ApiController extends AbstractController
             ->setLicence($resEdit["ResultLicence"]);
         
         // Enregistre le véhicule standard.
+<<<<<<< Updated upstream
         $entityManager->persist($vehicleToEdit);
         
         // Mise a jour de la table moto si elle existe
@@ -115,6 +122,13 @@ class ApiController extends AbstractController
                 ->setTrunkCapacity($resEdit['resultTrunkCapacity']);
             $entityManager->persist($utilityVehicle);
         }
+=======
+        $this->entityManager->persist($vehicleToEdit);
+        $vehicleEditBuilder = new VehicleEditBuilder($vehicleToEdit);
+        $vehicleEditBuilder->editMotorcycle($vehicleToEdit, $data);
+        $vehicleEditBuilder->editUtilityVehicle($vehicleToEdit, $data);
+        
+>>>>>>> Stashed changes
         // Save en bdd
         $entityManager->flush();
 
