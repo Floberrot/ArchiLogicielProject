@@ -1,9 +1,12 @@
 <template class="customWidth">
   <v-row justify="center">
     <v-col cols="12">
-      <v-btn icon @click="openDialog">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      <v-row class="customRow">
+        <v-btn rounded small color="primary" class="ma-2 white--text" @click="openDialog">
+          Ajouter un véhicule
+          <v-icon right>mdi-plus</v-icon>
+        </v-btn>
+      </v-row>
       <v-simple-table fixed-header height="80vh">
         <thead>
           <tr>
@@ -11,7 +14,7 @@
               <strong>Label</strong>
             </th>
             <th class="text-left">
-              Brand
+              Marque
             </th>
             <th class="text-left">
               Modifier
@@ -29,7 +32,7 @@
             <td><strong>{{ item.label }}</strong></td>
             <td>{{ item.brand }}</td>
             <td>
-              <v-btn icon>
+              <v-btn icon @click="redirectEdit">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </td>
@@ -50,7 +53,6 @@
 </template>
 
 <script>
-import createVehicleDialog from '../components/createVehicleDialog'
 import CreateVehicleDialog from '../components/createVehicleDialog.vue';
 export default {
   name: "Home",
@@ -168,9 +170,13 @@ export default {
       dialog: true,
     };
   },
+  /* TODO: beforeMount GET */
   methods: {
     redirectDetail () {
       this.$router.push('detail');
+    },
+    redirectEdit () {
+      this.$router.push('edit');
     },
     openDialog () {
         this.$refs.dialog.show()
@@ -182,5 +188,10 @@ export default {
 <style scoped>
 .customWidth {
   width: 100vw;
+}
+
+.customRow{
+  justify-content: flex-end;
+  padding: 0 15px 15px 0;
 }
 </style>

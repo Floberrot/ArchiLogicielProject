@@ -35,7 +35,7 @@
                   <template v-slot:activator="{ on }">
                     <v-text-field :value="date" slot="activator" label="Dernier contrôle technique" v-on="on"></v-text-field>
                   </template>
-                  <v-date-picker v-model="date" type="month"></v-date-picker>
+                  <v-date-picker v-model="date"></v-date-picker>
                 </v-menu>
               </v-col>
               <v-col cols="12" sm="6">

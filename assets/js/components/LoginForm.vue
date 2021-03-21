@@ -53,6 +53,12 @@ export default {
         .then((response) => {
           console.log(response);
           let token = response.data.token;
+          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem('token', JSON.stringify(token));
+          this.$router.push('/')
+        },
+        error => {
+          console.log(error)
         });
     },
   },

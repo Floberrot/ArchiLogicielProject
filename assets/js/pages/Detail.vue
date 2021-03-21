@@ -1,4 +1,4 @@
-<template class="overflowHidden">
+<template>
   <v-row justify="center" d-flex align-center mt-6>
     <v-col cols="12">
       <v-btn plain icon class="py-7" @click="redirectHome">
@@ -10,7 +10,8 @@
         height="80vh"
         rounded
         width="100%">
-        <see-product-sheet />
+        <see-product-sheet v-if="displayDetail"/>
+        <edit-product-sheet v-if="displayEdit"/>
       </v-sheet>
     </v-col>
   </v-row>
@@ -18,16 +19,25 @@
 
 <script>
 import SeeProductSheet from '../components/SeeProductSheet'
-// import EditProductSheet from '../components/EditProductSheet'
+import EditProductSheet from '../components/EditProductSheet'
 export default {
   name: "Detail",
   components: {
     SeeProductSheet,
+    EditProductSheet,
   },
   data() {
     return {
-      
+      displayDetail: false,
+      displayEdit: false
     };
+  },
+  created () {
+    if(this.$route.name == "edit"){
+      this.displayEdit = true
+    } else {
+      this.displayDetail = true
+    }
   },
   methods: {
     redirectHome () {
@@ -38,7 +48,7 @@ export default {
 </script>
 
 <style scoped>
-.overflowHidden{
-  overflow: hidden;
+html {
+  overflow-y: hidden !important;
 }
 </style>
