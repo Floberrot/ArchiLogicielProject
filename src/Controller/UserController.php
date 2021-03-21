@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Json;
 
 class UserController extends AbstractController
 {
@@ -58,7 +59,23 @@ class UserController extends AbstractController
         return new JsonResponse(
             [
                 "message" => $message,
-            ], 200, [], true);
+            ], 200, [], true
+        );
+    }
+
+    /**
+     * Cette fonction liste les utilisateurs venant de s'enregistrer
+     * @Route ("", name="", methods={"POST"})
+     * @return JsonResponse
+     */
+    public function listNewUserRegister(): JsonResponse
+    {
+        $allNewUser = $this->userRepository->findBy(['isAuthorize' => false]);
+        return new JsonResponse(
+            [
+                "allNewUser" => $allNewUser
+            ], 200, [], true
+        );
     }
 
 }
