@@ -19,10 +19,10 @@ class AuthController extends AbstractController
      * @param Request $request
      * @param UserRepository $userRepository
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @return Response
+     * @return JsonResponse
      * @Route ("/login", name="login")
      */
-    public function loginUser(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function login(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
     {
         $dataLogin = $request->getContent();
         $dataLogin = json_decode($dataLogin, true);
@@ -39,10 +39,12 @@ class AuthController extends AbstractController
             "exp" => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
         ];
         $jwt = JWT::encode($payload, $key, 'HS256');
-        return $this->json([
+        $role = $user->getRole();
+        return new JsonResponse([
             'message' => 'success login',
-            'token' => sprintf('Bearer %s', $jwt)
-        ]);
+            'token' => sprintf('Bearer %s', $jwt),
+            'role' => $role
+        ], 200, [], true);
     }
 
     /**
