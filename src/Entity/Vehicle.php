@@ -57,6 +57,11 @@ class Vehicle
      */
     private $motorcycle;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPublic;
+
 
     public function getId(): ?int
     {
@@ -165,6 +170,18 @@ class Vehicle
         }
 
         $this->motorcycle = $motorcycle;
+
+        return $this;
+    }
+
+    public function getIsPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setIsPublic(bool $isPublic): self
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }

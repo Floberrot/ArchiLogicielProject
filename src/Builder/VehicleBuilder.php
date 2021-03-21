@@ -27,7 +27,8 @@ class VehicleBuilder
                 ->setConceptionDate($res["conceptionDate"])
                 ->setLastControl($res["lastControl"])
                 ->setFuel($res["fuel"])
-                ->setLicence($res["licence"]);
+                ->setLicence($res["licence"])
+                ->setIsPublic(true);
         $entityManager->persist($vehicle);
 
         if ($res["type"] != "Car") {
@@ -37,29 +38,4 @@ class VehicleBuilder
 
         return $vehicle;
     }
-
-    // /**
-    //  * Créer un nouveau véhicule standard.
-    //  * Dans le cas ou le type est différent de "Car", on appel les fonctions du Builder
-    //  * @param $res
-    //  * @param $entityManager
-    //  * @return Vehicle
-    //  */
-    // static function updateVehicle($res, $entityManager, $vehicle): Vehicle
-    // {
-    //     $vehicle->setLabel($res["ResultLabel"])
-    //             ->setBrand($res["ResultBrand"])
-    //             ->setConceptionDate($res["ResultConceptionDate"])
-    //             ->setLastControl($res["ResultLastControl"])
-    //             ->setFuel($res["ResultFuel"])
-    //             ->setLicence($res["ResultLicence"]);
-    //     $entityManager->persist($vehicle);
-
-    //     if ($res["type"] != "Car") {
-    //         $vehicleTypeBuilder = new VehicleTypeBuilder($entityManager);
-    //         $vehicleTypeBuilder->determineVehicleType($res, $vehicle);
-    //     }
-
-    //     return $vehicle;
-    // }
 }
