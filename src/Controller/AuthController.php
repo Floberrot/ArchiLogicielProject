@@ -64,7 +64,7 @@ class AuthController extends AbstractController
         $user
             ->setEmail($email)
             ->setPassword($passwordEncoder->encodePassword($user, $plainPassword))
-            ->setIsAuthorize(true);
+            ->setIsAuthorize(false);
         $em->persist($user);
         $em->flush();
         return $this->json([
