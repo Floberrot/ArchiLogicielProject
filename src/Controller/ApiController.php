@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Builder\VehicleBuilder;
+use App\Services\SetResultFrontIntoArray;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,10 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Builder\VehicleDetailsBuilder;
 use App\Builder\VehicleEditBuilder;
 use App\Entity\Vehicle;
+use Exception;
 use App\Repository\MotorcycleRepository;
 use App\Repository\UtilityVehicleRepository;
 use App\Repository\VehicleRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ApiController extends AbstractController
 {
@@ -22,43 +25,42 @@ class ApiController extends AbstractController
     private $vehicleRepository;
     private $motorcycleRepository;
     private $utilityVehicleRepository;
+    protected $request;
+    private $setResultFrontIntoArray;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         VehicleRepository $vehicleRepository,
         MotorcycleRepository $motorcycleRepository,
-        UtilityVehicleRepository $utilityVehicleRepository)
+        UtilityVehicleRepository $utilityVehicleRepository,
+        RequestStack $request,
+        SetResultFrontIntoArray $setResultFrontIntoArray)
     {
         $this->entityManager = $entityManager;
         $this->vehicleRepository = $vehicleRepository;
         $this->motorcycleRepository = $motorcycleRepository;
         $this->utilityVehicleRepository = $utilityVehicleRepository;
+        $this->request = $request;
+        $this->setResultFrontIntoArray = $setResultFrontIntoArray;
     }
+
     /**
      * Créer un nouveau Vehicule
      * @Route ("/api/vehicle", name="create_vehicle", methods={"POST"})
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return JsonResponse
+     * @throws Exception
      */
-  public function createVehicle(Request $request) : JsonResponse
+  public function createVehicle() : JsonResponse
   {
         // Résultats de la requête (Json decode à faire)
         // Champ type en bdd ?
-        $res = [
-            "type" => "UtilityVehicle",
-            "ResultLabel" => "Label",
-            "ResultBrand" => "Merco",
-            "ResultConceptionDate" => new \DateTime(),
-            "ResultLastControl" => new \DateTime(),
-            "ResultFuel" => "Diesel",
-            "ResultLicence" => "Permis b",
-            "resultMaxLoad" => "10.5",
-            "resultTrunkCapacity" => "10.5",
-        ];
+        $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
+        $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
         // Création d'un nouveau véhicule
         $vehicleBuilder = new VehicleBuilder();
-        $vehicleBuilder->setAndCheckVehicleType($res, $this->entityManager);
+        $vehicleBuilder->setAndCheckVehicleType($data, $this->entityManager);
 
         $this->entityManager->flush();
 
@@ -70,67 +72,34 @@ class ApiController extends AbstractController
      * @param mixed $idToEdit
      * @Route("/api/vehicle/{idToEdit}", name="edit_vehicle", methods={"PUT"})
      * @return JsonResponse
+     * @throws Exception
      */
-    public function editVehicle($idToEdit, VehicleRepository $vehicleRepository, EntityManagerInterface $entityManager) : JsonResponse
+    public function editVehicle($idToEdit) : JsonResponse
     {
-<<<<<<< Updated upstream
-        $vehicleToEdit = $vehicleRepository->find($idToEdit);
-=======
         // TODO : On envoie au front toutes les informations du véhhicule à éditer. Dans le formulaire d'édition on renverra tous les champs, même ceux que l'utilisateur n'a pas changé.
         $vehicleToEdit = $this->vehicleRepository->find($idToEdit);
->>>>>>> Stashed changes
 
-        // Nous recevrons ici les résultats du Front.
-        $resEdit = [
-            "type" => "UtilityVehicle",
-            "ResultLabel" => "Test update 45",
-            "ResultBrand" => "ptite lambo",
-            "ResultConceptionDate" => new \DateTime(),
-            "ResultLastControl" => new \DateTime(),
-            "ResultFuel" => "sp95",
-            "ResultLicence" => "Permis ouais",
-            "resultMaxLoad" => "1000",
-            "resultTrunkCapacity" => "2000.1",
-        ];
+
+        $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
+        $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
 
         $vehicleToEdit
-            ->setLabel($resEdit['ResultLabel'])
-            ->setBrand($resEdit["ResultBrand"])
-            ->setConceptionDate($resEdit["ResultConceptionDate"])
-            ->setLastControl($resEdit["ResultLastControl"])
-            ->setFuel($resEdit["ResultFuel"])
-            ->setLicence($resEdit["ResultLicence"]);
+            ->setLabel($data['label'])
+            ->setBrand($data["brand"])
+            ->setConceptionDate($data["conceptionDate"])
+            ->setLastControl($data["lastControl"])
+            ->setFuel($data["fuel"])
+            ->setLicence($data["licence"]);
         
         // Enregistre le véhicule standard.
-<<<<<<< Updated upstream
-        $entityManager->persist($vehicleToEdit);
-        
-        // Mise a jour de la table moto si elle existe
-        $moto = $vehicleToEdit->getMotorcycle();
-        $utilityVehicle = $vehicleToEdit->getUtilityVehicle();
-        if ($moto) {
-            $moto
-                ->setVehicle($vehicleToEdit)
-                ->setHelmetAvailable($resEdit['helmetAvailable']);
-            $entityManager->persist($moto);
-        }
-        // Idem pour un véhicule utilitaire :)
-        if ($utilityVehicle) {
-            $utilityVehicle
-                ->setVehicle($vehicleToEdit)
-                ->setMaxLoad($resEdit['resultMaxLoad'])
-                ->setTrunkCapacity($resEdit['resultTrunkCapacity']);
-            $entityManager->persist($utilityVehicle);
-        }
-=======
+
         $this->entityManager->persist($vehicleToEdit);
-        $vehicleEditBuilder = new VehicleEditBuilder($vehicleToEdit);
+        $vehicleEditBuilder = new VehicleEditBuilder($this->entityManager);
         $vehicleEditBuilder->editMotorcycle($vehicleToEdit, $data);
         $vehicleEditBuilder->editUtilityVehicle($vehicleToEdit, $data);
         
->>>>>>> Stashed changes
         // Save en bdd
-        $entityManager->flush();
+        $this->entityManager->flush();
 
         return new JsonResponse('edit ok', 200, [], true);
     }
@@ -145,7 +114,7 @@ class ApiController extends AbstractController
     {
         $allVehicle = new Vehicle();
         $allVehicle = $this->vehicleRepository->findAll();
-        $vehicleToDisplay = [];
+        $vehiclesToDisplay = [];
         foreach ($allVehicle as $oneVehicle)
         {
             $label = $oneVehicle->getLabel();
@@ -154,12 +123,12 @@ class ApiController extends AbstractController
             $dataOfVehicles['label'] = $label;
             $dataOfVehicles['brand'] = $brand;
             $dataOfVehicles['licence'] = $licence;
-            array_push($vehicleToDisplay, $dataOfVehicles);
+            array_push($vehiclesToDisplay, $dataOfVehicles);
         }
         // Voir avec Fabien ce qu'il veut comme valeur de retour.
         return new JsonResponse(
             [
-                'arrayOfVehicles' => $vehicleToDisplay
+                'arrayOfVehicles' => $vehiclesToDisplay
             ]
         );
     }
@@ -180,7 +149,7 @@ class ApiController extends AbstractController
         // Appel la class pour afficher les détails d'un véhicule.
         $vehicleDetailClass = new VehicleDetailsBuilder($this->motorcycleRepository, $this->utilityVehicleRepository);
         $vehicleDetailClass->detailsBuilder($vehicleEntity, $detailOneVehicle, $idDetails);
-        // Voir avec Fabien ce qu'il veut exactement comme retour
+        // Voir avec Fabien ce qu'il veut exactement comme retour, + renvoyer toutes les données du véhicule.
         return new JsonResponse(
             [
                 'detailVehicle' => $detailOneVehicle
@@ -196,13 +165,13 @@ class ApiController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return JsonResponse
      */
-    public function deleteVehicle($idToDelete, VehicleRepository $vehicleRepository) :JsonResponse
+    public function deleteVehicle($idToDelete) :JsonResponse
     {
         // On vérifie que la méthode est bien "DELETE"
          if ($this->request->getCurrentRequest()->getMethod() === "DELETE") {
             $vehicleToDelete = new Vehicle();
             // On fait une requête pour trouver l'entité associé à l'id.
-            $vehicleToDelete = $vehicleRepository->find($idToDelete);
+            $vehicleToDelete = $this->vehicleRepository->find($idToDelete);
             if(!$vehicleToDelete) {
                 return new JsonResponse('Erreur lors de la suppression, ce véhicule n\'exite pas', 500, [], true);
             }
