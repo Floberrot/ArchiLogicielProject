@@ -11,8 +11,8 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn icon v-on:click="test()">
-      test
+    <v-btn icon>
+      <v-icon>mdi-magnify</v-icon>
     </v-btn>
 
     <v-btn icon>
@@ -27,13 +27,6 @@
 
 <script>
 export default {
-  methods: {
-    test () { 
-      this.$axios.post("/change/privacy/9",{
-        valueStatusPrivacy: false
-      }) 
-    },
-  },
   name: "Navbar"
 }
 </script>

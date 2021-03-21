@@ -17,6 +17,7 @@ use App\Repository\UtilityVehicleRepository;
 use App\Repository\VehicleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Constraints\Json;
 
 class ApiController extends AbstractController
 {
@@ -202,15 +203,14 @@ class ApiController extends AbstractController
             switch ($valueStatusPrivacy) {
                 case true:
                     $vehicleToChangeStatus->setIsPublic(true);
-                    return new JsonResponse('Le véhicule est visible pour tous', 200, [], true);
                     break;
                 case false:
                     $vehicleToChangeStatus->setIsPublic(false);
-                    return new JsonResponse('Le véhicule est visible que pour les manager', 200, [], true);
                     break;
             }
             $this->entityManager->persist($vehicleToChangeStatus);
             $this->entityManager->flush();
+            return new JsonResponse('Le status du véhicule a changé', 200, [], true);
         } else {
             return new JsonResponse('Mauvaise méthode de requete, méthode attendu : POST', 404, [], true);
         }
