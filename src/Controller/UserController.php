@@ -65,17 +65,18 @@ class UserController extends AbstractController
 
     /**
      * Cette fonction liste les utilisateurs venant de s'enregistrer
-     * @Route ("", name="", methods={"POST"})
+     * @Route ("/admin/getUserRequest", name="getUserRequest", methods={"GET"})
      * @return JsonResponse
      */
-    public function listNewUserRegister(): JsonResponse
+    public function getNewUserRequest(): JsonResponse
     {
         $allNewUser = $this->userRepository->findBy(['isAuthorize' => false]);
-        return new JsonResponse(
-            [
-                "allNewUser" => $allNewUser
-            ], 200, [], true
-        );
+//        return new JsonResponse(
+//            [
+//                "allNewUser" => $allNewUser
+//            ], 200, [], true
+//        );
+        return $this->json(["allNewUser" => $allNewUser, "code" => 200, true]);
     }
 
 }
