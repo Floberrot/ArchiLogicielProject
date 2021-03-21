@@ -92,7 +92,6 @@ class ApiController extends AbstractController
             ->setLicence($data["licence"]);
         
         // Enregistre le véhicule standard.
-
         $this->entityManager->persist($vehicleToEdit);
         $vehicleEditBuilder = new VehicleEditBuilder($this->entityManager);
         $vehicleEditBuilder->editMotorcycle($vehicleToEdit, $data);
@@ -182,6 +181,38 @@ class ApiController extends AbstractController
             return new JsonResponse('Vehicule supprimé', 200, [], true);
         } else {
             return new JsonResponse('La methode de requête est mauvaise', 500, [], true);
+        }
+    }
+
+    /**
+     * @Route("/change/privacy/{idToEdit}", name="privacy_vehicle", methods={"POST"})
+     * @param $idToEdit
+     */
+    public function changeStatusOfVehiclePrivacy($idToEdit)
+    {
+        $request = $this->request->getCurrentRequest();
+        if ($request->getMethod() === "POST") {
+            // On récupère la valeur que nous renvoie le front.
+            $dataInRequest = $request->getContent();
+            $response = json_decode($dataInRequest, true);
+            $valueStatusPrivacy = $response['valueStatusPrivacy'];
+            // On cherche le véhicule avec l'id que l'on reçoit du front.
+            $vehicleToChangeStatus = $this->vehicleRepository->find($idToEdit);
+            // Si le front nous renvoie "true", on passe le statut a publique, si c'est faux, on le passe en privé
+            switch ($valueStatusPrivacy) {
+                case true:
+                    $vehicleToChangeStatus->setIsPublic(true);
+                    return new JsonResponse('Le véhicule est visible pour tous', 200, [], true);
+                    break;
+                case false:
+                    $vehicleToChangeStatus->setIsPublic(false);
+                    return new JsonResponse('Le véhicule est visible que pour les manager', 200, [], true);
+                    break;
+            }
+            $this->entityManager->persist($vehicleToChangeStatus);
+            $this->entityManager->flush();
+        } else {
+            return new JsonResponse('Mauvaise méthode de requete, méthode attendu : POST', 404, [], true);
         }
     }
 }
