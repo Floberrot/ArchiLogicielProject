@@ -30,6 +30,7 @@ class AuthController extends AbstractController
         $user = $userRepository->findOneBy(['email' => $email]);
         if (!$user || !$passwordEncoder->isPasswordValid($user, $dataLogin['mdp'])) {
             return $this->json([
+                'isValid' => false,
                 'message' => 'email or password is wrong.',
             ]);
         }
