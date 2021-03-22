@@ -30,6 +30,7 @@ class AuthController extends AbstractController
         $user = $userRepository->findOneBy(['email' => $email]);
         if (!$user || !$passwordEncoder->isPasswordValid($user, $dataLogin['mdp'])) {
             return $this->json([
+                'isValid' => false,
                 'message' => 'email or password is wrong.',
             ]);
         }
@@ -41,6 +42,7 @@ class AuthController extends AbstractController
         $jwt = JWT::encode($payload, $key, 'HS256');
         $role = $user->getRole();
         return new JsonResponse([
+            'isValid' => true,
             'message' => 'success login',
             'token' => sprintf('Bearer %s', $jwt),
             'role' => $role
