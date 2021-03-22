@@ -88,7 +88,8 @@ export default {
           role: this.role
       })
       .then(response => {
-        this.listUserRequest()// On re actualise la liste en rappelant la fonction
+        // On re actualise la liste en rappelant la fonction
+        this.listUserRequest()
       })
     },
     // Permet de lister les utilisateurs qui ce sont enregistrés
