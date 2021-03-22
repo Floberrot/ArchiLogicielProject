@@ -69,108 +69,16 @@ export default {
           {
             label: 'Clio',
             brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
+          }
       ],
       dialog: true,
     };
   },
-  /* TODO: beforeMount GET */
+ beforeCreate() {
+    if(window.localStorage.getItem('token') === null) {
+      this.$router.push({ path: '/login' })    
+      }
+  },
   methods: {
     redirectDetail () {
       this.$router.push('detail');

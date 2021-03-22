@@ -25,17 +25,11 @@ const routes = [
     {
         path: '/', name:'Home',
         component: () => import('./pages/Home.vue'),
-        beforeEnter (to, from, next) {
-            if(!window.localStorage.getItem('token')) {
-                next({name:'login'})
-            } else {
-                next({name:'Home'})
-            }
-        },
+        
     },
     {
         path: '/login', name:'login',
-        component: () => import('./pages/Auth.vue')
+        component: () => import('./pages/Auth.vue'),
     },
     {
         /* TODO gestion parametre (id vehicule) */
