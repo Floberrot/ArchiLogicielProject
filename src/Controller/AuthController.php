@@ -36,7 +36,7 @@ class AuthController extends AbstractController
         }
         if ($user->getIsAuthorize() === false) {
             return $this->json([
-                'isValid' => false,
+                'isAuthorized' => false,
                 'message' => 'Votre demande est en attente.',
             ]);
         }
