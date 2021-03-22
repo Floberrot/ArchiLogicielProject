@@ -33,13 +33,13 @@ const routes = [
     {
         /* TODO gestion parametre (id vehicule) */
         /* TODO gestion edition */
-        path: '/detail', name:'detail',
+        path: '/detail/:id', name:'detail',
         component: () => import('./pages/Detail.vue')
     },
     {
         /* TODO gestion parametre (id vehicule) */
         /* TODO gestion edition */
-        path: '/edit', name:'edit',
+        path: '/edit/:id', name:'edit',
         component: () => import('./pages/Detail.vue')
     },
     {

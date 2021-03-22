@@ -33,12 +33,19 @@ class AuthController extends AbstractController
                 'isValid' => false,
                 'message' => 'Email or password is wrong.',
             ]);
-        }
-        if ($user->getIsAuthorize() === false) {
-            return $this->json([
-                'isAuthorized' => false,
-                'message' => 'Votre demande est en attente.',
-            ]);
+        } else {
+            if ($user->getIsAuthorize() === false) {
+                return $this->json([
+                    'isValid' => true,
+                    'isAuthorized' => false,
+                    'message' => 'Votre demande est en attente.',
+                ]);
+            } else {
+                return $this->json([
+                    'isValid' => true,
+                    'isAuthorized' => true,
+                ]);
+            }
         }
         $key = "secret_key";
         $payload = [

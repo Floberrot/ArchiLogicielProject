@@ -27,6 +27,11 @@ export default {
       btnTitle: 'Inscription',
     };
   },
+  beforeCreate() {
+    if(window.localStorage.getItem('token') !== null) {
+      this.$router.push({ path: '/' })    
+      }
+  },
   methods: {
     switchForm () {
         this.isLogin = !this.isLogin

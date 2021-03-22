@@ -117,9 +117,11 @@ class ApiController extends AbstractController
         $vehiclesToDisplay = [];
         foreach ($allVehicle as $oneVehicle)
         {
+            $id = $oneVehicle->getId();
             $label = $oneVehicle->getLabel();
             $brand = $oneVehicle->getBrand();
             $licence = $oneVehicle->getLicence();
+            $dataOfVehicles['id'] = $id;
             $dataOfVehicles['label'] = $label;
             $dataOfVehicles['brand'] = $brand;
             $dataOfVehicles['licence'] = $licence;

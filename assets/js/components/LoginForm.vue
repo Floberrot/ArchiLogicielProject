@@ -37,7 +37,7 @@
 
       <template v-slot:action="{ attrs }">
         <v-btn
-          color="red"
+          color="white"
           text
           v-bind="attrs"
           @click="snackbar = false"
@@ -61,14 +61,9 @@ export default {
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
       snackbar: false,
-      timeout: 2000,
+      timeout: 3000,
       message: "Test",
     };
-  },
-  beforeCreate() {
-    if(window.localStorage.getItem('token') !== null) {
-      this.$router.push({ path: '/' })    
-      }
   },
   methods: {
     loginUser() {
@@ -81,13 +76,18 @@ export default {
           console.log(response);
           if (!response.data.isValid) {
             this.snackbar = true
-            this.message = "Email or Password is wrong"
+            this.message = "E-mail ou mot de passe érroné"
           } else {
-            let token = response.data.token;
-            let role = response.data.role;
-            localStorage.setItem('role', JSON.stringify(role));
-            localStorage.setItem('token', JSON.stringify(token));
-            this.$router.push('/')
+            if (!response.data.isAuthorized) {
+              this.snackbar = true
+              this.message = "Votre demande est en attente"
+            } else {
+              let token = response.data.token;
+              let role = response.data.role;
+              localStorage.setItem('role', JSON.stringify(role));
+              localStorage.setItem('token', JSON.stringify(token));
+              this.$router.push('/')
+            }
           }
         }).catch((error) => {
           console.log(error)
