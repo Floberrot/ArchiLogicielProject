@@ -24,10 +24,7 @@ Vue.use(
 const routes = [
     {
         path: '/', name:'Home',
-        component: () => import('./pages/Home.vue'),
-        /*beforeEnter (to, from, next) {
-            isConnected()
-        },*/
+        component: () => import('./pages/Home.vue')
     },
     {
         path: '/login', name:'login',

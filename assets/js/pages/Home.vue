@@ -106,7 +106,11 @@ export default {
       dialog: true,
     };
   },
-  /* TODO: beforeMount GET */
+ beforeCreate() {
+    if(window.localStorage.getItem('token') === null) {
+      this.$router.push({ path: '/login' })    
+      }
+  },
   methods: {
     redirectDetail () {
       this.$router.push('detail');
