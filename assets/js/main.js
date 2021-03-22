@@ -24,12 +24,11 @@ Vue.use(
 const routes = [
     {
         path: '/', name:'Home',
-        component: () => import('./pages/Home.vue'),
-        
+        component: () => import('./pages/Home.vue')
     },
     {
         path: '/login', name:'login',
-        component: () => import('./pages/Auth.vue'),
+        component: () => import('./pages/Auth.vue')
     },
     {
         /* TODO gestion parametre (id vehicule) */
