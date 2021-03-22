@@ -43,6 +43,11 @@ export default {
       ],
     };
   },
+  beforeCreate() {
+    if(window.localStorage.getItem('token') !== null) {
+      this.$router.push({ path: '/' })    
+      }
+  },
   methods: {
     loginUser() {
       this.$axios
