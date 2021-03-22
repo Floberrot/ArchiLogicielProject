@@ -1,6 +1,9 @@
 <template>
     <v-card class="mx-auto" tile>
-
+      <!-- Affiche une erreur si il y en a une -->
+      <div v-if="this.errorMessage">
+        <v-alert  dense outlined text type="error">{{ this.errorMessage }}</v-alert>
+      </div>
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -27,8 +30,8 @@
                 <v-card-text>
                   <p><span class="font-weight-bold">Nouvel utilisateur :</span> {{ selectedUserInfo.email }}</p>
                   <!--Select des rôles -->
-                  <v-select ref="rolesOptions" :items="rolesOptions" filled label="Attribuer un rôle" name="role" required></v-select>
-                  <v-select ref="authorizeOptions" :items="authorizeOptions" filled label="Accepter la demande" name="isAuthorize" required></v-select>
+                  <v-select ref="rolesOptions" :items="rolesOptions" filled label="Attribuer un rôle" name="role"></v-select>
+                  <v-select ref="authorizeOptions" :items="authorizeOptions" filled label="Accepter la demande" name="isAuthorize"></v-select>
                   <v-btn hidden :value="selectedUserInfo.id" name="id"></v-btn>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -56,6 +59,7 @@ export default {
       dialog: false,
       rolesOptions: ['Member', 'Manager'],
       authorizeOptions: ['Oui', 'Non'],
+      errorMessage: null
     }
   },
   mounted() {
@@ -80,17 +84,25 @@ export default {
       // Récupération des données du formulaire
       this.role = submitEvent.target.elements.role.value
       this.authorize = submitEvent.target.elements.isAuthorize.value
-      this.authorize === "Oui" ? this.authorize = true : this.authorize = false
       this.id = submitEvent.target.elements.id.value
-      // On set les données
-      this.$axios.post(`/admin/authorize/${this.id}`,{
-          isAuthorize: this.authorize,
-          role: this.role
-      })
-      .then(response => {
-        // On re actualise la liste en rappelant la fonction
-        this.listUserRequest()
-      })
+      //Si les deux select sont séléctionnés
+      if(this.role && this.authorize) {
+        this.authorize === "Oui" ? this.authorize = true : this.authorize = false
+        this.errorMessage = null
+        // On set les données
+        this.$axios.post(`/admin/authorize/${this.id}`,{
+            isAuthorize: this.authorize,
+            role: this.role
+        })
+        .then(response => {
+          // On re actualise la liste en rappelant la fonction
+          this.listUserRequest()
+        })
+      } else {
+        //Sinon on affiche une erreur
+        this.errorMessage = "Veuillez remplir tous les champs"
+      }
+      
     },
     // Permet de lister les utilisateurs qui ce sont enregistrés
     listUserRequest () {
