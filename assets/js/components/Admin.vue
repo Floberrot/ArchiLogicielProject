@@ -94,7 +94,7 @@ export default {
     },
     // Permet de lister les utilisateurs qui ce sont enregistrés
     listUserRequest () {
-      this.$axios.get("/admin/getUserRequest")
+      this.$axios.get("/admin/get/user")
           .then(response => {
             this.userData = response.data["allNewUser"]
           })

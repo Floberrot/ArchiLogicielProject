@@ -59,27 +59,16 @@ class UserController extends AbstractController
         $this->entityManager->persist($user);
         $this->entityManager->flush();
         return $this->json(["message" => $message, "code" => 200, true]);
-//        return new JsonResponse(
-//            [
-//                "message" => $message,
-//            ], 200, [], true
-//        );
     }
 
     /**
      * Cette fonction liste les utilisateurs venant de s'enregistrer
-     * @Route ("/admin/getUserRequest", name="getUserRequest", methods={"GET"})
+     * @Route ("/admin/get/user", name="getUserRequest", methods={"GET"})
      * @return JsonResponse
      */
     public function getNewUserRequest(): JsonResponse
     {
         $allNewUser = $this->userRepository->findBy(['isAuthorize' => false]);
         return $this->json(["allNewUser" => $allNewUser, "code" => 200, true]);
-//        return new JsonResponse(
-//            [
-//                "allNewUser" => $allNewUser
-//            ], 200, [], true
-//        );
     }
-
 }
