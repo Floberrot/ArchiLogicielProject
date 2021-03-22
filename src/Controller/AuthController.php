@@ -31,7 +31,13 @@ class AuthController extends AbstractController
         if (!$user || !$passwordEncoder->isPasswordValid($user, $dataLogin['mdp'])) {
             return $this->json([
                 'isValid' => false,
-                'message' => 'email or password is wrong.',
+                'message' => 'Email or password is wrong.',
+            ]);
+        }
+        if ($user->getIsAuthorize() === false) {
+            return $this->json([
+                'isValid' => false,
+                'message' => 'Votre demande est en attente.',
             ]);
         }
         $key = "secret_key";
@@ -46,7 +52,7 @@ class AuthController extends AbstractController
             'message' => 'success login',
             'token' => sprintf('Bearer %s', $jwt),
             'role' => $role
-        ], 200, [], true);
+        ]);
     }
 
     /**
