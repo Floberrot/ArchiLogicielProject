@@ -27,6 +27,25 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-snackbar
+      color="error"
+      rounded="pill"
+      v-model="snackbar"
+      :timeout="timeout"
+    >
+      {{ message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="red"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-form>
 </template>
 
@@ -41,6 +60,9 @@ export default {
         (v) => !!v || "E-mail is required",
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
+      snackbar: false,
+      timeout: 2000,
+      message: "Test",
     };
   },
   methods: {
@@ -52,12 +74,17 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          let token = response.data.token;
-          localStorage.setItem('user', JSON.stringify(response.data));
-          localStorage.setItem('token', JSON.stringify(token));
-          this.$router.push('/')
-        },
-        error => {
+          if (!response.data.isValid) {
+            this.snackbar = true
+            this.message = "Email or Password is wrong"
+          } else {
+            let token = response.data.token;
+            let role = response.data.role;
+            localStorage.setItem('role', JSON.stringify(role));
+            localStorage.setItem('token', JSON.stringify(token));
+            this.$router.push('/')
+          }
+        }).catch((error) => {
           console.log(error)
         });
     },

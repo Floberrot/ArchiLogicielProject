@@ -40,11 +40,11 @@ class AuthController extends AbstractController
         ];
         $jwt = JWT::encode($payload, $key, 'HS256');
         $role = $user->getRole();
-        return new JsonResponse([
+        return $this->json([
             'message' => 'success login',
             'token' => sprintf('Bearer %s', $jwt),
             'role' => $role
-        ], 200, [], true);
+        ]);
     }
 
     /**

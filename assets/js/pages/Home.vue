@@ -67,103 +67,39 @@ export default {
             brand: 'Peugeot',
           },
           {
-            label: 'Clio',
+            label: 'Clio 1',
             brand: 'Renault',
           },
           {
-            label: '206',
+            label: '207',
             brand: 'Peugeot',
           },
           {
-            label: 'Clio',
+            label: 'Clio 2',
             brand: 'Renault',
           },
           {
-            label: '206',
+            label: '208',
             brand: 'Peugeot',
           },
           {
-            label: 'Clio',
+            label: 'Clio 3',
             brand: 'Renault',
           },
           {
-            label: '206',
+            label: '209',
             brand: 'Peugeot',
           },
           {
-            label: 'Clio',
+            label: 'Clio 4',
             brand: 'Renault',
           },
           {
-            label: '206',
+            label: '201',
             brand: 'Peugeot',
           },
           {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
-            brand: 'Renault',
-          },
-          {
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio',
+            label: 'Clio 5',
             brand: 'Renault',
           },
       ],
