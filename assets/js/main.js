@@ -49,6 +49,11 @@ const routes = [
         path: '/usermanager', name:'usermanager',
         component: () => import('./pages/UserManager.vue')
     }
+    ,
+    {
+        path: '/admin', name:'admin',
+        component: () => import('./components/Admin.vue')
+    }
 ]
 
 

@@ -19,10 +19,10 @@ class AuthController extends AbstractController
      * @param Request $request
      * @param UserRepository $userRepository
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @return Response
+     * @return JsonResponse
      * @Route ("/login", name="login")
      */
-    public function loginUser(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function login(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
     {
         $dataLogin = $request->getContent();
         $dataLogin = json_decode($dataLogin, true);
@@ -33,16 +33,18 @@ class AuthController extends AbstractController
                 'message' => 'email or password is wrong.',
             ]);
         }
-        $key = "example_key";
+        $key = "secret_key";
         $payload = [
             "email" => $email,
             "exp" => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
         ];
         $jwt = JWT::encode($payload, $key, 'HS256');
-        return $this->json([
+        $role = $user->getRole();
+        return new JsonResponse([
             'message' => 'success login',
-            'token' => sprintf('Bearer %s', $jwt)
-        ]);
+            'token' => sprintf('Bearer %s', $jwt),
+            'role' => $role
+        ], 200, [], true);
     }
 
     /**
@@ -62,7 +64,7 @@ class AuthController extends AbstractController
         $user
             ->setEmail($email)
             ->setPassword($passwordEncoder->encodePassword($user, $plainPassword))
-            ->setIsAuthorize(true);
+            ->setIsAuthorize(false);
         $em->persist($user);
         $em->flush();
         return $this->json([
