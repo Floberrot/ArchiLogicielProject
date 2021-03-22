@@ -27,8 +27,8 @@
                 <v-card-text>
                   <p><span class="font-weight-bold">Nouvel utilisateur :</span> {{ selectedUserInfo.email }}</p>
                   <!--Select des rôles -->
-                  <v-select ref="rolesOptions" :items="rolesOptions" filled label="Attribuer un rôle" name="role"></v-select>
-                  <v-select ref="authorizeOptions" :items="authorizeOptions" filled label="Accepter la demande" name="isAuthorize"></v-select>
+                  <v-select ref="rolesOptions" :items="rolesOptions" filled label="Attribuer un rôle" name="role" required></v-select>
+                  <v-select ref="authorizeOptions" :items="authorizeOptions" filled label="Accepter la demande" name="isAuthorize" required></v-select>
                   <v-btn hidden :value="selectedUserInfo.id" name="id"></v-btn>
                 </v-card-text>
                 <v-divider></v-divider>
