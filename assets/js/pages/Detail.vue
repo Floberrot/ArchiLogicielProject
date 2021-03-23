@@ -32,6 +32,11 @@ export default {
       displayEdit: false
     };
   },
+  beforeCreate() {
+    if(window.localStorage.getItem('token') === null) {
+      this.$router.push({ path: '/login' })    
+    }
+  },
   created () {
     if(this.$route.name == "edit"){
       this.displayEdit = true
