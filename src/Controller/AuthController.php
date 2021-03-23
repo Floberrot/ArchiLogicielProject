@@ -33,19 +33,13 @@ class AuthController extends AbstractController
                 'isValid' => false,
                 'message' => 'Email or password is wrong.',
             ]);
-        } else {
-            if ($user->getIsAuthorize() === false) {
-                return $this->json([
-                    'isValid' => true,
-                    'isAuthorized' => false,
-                    'message' => 'Votre demande est en attente.',
-                ]);
-            } else {
-                return $this->json([
-                    'isValid' => true,
-                    'isAuthorized' => true,
-                ]);
-            }
+        }
+        if ($user->getIsAuthorize() === false) {
+            return $this->json([
+                'isValid' => true,
+                'isAuthorized' => false,
+                'message' => 'Votre demande est en attente.',
+            ]);
         }
         $key = "secret_key";
         $payload = [
@@ -55,6 +49,8 @@ class AuthController extends AbstractController
         $jwt = JWT::encode($payload, $key, 'HS256');
         $role = $user->getRole();
         return $this->json([
+            'isValid' => true,
+            'isAuthorized' => true,
             'message' => 'success login',
             'token' => sprintf('Bearer %s', $jwt),
             'role' => $role
