@@ -1,10 +1,23 @@
 <template>
     <v-card class="mx-auto" tile>
-      <!-- Affiche une erreur si il y en a une -->
-      <div v-if="this.errorMessage">
-        <v-alert  dense outlined text type="error">{{ this.errorMessage }}</v-alert>
-      </div>
-      <v-simple-table>
+      <!-- Affiche un message error -->
+      <v-snackbar v-model="snackbar"  rounded="pill" color="red" v-if="this.errorMessage">{{ this.errorMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn id="closeText" color="pink" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+      </v-snackbar>
+      <!-- Affiche un message success -->
+      <v-snackbar v-model="snackbar"  rounded="pill" color="green" v-else-if="this.successMessage">{{ this.successMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn id="closeText" color="pink" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+      </v-snackbar>
+      <!-- Tableau des demande utilisateurs -->
+      <v-simple-table width="400">
         <template v-slot:default>
           <thead>
           <tr>
@@ -18,6 +31,8 @@
             <td> <v-btn color="red lighten-2" dark v-on:click="OpenDialog(user)">Voir plus</v-btn></td>
           </tr>
           </tbody>
+          </template>
+      </v-simple-table>
 
           <!--  Modal  -->
           <v-dialog v-model="dialog" width="500">
@@ -37,16 +52,12 @@
                 <v-divider></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn type="submit" color="green lighten-2" dark v-on:click="dialog = false">Enregistrer</v-btn>
+                  <v-btn type="submit" color="green lighten-2" dark>Enregistrer</v-btn>
                 </v-card-actions>
               </form>
             </v-card>
           </v-dialog>
           <!--  Modal  -->
-
-        </template>
-      </v-simple-table>
-
     </v-card>
 </template>
 
@@ -57,9 +68,11 @@ export default {
       userData: [],
       selectedUserInfo: [],
       dialog: false,
+      snackbar: false,
       rolesOptions: ['Member', 'Manager'],
       authorizeOptions: ['Oui', 'Non'],
-      errorMessage: null
+      errorMessage: null,
+      successMessage: null
     }
   },
   mounted() {
@@ -87,19 +100,33 @@ export default {
       this.id = submitEvent.target.elements.id.value
       //Si les deux select sont séléctionnés
       if(this.role && this.authorize) {
-        this.authorize === "Oui" ? this.authorize = true : this.authorize = false
-        this.errorMessage = null
-        // On set les données
-        this.$axios.post(`/admin/authorize/${this.id}`,{
-            isAuthorize: this.authorize,
-            role: this.role
-        })
-        .then(response => {
-          // On re actualise la liste en rappelant la fonction
-          this.listUserRequest()
-        })
+        if(this.authorize != "Oui") {
+          //Si le manager clique sur "Non"
+          this.errorMessage = "Utilisateur refusé"
+          this.snackbar = true
+          this.dialog = false
+          this.successMessage = null
+        } else {
+          this.authorize === "Oui" ? this.authorize = true : this.authorize = false
+          this.errorMessage = null
+          this.successMessage = "Utilisateur authorisé"
+          this.snackbar = true
+          this.dialog = false
+          // On set les données
+          this.$axios.post(`/admin/authorize/${this.id}`,{
+              isAuthorize: this.authorize,
+              role: this.role
+          })
+          .then(response => {
+            // On re actualise la liste en rappelant la fonction
+            this.listUserRequest()
+          })
+        }
       } else {
         //Sinon on affiche une erreur
+        this.snackbar = true
+        this.dialog = true
+        this.successMessage = null
         this.errorMessage = "Veuillez remplir tous les champs"
       }
       
@@ -117,5 +144,7 @@ export default {
 </script>
 
 <style scoped>
-
+#closeText{
+  color: #fff !important;
+}
 </style>
