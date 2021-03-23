@@ -59,7 +59,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="hide()"> Annuler </v-btn>
-          <v-btn color="blue darken-1" text @click="hide()"> Sauvegarder </v-btn>
+          <v-btn color="blue darken-1" text @click="send()"> Sauvegarder </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -72,9 +72,13 @@ export default {
   data() {
     return {
       dialog: false,
+      vehiclesData: [],
       // date: new Date().toISOString().substr(0, 10),
       date: null
     };
+  },
+  mounted() {
+    this.listVehicleRequest() //Récupère les véhicules
   },
   methods: {
     show() {
@@ -82,6 +86,30 @@ export default {
     },
     hide() {
       this.dialog = false;
+    },
+    listVehicleRequest () {
+      this.$axios.get("/api/vehicle")
+          .then(response => {
+            this.vehiclesData = response.data["arrayOfVehicles"]
+            console.log(this.vehiclesData)
+          })
+    },
+    send() {
+      this.$axios
+        .post("/api/vehicle", {
+          email: this.email,
+          mdp: this.mdp,
+        })
+        .then((response) => {
+          console.log(response);
+            let token = response.data.token;
+            let role = response.data.role;
+            localStorage.setItem('role', JSON.stringify(role));
+            localStorage.setItem('token', JSON.stringify(token));
+            this.$router.push('/')
+        }).catch((error) => {
+          console.log(error)
+        });
     },
   },
 };

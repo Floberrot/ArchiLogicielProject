@@ -10,9 +10,9 @@
           ></v-img>
         </v-col>
         <v-col lg="6">
-          <p>Text</p>
-          <p>Text</p>
-          <p>Text</p>
+          <p>{{ vehicle.label }}</p>
+          <p>Marque : {{ vehicle.brand }}</p>
+          <p>Dernier contrôle technique : {{ vehicle.last_control }}</p>
         </v-col>
       </v-row>
       <v-row justify="center" class="customColHeightMiddle">
@@ -34,9 +34,21 @@ export default {
   name: "Detail",
   data() {
     return {
-      
+      vehicle: null
     };
   },
+  mounted() {
+    this.listVehicleRequest() //Récupère les véhicules
+  },
+  methods: {
+    listVehicleRequest () {
+      this.$axios.get("/api/vehicle/" + this.$route.params.id)
+          .then(response => {
+            this.vehicle = response.data["detailVehicle"]
+            console.log(this.vehicle)
+          })
+    },
+  }
 };
 </script>
 

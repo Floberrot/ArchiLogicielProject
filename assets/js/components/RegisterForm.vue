@@ -49,13 +49,24 @@ export default {
   methods: {
     registerUser() {
       this.$axios
-        .post("/register", {
+        .post("/login", {
           email: this.email,
           mdp: this.mdp,
         })
         .then((response) => {
           console.log(response);
-          let token = response.data.token;
+          if (!response.data.isValid) {
+            this.snackbar = true
+            this.message = "Email or Password is wrong"
+          } else {
+            let token = response.data.token;
+            let role = response.data.role;
+            localStorage.setItem('role', JSON.stringify(role));
+            localStorage.setItem('token', JSON.stringify(token));
+            this.$router.push('/')
+          }
+        }).catch((error) => {
+          console.log(error)
         });
     },
   },

@@ -27,6 +27,25 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-snackbar
+      color="error"
+      rounded="pill"
+      v-model="snackbar"
+      :timeout="timeout"
+    >
+      {{ message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-form>
 </template>
 
@@ -41,12 +60,10 @@ export default {
         (v) => !!v || "E-mail is required",
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
+      snackbar: false,
+      timeout: 3000,
+      message: "Test",
     };
-  },
-  beforeCreate() {
-    if(window.localStorage.getItem('token') !== null) {
-      this.$router.push({ path: '/' })    
-      }
   },
   methods: {
     loginUser() {
@@ -57,12 +74,22 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          let token = response.data.token;
-          localStorage.setItem('user', JSON.stringify(response.data));
-          localStorage.setItem('token', JSON.stringify(token));
-          this.$router.push('/')
-        },
-        error => {
+          if (!response.data.isValid) {
+            this.snackbar = true
+            this.message = "E-mail ou mot de passe érroné"
+          } else {
+            if (!response.data.isAuthorized) {
+              this.snackbar = true
+              this.message = "Votre demande est en attente"
+            } else {
+              let token = response.data.token;
+              let role = response.data.role;
+              localStorage.setItem('role', JSON.stringify(role));
+              localStorage.setItem('token', JSON.stringify(token));
+              this.$router.push('/')
+            }
+          }
+        }).catch((error) => {
           console.log(error)
         });
     },
