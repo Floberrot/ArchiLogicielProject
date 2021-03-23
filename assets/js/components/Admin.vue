@@ -1,7 +1,7 @@
 <template>
     <v-card class="mx-auto" tile>
       <!-- Affiche un message error -->
-      <v-snackbar v-model="snackbar"  rounded="pill" color="red" v-if="this.errorMessage">{{ this.errorMessage }}
+      <v-snackbar v-model="snackbar"  rounded="pill" color="error" v-if="this.errorMessage">{{ this.errorMessage }}
       <template v-slot:action="{ attrs }">
         <v-btn id="closeText" color="pink" text v-bind="attrs" @click="snackbar = false">
           Close
@@ -9,7 +9,7 @@
       </template>
       </v-snackbar>
       <!-- Affiche un message success -->
-      <v-snackbar v-model="snackbar"  rounded="pill" color="green" v-else-if="this.successMessage">{{ this.successMessage }}
+      <v-snackbar v-model="snackbar"  rounded="pill" color="success" v-else-if="this.successMessage">{{ this.successMessage }}
       <template v-slot:action="{ attrs }">
         <v-btn id="closeText" color="pink" text v-bind="attrs" @click="snackbar = false">
           Close
