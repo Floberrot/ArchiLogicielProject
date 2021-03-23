@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     onClickOutside () {
-      this.drawer = false
+      this.$refs.drawer.hide()
     },
     OpenDrawer () {
       this.$refs.drawer.show()
