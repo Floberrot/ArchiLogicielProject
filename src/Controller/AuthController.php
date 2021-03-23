@@ -36,6 +36,7 @@ class AuthController extends AbstractController
         }
         if ($user->getIsAuthorize() === false) {
             return $this->json([
+                'isValid' => true,
                 'isAuthorized' => false,
                 'message' => 'Votre demande est en attente.',
             ]);
@@ -47,8 +48,9 @@ class AuthController extends AbstractController
         ];
         $jwt = JWT::encode($payload, $key, 'HS256');
         $role = $user->getRole();
-        return new JsonResponse([
+        return $this->json([
             'isValid' => true,
+            'isAuthorized' => true,
             'message' => 'success login',
             'token' => sprintf('Bearer %s', $jwt),
             'role' => $role

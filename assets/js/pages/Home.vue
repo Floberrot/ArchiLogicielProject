@@ -32,12 +32,12 @@
             <td><strong>{{ item.label }}</strong></td>
             <td>{{ item.brand }}</td>
             <td>
-              <v-btn icon @click="redirectEdit">
+              <v-btn icon @click="redirectEdit(item.id)">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </td>
             <td>
-              <v-btn icon @click="redirectDetail">
+              <v-btn icon @click="redirectDetail(item.id)">
                 <v-icon>mdi-eye</v-icon>
               </v-btn>
             </td>
@@ -62,29 +62,47 @@ export default {
   data() {
     return {
      vehicles: [
-          {
+          /*{
             label: '206',
             brand: 'Peugeot',
           },
           {
-            label: 'Clio',
+            label: 'Clio 1',
             brand: 'Renault',
-          }
+          },
+          {
+            label: '207',
+            brand: 'Peugeot',
+          },
+          {
+            label: 'Clio 2',
+            brand: 'Renault',
+          },*/
       ],
       dialog: true,
     };
   },
- beforeCreate() {
+  mounted() {
+    this.listVehicleRequest() //Récupère les véhicules
+  },
+  beforeCreate() {
     if(window.localStorage.getItem('token') === null) {
       this.$router.push({ path: '/login' })    
-      }
+    }
   },
   methods: {
-    redirectDetail () {
-      this.$router.push('detail');
+    listVehicleRequest () {
+      this.$axios.get("/api/vehicle")
+          .then(response => {
+            this.vehicles = response.data["arrayOfVehicles"]
+            console.log(this.vehicles)
+          })
     },
-    redirectEdit () {
-      this.$router.push('edit');
+    redirectDetail (id) {
+      this.$router.push({path: `/detail/${id}` });
+    },
+    redirectEdit (id) {
+      this.$router.push({path: `/edit/${id}` });
     },
     openDialog () {
         this.$refs.dialog.show()
