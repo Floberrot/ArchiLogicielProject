@@ -39,8 +39,8 @@ class VehicleEditBuilder
         if ($utilityVehicle) {
             $utilityVehicle
                 ->setVehicle($vehicleToEdit)
-                ->setMaxLoad($data['maxLoad'])
-                ->setTrunkCapacity($data['trunkCapacity']);
+                ->setMaxLoad($data['resultMaxLoad'])
+                ->setTrunkCapacity($data['resultTrunkCapacity']);
             $this->entityManager->persist($utilityVehicle);
         }
     }

@@ -11,31 +11,70 @@
         </v-col>
         <v-col lg="6">
           <v-text-field
-            v-model="label"
+            v-model = "label"
+            :placeholder= vehicle.label
             type="text"
-            label="Label"
             required
           >
           </v-text-field>
           <v-text-field
-            v-model="label"
+            v-model = "brand"
+            :placeholder= vehicle.brand
             type="text"
-            label="Label"
             required
           >
           </v-text-field>
           <v-text-field
-            v-model="label"
+           v-model = "fuel"
+            :placeholder= vehicle.fuel
             type="text"
-            label="Label"
             required
           >
           </v-text-field>
+          <v-text-field
+            v-model = "licence"
+            :placeholder= vehicle.licence
+            type="text"
+            required
+          >
+          </v-text-field>
+          <div v-if="vehicle.type === 'UtilityVehicle'">
+          <v-text-field
+            v-model = "maxLoad"
+            :placeholder= vehicle.max_load
+            type="number" 
+            required
+          >
+          </v-text-field>
+          <v-text-field
+            v-model = "trunkCapacity"
+            :placeholder= vehicle.trunk_capacity
+            type="number"
+            required
+          >
+          </v-text-field>  
+          </div> 
+          <div v-if="vehicle.type === 'Motorcycle'">
+          <v-text-field
+            v-model = "helmetAvailable"
+            :placeholder= vehicle.helmet_available
+            type="text" 
+            required
+            v-if="type = 'Motorcyle'"
+          >
+          </v-text-field>   
+          </div>       
         </v-col>
       </v-row>
       <v-row justify="center" class="customColHeightMiddle">
         <v-col lg="12">
-          <v-textarea solo name="textarea" label="Solo textarea"></v-textarea>
+          <v-textarea 
+          v-model ="description" 
+          solo 
+          name="textarea" 
+          :placeholder= vehicle.description
+          >
+          </v-textarea>
         </v-col>
       </v-row>
       <v-row class="customColHeightBottom">
@@ -48,10 +87,29 @@
             class="mt-2"
           ></v-switch>
           <v-btn color="error" class="ml-2">Supprimer<v-icon>mdi-trash</v-icon></v-btn>
-          <v-btn color="success" class="ml-2">Valider</v-btn>
+          <v-btn v-on:click="sendEditField()" color="success" class="ml-2">Valider</v-btn>
         </v-col>
       </v-row>
     </v-col>
+    <v-snackbar
+      color="success"
+      rounded="pill"
+      v-model="snackbar"
+      :timeout="timeout"
+    >
+      {{ message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-row>
 </template>
 
@@ -61,8 +119,63 @@ export default {
   data() {
     return {
       privacy: "Public",
-    };
+      vehicle: [],
+      label: '',
+      brand: '',
+      licence: '',
+      fuel:'',
+      type: '',
+      maxLoad: '',
+      trunkCapacity: '',
+      helmetAvailable:'',
+      snackbar: false,
+      message:'',
+      description: '',
+      };
   },
+
+  mounted() {
+    this.getVehicleDetailById() //Récupère le véhicul avec son id
+  },
+  methods: {
+    getVehicleDetailById() {
+    this.$axios
+      .get("/api/vehicle/" + this.$route.params.id)
+      .then(response => {
+      this.vehicle = response.data['detailVehicle']
+      console.log(this.vehicle)
+      this.type = this.vehicle.type
+      this.label = this.vehicle.label
+      this.brand = this.vehicle.brand
+      this.licence = this.vehicle.licence
+      this.fuel = this.vehicle.fuel
+      this.description = this.vehicle.description
+      this.maxLoad = this.vehicle.max_load
+      this.trunkCapacity = this.vehicle.trunk_capacity
+      this.helmetAvailable = this.vehicle.helmet_available
+    })
+    },
+    sendEditField () {
+      console.log(this.description)
+
+       this.$axios
+        .put('api/vehicle/' + this.$route.params.id, {
+            resultType: this.type,
+            resultLabel: this.label,
+            resultBrand: this.brand,
+            resultFuel: this.fuel,
+            resultDescription: this.description,
+            resultLicence: this.licence,
+            resultMaxLoad: this.maxLoad,
+            resultTrunkCapacity: this.trunkCapacity,
+            resultHelmetAvailable: this.helmetAvailable
+        })
+        .then((response) => {
+            this.snackbar = true
+            this.message = response.data.message
+        })
+    },
+    }
 };
 </script>
 

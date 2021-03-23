@@ -82,15 +82,18 @@ class ApiController extends AbstractController
 
 
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
+        dump($dataReceive);
         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
-
+        dump($data);
         $vehicleToEdit
             ->setLabel($data['label'])
             ->setBrand($data["brand"])
-            ->setConceptionDate($data["conceptionDate"])
-            ->setLastControl($data["lastControl"])
+            // ->setConceptionDate($data["conceptionDate"])
+            // ->setLastControl($data["lastControl"])
             ->setFuel($data["fuel"])
-            ->setLicence($data["licence"]);
+            ->setLicence($data["licence"])
+            ->setDescription($data["description"]);
+
         
         // Enregistre le véhicule standard.
         $this->entityManager->persist($vehicleToEdit);
@@ -101,7 +104,9 @@ class ApiController extends AbstractController
         // Save en bdd
         $this->entityManager->flush();
 
-        return new JsonResponse('edit ok', 200, [], true);
+        return new JsonResponse([
+            'message' => 'Vos modifications ont bien été mises a jours.'
+        ], 200, [], false);
     }
     
     /**

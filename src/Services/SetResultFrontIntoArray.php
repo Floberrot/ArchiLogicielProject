@@ -19,23 +19,26 @@ class SetResultFrontIntoArray
     public function setResultIntoArray($data): array
     {
         //Récupération des données
+        dump($data);
         $type = $data['resultType'];
         $label = $data['resultLabel'];
         $brand = $data['resultBrand'];
-        $conceptionDate = new \DateTime($data['resultConceptionDate']);
-        $lastControl = new \DateTime($data['resultLastControl']);
+        // $conceptionDate = new \DateTime($data['resultConceptionDate']);
+        // $lastControl = new \DateTime($data['resultLastControl']);
         $fuel = $data['resultFuel'];
         $licence = $data['resultLicence'];
+        $description = $data['resultDescription'];
 
         //Création du tableau de données
         $dataArray = [
             "type" => $type,
             "label" => $label,
             "brand" => $brand,
-            "conceptionDate" => $conceptionDate,
-            "lastControl" => $lastControl,
+            // "conceptionDate" => $conceptionDate,
+            // "lastControl" => $lastControl,
             "fuel" => $fuel,
-            "licence" => $licence
+            "licence" => $licence,
+            "description" => $description
         ];
 
         //Ajoute au tableau les données nécessaires
@@ -44,13 +47,13 @@ class SetResultFrontIntoArray
                 $maxLoad = $data['resultMaxLoad'];
                 $trunkCapacity = $data['resultTrunkCapacity'];
                 //Ajoute les données dans le tableau
-                $dataArray["maxLoad"] = $maxLoad;
-                $dataArray["trunkCapacity"] = $trunkCapacity;
+                $dataArray["resultMaxLoad"] = $maxLoad;
+                $dataArray["resultTrunkCapacity"] = $trunkCapacity;
                 break;
             case "Motorcycle":
                 $helmetAvailable = $data['resultHelmetAvailable'];
                 //Ajoute les données dans le tableau
-                $dataArray["helmetAvailable"] = $helmetAvailable;
+                $dataArray["resultHelmetAvailable"] = $helmetAvailable;
                 break;
         }
         return $dataArray;

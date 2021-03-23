@@ -56,6 +56,7 @@ class VehicleDetailsBuilder
         $moto = new Motorcycle();
         $moto = $this->motorcycleRepository->findOneBy(['vehicle' => $idDetails]);
         $arrayOfVehicles['helmet_available'] = $moto->getHelmetAvailable();
+        $arrayOfVehicles['type'] = 'Motorcycle';
     }
 
     /**
@@ -68,5 +69,6 @@ class VehicleDetailsBuilder
         $utilityVehicle = $this->utilityVehicleRepository->findOneBy(['vehicle' => $idDetails]);
         $arrayOfVehicles['max_load'] = $utilityVehicle->getMaxLoad();
         $arrayOfVehicles['trunk_capacity'] = $utilityVehicle->getTrunkCapacity();
+        $arrayOfVehicles['type'] = 'UtilityVehicle';
     }
 }
