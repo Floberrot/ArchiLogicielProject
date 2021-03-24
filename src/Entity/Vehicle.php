@@ -62,6 +62,11 @@ class Vehicle
      */
     private $isPublic;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
 
     public function getId(): ?int
     {
@@ -104,12 +109,12 @@ class Vehicle
         return $this;
     }
 
-    public function getLastControl(): ?\DateTimeInterface
+    public function getLastControl(): ?\DateTime
     {
         return $this->last_control;
     }
 
-    public function setLastControl(\DateTimeInterface $last_control): self
+    public function setLastControl(\DateTime $last_control): self
     {
         $this->last_control = $last_control;
 
@@ -182,6 +187,18 @@ class Vehicle
     public function setIsPublic(bool $isPublic): self
     {
         $this->isPublic = $isPublic;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

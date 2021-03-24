@@ -34,9 +34,12 @@ class VehicleDetailsBuilder
         $arrayOfVehicles['label'] = $vehicleEntity->getLabel();
         $arrayOfVehicles['brand'] = $vehicleEntity->getBrand();
         $arrayOfVehicles['licence'] = $vehicleEntity->getLicence();
-        $arrayOfVehicles['conception_date'] = $vehicleEntity->getConceptionDate();
-        $arrayOfVehicles['last_control'] = $vehicleEntity->getLastControl();
+        $arrayOfVehicles['conception_date'] = date_format($vehicleEntity->getConceptionDate(), 'Y-m-d');
+        $arrayOfVehicles['last_control'] = date_format($vehicleEntity->getLastControl(), 'Y-m-d');
         $arrayOfVehicles['fuel'] = $vehicleEntity->getFuel();
+        $arrayOfVehicles['description'] = $vehicleEntity->getDescription();
+        $arrayOfVehicles['type'] = '';
+        $arrayOfVehicles['is_public'] = $vehicleEntity->getIsPublic();
         // Si le véhicule a le champ motorcycle non vide, c'est que c'est une moto, on affiche donc ces données
         if ($vehicleEntity->getMotorcycle()) {
             $this->detailsMotorcycle($idDetails, $arrayOfVehicles);
@@ -56,6 +59,7 @@ class VehicleDetailsBuilder
         $moto = new Motorcycle();
         $moto = $this->motorcycleRepository->findOneBy(['vehicle' => $idDetails]);
         $arrayOfVehicles['helmet_available'] = $moto->getHelmetAvailable();
+        $arrayOfVehicles['type'] = 'Motorcycle';
     }
 
     /**
@@ -68,5 +72,6 @@ class VehicleDetailsBuilder
         $utilityVehicle = $this->utilityVehicleRepository->findOneBy(['vehicle' => $idDetails]);
         $arrayOfVehicles['max_load'] = $utilityVehicle->getMaxLoad();
         $arrayOfVehicles['trunk_capacity'] = $utilityVehicle->getTrunkCapacity();
+        $arrayOfVehicles['type'] = 'UtilityVehicle';
     }
 }
