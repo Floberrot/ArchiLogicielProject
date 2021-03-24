@@ -19,7 +19,6 @@ class SetResultFrontIntoArray
     public function setResultIntoArray($data): array
     {
         //Récupération des données
-        dump($data);
         $type = $data['resultType'];
         $label = $data['resultLabel'];
         $brand = $data['resultBrand'];

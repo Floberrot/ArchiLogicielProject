@@ -82,6 +82,7 @@ class ApiController extends AbstractController
 
 
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
+        dump($dataReceive);
         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
         $vehicleToEdit
             ->setLabel($data['label'])

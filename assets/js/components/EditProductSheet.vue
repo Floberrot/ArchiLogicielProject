@@ -81,6 +81,7 @@
             <v-date-picker
               v-model="lastControl"
               color="green lighten-1"
+              :value= vehicle.lastControl
             ></v-date-picker>
             <v-divider></v-divider>
             <v-card-title>Dernier controle du véhicule</v-card-title>
@@ -177,28 +178,27 @@ export default {
       this.maxLoad = this.vehicle.max_load
       this.trunkCapacity = this.vehicle.trunk_capacity
       this.helmetAvailable = this.vehicle.helmet_available
-      this.lastControl = this.vehicle.lastControl
+      this.lastControl = this.vehicle.last_control
     })
     },
     sendEditField () {
-      console.log(this.description)
-
        this.$axios
         .put('api/vehicle/' + this.$route.params.id, {
             resultType: this.type,
             resultLabel: this.label,
             resultBrand: this.brand,
             resultFuel: this.fuel,
+            resultLastControl: this.lastControl,
             resultDescription: this.description,
             resultLicence: this.licence,
             resultMaxLoad: this.maxLoad,
             resultTrunkCapacity: this.trunkCapacity,
             resultHelmetAvailable: this.helmetAvailable,
-            resultLastControl: this.lastControl
         })
         .then((response) => {
             this.snackbar = true
             this.message = response.data.message
+            this.$router.go(this.$router.currentRoute)
         })
     },
     }

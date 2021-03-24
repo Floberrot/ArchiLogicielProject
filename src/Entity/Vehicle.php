@@ -109,12 +109,12 @@ class Vehicle
         return $this;
     }
 
-    public function getLastControl(): ?\DateTimeInterface
+    public function getLastControl(): ?\DateTime
     {
         return $this->last_control;
     }
 
-    public function setLastControl(\DateTimeInterface $last_control): self
+    public function setLastControl(\DateTime $last_control): self
     {
         $this->last_control = $last_control;
 
