@@ -10,6 +10,7 @@
           ></v-img>
         </v-col>
         <v-col lg="3">
+          <v-card class="pa-3">
           <v-text-field
             v-model = "label"
             :placeholder= vehicle.label
@@ -70,7 +71,8 @@
             label="Casque disponible avec le véhicule"
           >
           </v-text-field>   
-          </div>       
+          </div>  
+          </v-card>     
         </v-col>
         <v-col lg="3">
           <template>
@@ -87,7 +89,7 @@
         </template>
         </v-col>
       </v-row>
-      <v-row justify="center" class="customColHeightMiddle md-16">
+      <v-row justify="center" class="customColHeightMiddle mt-16">
         <v-col lg="12">
           <v-textarea 
           v-model ="description" 
