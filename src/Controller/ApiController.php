@@ -206,6 +206,7 @@ class ApiController extends AbstractController
             // On récupère la valeur que nous renvoie le front.
             $dataInRequest = $request->getContent();
             $response = json_decode($dataInRequest, true);
+            dump($response);
             $valueStatusPrivacy = $response['valueStatusPrivacy'];
             // On cherche le véhicule avec l'id que l'on reçoit du front.
             $vehicleToChangeStatus = $this->vehicleRepository->find($idToEdit);
@@ -213,16 +214,29 @@ class ApiController extends AbstractController
             switch ($valueStatusPrivacy) {
                 case true:
                     $vehicleToChangeStatus->setIsPublic(true);
+                    $this->entityManager->persist($vehicleToChangeStatus);
+                    $this->entityManager->flush();
+                    return new JsonResponse(
+                        [
+                            'message' => 'Le véhicule est en statut : publique.'
+                        ], 200, [], false);
                     break;
                 case false:
                     $vehicleToChangeStatus->setIsPublic(false);
+                    $this->entityManager->persist($vehicleToChangeStatus);
+                    $this->entityManager->flush();
+                    return new JsonResponse(
+                        [
+                            'message' => 'Le véhicule est en statut : privé.'
+                        ], 200, [], false);
                     break;
             }
-            $this->entityManager->persist($vehicleToChangeStatus);
-            $this->entityManager->flush();
-            return new JsonResponse('Le status du véhicule a changé', 200, [], true);
+            
         } else {
-            return new JsonResponse('Mauvaise méthode de requete, méthode attendu : POST', 404, [], true);
+            return new JsonResponse(
+                [
+                    'message' => 'Mauvaise méthode de requete, méthode attendu : POST'
+                ], 404, [], false);
         }
     }
 }

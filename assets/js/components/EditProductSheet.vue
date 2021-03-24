@@ -100,13 +100,13 @@
       </v-row>
       <v-row class="customColHeightBottom">
         <v-col lg="12" class="d-flex justify-end align-content-center">
-          <v-switch
-            v-model="privacy"
-            true-value="Privé"
-            false-value="Public"
-            :label="`${ privacy }`"
-            class="mt-2"
-          ></v-switch>
+          <v-checkbox
+            :input-value= vehicle.isPublic
+            label = "Rendre le véhicule public ?"
+            v-model= "isPublic"
+            v-on:change="changeIsPublicValue()"
+            >
+            </v-checkbox> 
           <v-btn v-on:click="deleteVehicle()" color="error" class="ml-2">Supprimer<v-icon>mdi-trash</v-icon></v-btn>
           <v-btn v-on:click="sendEditField()" color="success" class="ml-2">Valider</v-btn>
         </v-col>
@@ -153,7 +153,8 @@ export default {
       message:'',
       description: '',
       lastControl:'',
-      conceptionDate:''
+      conceptionDate:'',
+      isPublic: ''
       };
   },
 
@@ -167,6 +168,7 @@ export default {
       .then(response => {
       this.vehicle = response.data['detailVehicle']
       // Récupère et set les données de data qu'on reçoit du controller php
+      console.log(this.vehicle);
       this.type = this.vehicle.type
       this.label = this.vehicle.label
       this.brand = this.vehicle.brand
@@ -178,6 +180,7 @@ export default {
       this.helmetAvailable = this.vehicle.helmet_available
       this.lastControl = this.vehicle.last_control
       this.conceptionDate = this.vehicle.conception_date
+      this.isPublic = this.vehicle.is_public
     })
     },
     sendEditField () {
@@ -210,6 +213,16 @@ export default {
           setTimeout(2000, this.$router.push({ path: '/' })  )
         })
       }
+    },
+    changeIsPublicValue() {
+        this.$axios
+          .post('/change/privacy/' + this.$route.params.id, {
+            valueStatusPrivacy: this.isPublic
+          })
+          .then((response) => {
+            this.snackbar = true
+            this.message = response.data.message
+          })
     }
   }
 }

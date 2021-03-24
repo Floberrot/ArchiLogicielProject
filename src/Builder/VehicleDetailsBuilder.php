@@ -39,7 +39,7 @@ class VehicleDetailsBuilder
         $arrayOfVehicles['fuel'] = $vehicleEntity->getFuel();
         $arrayOfVehicles['description'] = $vehicleEntity->getDescription();
         $arrayOfVehicles['type'] = '';
-
+        $arrayOfVehicles['is_public'] = $vehicleEntity->getIsPublic();
         // Si le véhicule a le champ motorcycle non vide, c'est que c'est une moto, on affiche donc ces données
         if ($vehicleEntity->getMotorcycle()) {
             $this->detailsMotorcycle($idDetails, $arrayOfVehicles);
