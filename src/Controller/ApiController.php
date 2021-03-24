@@ -155,7 +155,6 @@ class ApiController extends AbstractController
         // Appel la class pour afficher les détails d'un véhicule.
         $vehicleDetailClass = new VehicleDetailsBuilder($this->motorcycleRepository, $this->utilityVehicleRepository);
         $vehicleDetailClass->detailsBuilder($vehicleEntity, $detailOneVehicle, $idDetails);
-        // Voir avec Fabien ce qu'il veut exactement comme retour, + renvoyer toutes les données du véhicule.
         return new JsonResponse(
             [
                 'detailVehicle' => $detailOneVehicle
@@ -184,10 +183,15 @@ class ApiController extends AbstractController
             $this->entityManager->remove($vehicleToDelete);
             $this->entityManager->flush();
             
-            //$this->entityManager->remove($vehicleToDelete);
-            return new JsonResponse('Vehicule supprimé', 200, [], true);
+            return new JsonResponse(
+                [
+                'message' => 'Vehicule supprimé !'
+                ], 200, [], false);
         } else {
-            return new JsonResponse('La methode de requête est mauvaise', 500, [], true);
+            return new JsonResponse(
+                [
+                    'message' => 'La methode de requête est mauvaise',
+                ], 500, [], false);
         }
     }
 

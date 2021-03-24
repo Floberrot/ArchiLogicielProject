@@ -110,7 +110,7 @@
             :label="`${ privacy }`"
             class="mt-2"
           ></v-switch>
-          <v-btn color="error" class="ml-2">Supprimer<v-icon>mdi-trash</v-icon></v-btn>
+          <v-btn v-on:click="deleteVehicle()" color="error" class="ml-2">Supprimer<v-icon>mdi-trash</v-icon></v-btn>
           <v-btn v-on:click="sendEditField()" color="success" class="ml-2">Valider</v-btn>
         </v-col>
       </v-row>
@@ -168,7 +168,7 @@ export default {
       .get("/api/vehicle/" + this.$route.params.id)
       .then(response => {
       this.vehicle = response.data['detailVehicle']
-      console.log(this.vehicle)
+      // Récupère et set les données de data qu'on reçoit du controller php
       this.type = this.vehicle.type
       this.label = this.vehicle.label
       this.brand = this.vehicle.brand
@@ -198,11 +198,21 @@ export default {
         .then((response) => {
             this.snackbar = true
             this.message = response.data.message
-            this.$router.go(this.$router.currentRoute)
         })
     },
+    deleteVehicle() {
+      if(confirm('Vous êtes sur ?')) {
+        this.$axios
+        .delete('api/vehicle/' + this.$route.params.id)
+        .then((response) => {
+          this.snackbar = true
+          this.message = response.data.message
+          setTimeout(2000, this.$router.push({ path: '/' })  )
+        })
+      }
     }
-};
+  }
+}
 </script>
 
 <style scoped>
