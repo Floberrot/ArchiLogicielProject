@@ -82,14 +82,12 @@ class ApiController extends AbstractController
 
 
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
-        dump($dataReceive);
         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
-        dump($data);
         $vehicleToEdit
             ->setLabel($data['label'])
             ->setBrand($data["brand"])
             // ->setConceptionDate($data["conceptionDate"])
-            // ->setLastControl($data["lastControl"])
+            ->setLastControl($data["lastControl"])
             ->setFuel($data["fuel"])
             ->setLicence($data["licence"])
             ->setDescription($data["description"]);

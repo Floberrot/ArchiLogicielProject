@@ -37,6 +37,8 @@ class VehicleDetailsBuilder
         $arrayOfVehicles['conception_date'] = $vehicleEntity->getConceptionDate();
         $arrayOfVehicles['last_control'] = $vehicleEntity->getLastControl();
         $arrayOfVehicles['fuel'] = $vehicleEntity->getFuel();
+        $arrayOfVehicles['description'] = $vehicleEntity->getDescription();
+
         // Si le véhicule a le champ motorcycle non vide, c'est que c'est une moto, on affiche donc ces données
         if ($vehicleEntity->getMotorcycle()) {
             $this->detailsMotorcycle($idDetails, $arrayOfVehicles);

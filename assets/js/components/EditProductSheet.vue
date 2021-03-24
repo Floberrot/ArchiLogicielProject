@@ -9,12 +9,13 @@
             src="https://picsum.photos/id/514/1000/800?blur=2"
           ></v-img>
         </v-col>
-        <v-col lg="6">
+        <v-col lg="3">
           <v-text-field
             v-model = "label"
             :placeholder= vehicle.label
             type="text"
             required
+            label="Libellé"
           >
           </v-text-field>
           <v-text-field
@@ -22,6 +23,7 @@
             :placeholder= vehicle.brand
             type="text"
             required
+            label="Marque du véhicule"
           >
           </v-text-field>
           <v-text-field
@@ -29,6 +31,7 @@
             :placeholder= vehicle.fuel
             type="text"
             required
+            label="Essence nécessaire"
           >
           </v-text-field>
           <v-text-field
@@ -36,21 +39,24 @@
             :placeholder= vehicle.licence
             type="text"
             required
+            label="Permis du véhicule"
           >
           </v-text-field>
           <div v-if="vehicle.type === 'UtilityVehicle'">
           <v-text-field
             v-model = "maxLoad"
+            type="number"
             :placeholder= vehicle.max_load
-            type="number" 
             required
+            label="Charge maximum du véhicule"
           >
           </v-text-field>
           <v-text-field
             v-model = "trunkCapacity"
-            :placeholder= vehicle.trunk_capacity
             type="number"
+            :placeholder= vehicle.trunk_capacity
             required
+            label="Capacité maximum du coffre (en m3)"
           >
           </v-text-field>  
           </div> 
@@ -61,12 +67,27 @@
             type="text" 
             required
             v-if="type = 'Motorcyle'"
+            label="Casque disponible avec le véhicule"
           >
           </v-text-field>   
           </div>       
         </v-col>
+        <v-col lg="3">
+          <template>
+          <v-row justify="space-around">
+            <v-card>
+            <v-date-picker
+              v-model="lastControl"
+              color="green lighten-1"
+            ></v-date-picker>
+            <v-divider></v-divider>
+            <v-card-title>Dernier controle du véhicule</v-card-title>
+            </v-card>
+          </v-row>
+        </template>
+        </v-col>
       </v-row>
-      <v-row justify="center" class="customColHeightMiddle">
+      <v-row justify="center" class="customColHeightMiddle md-16">
         <v-col lg="12">
           <v-textarea 
           v-model ="description" 
@@ -131,6 +152,7 @@ export default {
       snackbar: false,
       message:'',
       description: '',
+      lastControl:''
       };
   },
 
@@ -153,6 +175,7 @@ export default {
       this.maxLoad = this.vehicle.max_load
       this.trunkCapacity = this.vehicle.trunk_capacity
       this.helmetAvailable = this.vehicle.helmet_available
+      this.lastControl = this.vehicle.lastControl
     })
     },
     sendEditField () {
@@ -168,7 +191,8 @@ export default {
             resultLicence: this.licence,
             resultMaxLoad: this.maxLoad,
             resultTrunkCapacity: this.trunkCapacity,
-            resultHelmetAvailable: this.helmetAvailable
+            resultHelmetAvailable: this.helmetAvailable,
+            resultLastControl: this.lastControl
         })
         .then((response) => {
             this.snackbar = true
