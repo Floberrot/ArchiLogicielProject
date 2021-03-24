@@ -22,7 +22,7 @@ class SetResultFrontIntoArray
         $type = $data['resultType'];
         $label = $data['resultLabel'];
         $brand = $data['resultBrand'];
-        // $conceptionDate = new \DateTime($data['resultConceptionDate']);
+        $conceptionDate = new \DateTime($data['resultConceptionDate']);
         $lastControl = new \DateTime($data['resultLastControl']);
         $fuel = $data['resultFuel'];
         $licence = $data['resultLicence'];
@@ -33,7 +33,7 @@ class SetResultFrontIntoArray
             "type" => $type,
             "label" => $label,
             "brand" => $brand,
-            // "conceptionDate" => $conceptionDate,
+            "conceptionDate" => $conceptionDate,
             "lastControl" => $lastControl,
             "fuel" => $fuel,
             "licence" => $licence,

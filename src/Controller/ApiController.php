@@ -15,6 +15,7 @@ use Exception;
 use App\Repository\MotorcycleRepository;
 use App\Repository\UtilityVehicleRepository;
 use App\Repository\VehicleRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints\Json;
@@ -55,10 +56,9 @@ class ApiController extends AbstractController
      */
   public function createVehicle() : JsonResponse
   {
-        // Résultats de la requête (Json decode à faire)
-        // Champ type en bdd ?
-        $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
-        $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
+        // $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
+        // $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
+    
         // Création d'un nouveau véhicule
         $vehicleBuilder = new VehicleBuilder();
         $vehicleBuilder->setAndCheckVehicleType($data, $this->entityManager);

@@ -23,7 +23,7 @@ class VehicleEditBuilder
         if ($moto) {
             $moto
                 ->setVehicle($vehicleToEdit)
-                ->setHelmetAvailable($data['helmetAvailable']);
+                ->setHelmetAvailable($data['resultHelmetAvailable']);
             $this->entityManager->persist($moto);
         }
     }

@@ -34,7 +34,7 @@ class VehicleDetailsBuilder
         $arrayOfVehicles['label'] = $vehicleEntity->getLabel();
         $arrayOfVehicles['brand'] = $vehicleEntity->getBrand();
         $arrayOfVehicles['licence'] = $vehicleEntity->getLicence();
-        $arrayOfVehicles['conception_date'] = $vehicleEntity->getConceptionDate();
+        $arrayOfVehicles['conception_date'] = date_format($vehicleEntity->getConceptionDate(), 'Y-m-d');
         $arrayOfVehicles['last_control'] = date_format($vehicleEntity->getLastControl(), 'Y-m-d');
         $arrayOfVehicles['fuel'] = $vehicleEntity->getFuel();
         $arrayOfVehicles['description'] = $vehicleEntity->getDescription();

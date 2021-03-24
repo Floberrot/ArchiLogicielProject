@@ -62,15 +62,12 @@
           </v-text-field>  
           </div> 
           <div v-if="vehicle.type === 'Motorcycle'">
-          <v-text-field
-            v-model = "helmetAvailable"
-            :placeholder= vehicle.helmet_available
-            type="text" 
-            required
-            v-if="type = 'Motorcyle'"
-            label="Casque disponible avec le véhicule"
-          >
-          </v-text-field>   
+          <v-checkbox
+            :input-value= vehicle.helmetAvailable
+            label="Casque disponible avec le véhicule?"
+            v-model= "helmetAvailable"
+            >
+            </v-checkbox>  
           </div>  
           </v-card>     
         </v-col>
@@ -155,7 +152,8 @@ export default {
       snackbar: false,
       message:'',
       description: '',
-      lastControl:''
+      lastControl:'',
+      conceptionDate:''
       };
   },
 
@@ -179,6 +177,7 @@ export default {
       this.trunkCapacity = this.vehicle.trunk_capacity
       this.helmetAvailable = this.vehicle.helmet_available
       this.lastControl = this.vehicle.last_control
+      this.conceptionDate = this.vehicle.conception_date
     })
     },
     sendEditField () {
@@ -189,6 +188,7 @@ export default {
             resultBrand: this.brand,
             resultFuel: this.fuel,
             resultLastControl: this.lastControl,
+            resultConceptionDate: this.conceptionDate,
             resultDescription: this.description,
             resultLicence: this.licence,
             resultMaxLoad: this.maxLoad,
