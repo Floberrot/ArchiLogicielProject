@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" @submit.prevent="loginUser">
+  <v-form ref="form" @submit.prevent="checkValid">
     <v-container class="py-0">
       <v-row
         justify="center"
@@ -9,7 +9,7 @@
         >
           <v-text-field
             v-model="email"
-            :rules="emailRules"
+            :rules="[rules.required]"
             label="E-mail"
             required
           >
@@ -56,16 +56,23 @@ export default {
     return {
       email: "",
       mdp: "",
-      emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-      ],
+      rules: {
+          required: value => !!value || 'Ce champ est requis',
+      },
       snackbar: false,
       timeout: 3000,
-      message: "Test",
+      message: "",
     };
   },
   methods: {
+    checkValid() {
+      if(!this.$refs.form.validate()){
+        this.snackbar = true
+        this.message = "Erreur de saisi"
+      } else {
+        this.loginUser()
+      }
+    },
     loginUser() {
       this.$axios
         .post("/login", {
@@ -73,7 +80,6 @@ export default {
           mdp: this.mdp,
         })
         .then((response) => {
-          console.log(response);
           if (!response.data.isValid) {
             this.snackbar = true
             this.message = "E-mail ou mot de passe érroné"

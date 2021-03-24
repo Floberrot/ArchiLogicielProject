@@ -64,21 +64,28 @@ class AuthController extends AbstractController
      * @return JsonResponse
      * @Route ("/register", name="register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em): JsonResponse
+    public function register(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em): JsonResponse
     {
         $askRegister = $request->getContent();
         $askRegister = json_decode($askRegister, true);
         $email = $askRegister['email'];
         $plainPassword = $askRegister['mdp'];
-        $user = new User();
-        $user
-            ->setEmail($email)
-            ->setPassword($passwordEncoder->encodePassword($user, $plainPassword))
-            ->setIsAuthorize(false);
-        $em->persist($user);
-        $em->flush();
-        return $this->json([
-            'message' => 'you account has been created'
-        ]);
+        $user = $userRepository->findOneBy(['email' => $email]);
+        if ($user) {
+            return $this->json([
+                'RegistrationOK' => false,
+            ]);
+        } else {
+            $user = new User();
+            $user
+                ->setEmail($email)
+                ->setPassword($passwordEncoder->encodePassword($user, $plainPassword))
+                ->setIsAuthorize(false);
+            $em->persist($user);
+            $em->flush();
+            return $this->json([
+                'RegistrationOK' => true,
+            ]);
+        }
     }
 }

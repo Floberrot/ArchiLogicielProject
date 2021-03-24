@@ -24,7 +24,7 @@ Vue.use(
 const routes = [
     {
         path: '/', name:'Home',
-        component: () => import('./pages/Home.vue')
+        component: () => import('./pages/Home.vue'),
     },
     {
         path: '/login', name:'login',
