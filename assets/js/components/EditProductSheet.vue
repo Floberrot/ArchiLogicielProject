@@ -8,6 +8,13 @@
             max-width="100%"
             src="https://picsum.photos/id/514/1000/800?blur=2"
           ></v-img>
+          <v-checkbox
+            :input-value= vehicle.isPublic
+            label = "Rendre le véhicule public ?"
+            v-model= "isPublic"
+            v-on:change="changeIsPublicValue()"
+            >
+            </v-checkbox>
         </v-col>
         <v-col lg="3">
           <v-card class="pa-3">
@@ -99,14 +106,7 @@
         </v-col>
       </v-row>
       <v-row class="customColHeightBottom">
-        <v-col lg="12" class="d-flex justify-end align-content-center">
-          <v-checkbox
-            :input-value= vehicle.isPublic
-            label = "Rendre le véhicule public ?"
-            v-model= "isPublic"
-            v-on:change="changeIsPublicValue()"
-            >
-            </v-checkbox> 
+        <v-col lg="12" class="d-flex justify-end align-content-center"> 
           <v-btn v-on:click="deleteVehicle()" color="error" class="ml-2">Supprimer<v-icon>mdi-trash</v-icon></v-btn>
           <v-btn v-on:click="sendEditField()" color="success" class="ml-2">Valider</v-btn>
         </v-col>
