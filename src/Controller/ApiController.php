@@ -15,6 +15,7 @@ use Exception;
 use App\Repository\MotorcycleRepository;
 use App\Repository\UtilityVehicleRepository;
 use App\Repository\VehicleRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints\Json;
@@ -55,10 +56,19 @@ class ApiController extends AbstractController
      */
   public function createVehicle() : JsonResponse
   {
-        // Résultats de la requête (Json decode à faire)
-        // Champ type en bdd ?
-        $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
-        $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
+         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
+         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
+//        $data = [
+//            'type' => 'Motorcycle',
+//            "label" => 'Nouveau véhicule',
+//            'brand' => 'Kawazaki',
+//            'fuel' => 'Gazoule',
+//            'lastControl' => new DateTime('2021-02-04'),
+//            'conceptionDate' => new DateTime('2021-02-04'),
+//            'description' => 'Ouais le véhicule tu connais',
+//            'licence' => 'permis 125',
+//            'helmetAvailable' => false
+//        ];
         // Création d'un nouveau véhicule
         $vehicleBuilder = new VehicleBuilder();
         $vehicleBuilder->setAndCheckVehicleType($data, $this->entityManager);
@@ -82,15 +92,18 @@ class ApiController extends AbstractController
 
 
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
+        dump($dataReceive);
         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
 
         $vehicleToEdit
             ->setLabel($data['label'])
             ->setBrand($data["brand"])
-            ->setConceptionDate($data["conceptionDate"])
+            // ->setConceptionDate($data["conceptionDate"])
             ->setLastControl($data["lastControl"])
             ->setFuel($data["fuel"])
-            ->setLicence($data["licence"]);
+            ->setLicence($data["licence"])
+            ->setDescription($data["description"]);
+
         
         // Enregistre le véhicule standard.
         $this->entityManager->persist($vehicleToEdit);
@@ -101,7 +114,9 @@ class ApiController extends AbstractController
         // Save en bdd
         $this->entityManager->flush();
 
-        return new JsonResponse('edit ok', 200, [], true);
+        return new JsonResponse([
+            'message' => 'Vos modifications ont bien été mises a jours.'
+        ], 200, [], false);
     }
     
     /**
@@ -117,9 +132,11 @@ class ApiController extends AbstractController
         $vehiclesToDisplay = [];
         foreach ($allVehicle as $oneVehicle)
         {
+            $id = $oneVehicle->getId();
             $label = $oneVehicle->getLabel();
             $brand = $oneVehicle->getBrand();
             $licence = $oneVehicle->getLicence();
+            $dataOfVehicles['id'] = $id;
             $dataOfVehicles['label'] = $label;
             $dataOfVehicles['brand'] = $brand;
             $dataOfVehicles['licence'] = $licence;
@@ -149,7 +166,6 @@ class ApiController extends AbstractController
         // Appel la class pour afficher les détails d'un véhicule.
         $vehicleDetailClass = new VehicleDetailsBuilder($this->motorcycleRepository, $this->utilityVehicleRepository);
         $vehicleDetailClass->detailsBuilder($vehicleEntity, $detailOneVehicle, $idDetails);
-        // Voir avec Fabien ce qu'il veut exactement comme retour, + renvoyer toutes les données du véhicule.
         return new JsonResponse(
             [
                 'detailVehicle' => $detailOneVehicle
@@ -178,10 +194,15 @@ class ApiController extends AbstractController
             $this->entityManager->remove($vehicleToDelete);
             $this->entityManager->flush();
             
-            //$this->entityManager->remove($vehicleToDelete);
-            return new JsonResponse('Vehicule supprimé', 200, [], true);
+            return new JsonResponse(
+                [
+                'message' => 'Vehicule supprimé !'
+                ], 200, [], false);
         } else {
-            return new JsonResponse('La methode de requête est mauvaise', 500, [], true);
+            return new JsonResponse(
+                [
+                    'message' => 'La methode de requête est mauvaise',
+                ], 500, [], false);
         }
     }
 
@@ -196,6 +217,7 @@ class ApiController extends AbstractController
             // On récupère la valeur que nous renvoie le front.
             $dataInRequest = $request->getContent();
             $response = json_decode($dataInRequest, true);
+            dump($response);
             $valueStatusPrivacy = $response['valueStatusPrivacy'];
             // On cherche le véhicule avec l'id que l'on reçoit du front.
             $vehicleToChangeStatus = $this->vehicleRepository->find($idToEdit);
@@ -203,16 +225,29 @@ class ApiController extends AbstractController
             switch ($valueStatusPrivacy) {
                 case true:
                     $vehicleToChangeStatus->setIsPublic(true);
+                    $this->entityManager->persist($vehicleToChangeStatus);
+                    $this->entityManager->flush();
+                    return new JsonResponse(
+                        [
+                            'message' => 'Le véhicule est en statut : publique.'
+                        ], 200, [], false);
                     break;
                 case false:
                     $vehicleToChangeStatus->setIsPublic(false);
+                    $this->entityManager->persist($vehicleToChangeStatus);
+                    $this->entityManager->flush();
+                    return new JsonResponse(
+                        [
+                            'message' => 'Le véhicule est en statut : privé.'
+                        ], 200, [], false);
                     break;
             }
-            $this->entityManager->persist($vehicleToChangeStatus);
-            $this->entityManager->flush();
-            return new JsonResponse('Le status du véhicule a changé', 200, [], true);
+            
         } else {
-            return new JsonResponse('Mauvaise méthode de requete, méthode attendu : POST', 404, [], true);
+            return new JsonResponse(
+                [
+                    'message' => 'Mauvaise méthode de requete, méthode attendu : POST'
+                ], 404, [], false);
         }
     }
 }
