@@ -58,17 +58,7 @@ class ApiController extends AbstractController
   {
          $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
          $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
-//        $data = [
-//            'type' => 'Motorcycle',
-//            "label" => 'Nouveau véhicule',
-//            'brand' => 'Kawazaki',
-//            'fuel' => 'Gazoule',
-//            'lastControl' => new DateTime('2021-02-04'),
-//            'conceptionDate' => new DateTime('2021-02-04'),
-//            'description' => 'Ouais le véhicule tu connais',
-//            'licence' => 'permis 125',
-//            'helmetAvailable' => false
-//        ];
+
         // Création d'un nouveau véhicule
         $vehicleBuilder = new VehicleBuilder();
         $vehicleBuilder->setAndCheckVehicleType($data, $this->entityManager);

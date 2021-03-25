@@ -10,8 +10,8 @@
             <v-row>
               <v-col cols="12" sm="6" md="6">
                 <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Type"
+                  :items="['Motorcyle', 'UtilityVehicle', '30-54', '54+']"
+                  label="type"
                   required
                 ></v-select>
               </v-col>
@@ -59,7 +59,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="hide()"> Annuler </v-btn>
-          <v-btn color="blue darken-1" text @click="send()"> Sauvegarder </v-btn>
+          <v-btn color="blue darken-1" text @click="createVehicle()"> Sauvegarder </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -72,13 +72,21 @@ export default {
   data() {
     return {
       dialog: false,
-      vehiclesData: [],
+      type:'',
+      label: '',
+      brand: '',
+      conceptionDate:'',
+      lastControl: '',
+      fuel: '',
+      licence: '',
+      helmetAvailable: '',
+      maxLoad: '',
+      trunkCapacity: '',
       // date: new Date().toISOString().substr(0, 10),
-      date: null
     };
   },
   mounted() {
-    this.listVehicleRequest() //Récupère les véhicules
+    
   },
   methods: {
     show() {
@@ -87,14 +95,7 @@ export default {
     hide() {
       this.dialog = false;
     },
-    listVehicleRequest () {
-      this.$axios.get("/api/vehicle")
-          .then(response => {
-            this.vehiclesData = response.data["arrayOfVehicles"]
-            console.log(this.vehiclesData)
-          })
-    },
-    send() {
+    createVehicle() {
       this.$axios
         .post("/api/vehicle", {
           email: this.email,
