@@ -30,7 +30,15 @@ class AuthController extends AbstractController
         $user = $userRepository->findOneBy(['email' => $email]);
         if (!$user || !$passwordEncoder->isPasswordValid($user, $dataLogin['mdp'])) {
             return $this->json([
-                'message' => 'email or password is wrong.',
+                'isValid' => false,
+                'message' => 'Email or password is wrong.',
+            ]);
+        }
+        if ($user->getIsAuthorize() === false) {
+            return $this->json([
+                'isValid' => true,
+                'isAuthorized' => false,
+                'message' => 'Votre demande est en attente.',
             ]);
         }
         $key = "secret_key";
@@ -40,11 +48,13 @@ class AuthController extends AbstractController
         ];
         $jwt = JWT::encode($payload, $key, 'HS256');
         $role = $user->getRole();
-        return new JsonResponse([
+        return $this->json([
+            'isValid' => true,
+            'isAuthorized' => true,
             'message' => 'success login',
             'token' => sprintf('Bearer %s', $jwt),
             'role' => $role
-        ], 200, [], true);
+        ]);
     }
 
     /**
@@ -54,21 +64,28 @@ class AuthController extends AbstractController
      * @return JsonResponse
      * @Route ("/register", name="register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em): JsonResponse
+    public function register(Request $request, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em): JsonResponse
     {
         $askRegister = $request->getContent();
         $askRegister = json_decode($askRegister, true);
         $email = $askRegister['email'];
         $plainPassword = $askRegister['mdp'];
-        $user = new User();
-        $user
-            ->setEmail($email)
-            ->setPassword($passwordEncoder->encodePassword($user, $plainPassword))
-            ->setIsAuthorize(true);
-        $em->persist($user);
-        $em->flush();
-        return $this->json([
-            'message' => 'you account has been created'
-        ]);
+        $user = $userRepository->findOneBy(['email' => $email]);
+        if ($user) {
+            return $this->json([
+                'RegistrationOK' => false,
+            ]);
+        } else {
+            $user = new User();
+            $user
+                ->setEmail($email)
+                ->setPassword($passwordEncoder->encodePassword($user, $plainPassword))
+                ->setIsAuthorize(false);
+            $em->persist($user);
+            $em->flush();
+            return $this->json([
+                'RegistrationOK' => true,
+            ]);
+        }
     }
 }

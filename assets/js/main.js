@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
 import Axios from 'axios'
 import vuetify from './plugins/vuetify'
+//import isConnected from './guard/auth'
 
 // Import the styles directly. (Or you could add them via script tags.)
 import 'bootstrap/dist/css/bootstrap.css';
@@ -22,12 +23,33 @@ Vue.use(
 
 const routes = [
     {
-        path: '/login', name:'login',
-        component: () => import('./components/Login.vue')
+        path: '/', name:'Home',
+        component: () => import('./pages/Home.vue'),
     },
     {
-        path: '/register', name:'register',
-        component: () => import('./components/Register.vue')
+        path: '/login', name:'login',
+        component: () => import('./pages/Auth.vue')
+    },
+    {
+        /* TODO gestion parametre (id vehicule) */
+        /* TODO gestion edition */
+        path: '/detail/:id', name:'detail',
+        component: () => import('./pages/Detail.vue')
+    },
+    {
+        /* TODO gestion parametre (id vehicule) */
+        /* TODO gestion edition */
+        path: '/edit/:id', name:'edit',
+        component: () => import('./pages/Detail.vue')
+    },
+    {
+        path: '/usermanager', name:'usermanager',
+        component: () => import('./pages/UserManager.vue')
+    }
+    ,
+    {
+        path: '/admin', name:'admin',
+        component: () => import('./components/Admin.vue')
     }
 ]
 
