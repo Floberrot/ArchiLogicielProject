@@ -24,21 +24,17 @@ Vue.use(
 const routes = [
     {
         path: '/', name:'Home',
-        component: () => import('./pages/Home.vue'),
+        component: () => import('./pages/Home.vue')
     },
     {
         path: '/login', name:'login',
         component: () => import('./pages/Auth.vue')
     },
     {
-        /* TODO gestion parametre (id vehicule) */
-        /* TODO gestion edition */
         path: '/detail/:id', name:'detail',
         component: () => import('./pages/Detail.vue')
     },
     {
-        /* TODO gestion parametre (id vehicule) */
-        /* TODO gestion edition */
         path: '/edit/:id', name:'edit',
         component: () => import('./pages/Detail.vue')
     },
