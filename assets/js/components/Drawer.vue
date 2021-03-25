@@ -9,10 +9,13 @@
             </v-btn>
           </v-list-item-icon>
           <v-list-item v-for="item in items" :key="item.title" link @click="redirect(item.path)">
-            <v-list-item-icon>
+            <v-list-item-icon
+            v-if="role === 'Manager' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules'"
+            >
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
-            <v-list-item-content>
+            <v-list-item-content
+            v-if="role === 'Manager' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules'">
               <v-list-item-title :class="item.class">{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -23,15 +26,24 @@
 </template>
 
 <script>
+import Home from './../pages/Home'
+  
 export default {
+  components: {
+    Home,
+  },
   data() {
     return {
       items: [
         { title: "Mes véhicules", icon: "mdi-car", path: "/"},
-        { title: "Gestion d'utilisateurs (soon)", icon: "mdi-account", class: 'text--disabled', path: 'usermanager' },
+        { title: "Gestion d'utilisateurs", icon: "mdi-account",  path: '/admin' },
       ],
       drawer: false,
+      role: ''
     };
+  },
+  mounted() {
+    this.checkRoleOfUser()
   },
   methods: {
     hide () {
@@ -42,7 +54,16 @@ export default {
     },
     redirect (path) {
       this.$router.push(path);
-    }
+    },
+    checkRoleOfUser() {
+      let token = window.localStorage.getItem('token')
+      this.$axios.post("/admin/role/user", {
+        token: token
+      })
+        .then(response => {
+          this.role = response.data.role
+        })
+    },
   },
 };
 </script>

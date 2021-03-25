@@ -56,9 +56,19 @@ class ApiController extends AbstractController
      */
   public function createVehicle() : JsonResponse
   {
-        // $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
-        // $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
-    
+         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
+         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
+//        $data = [
+//            'type' => 'Motorcycle',
+//            "label" => 'Nouveau véhicule',
+//            'brand' => 'Kawazaki',
+//            'fuel' => 'Gazoule',
+//            'lastControl' => new DateTime('2021-02-04'),
+//            'conceptionDate' => new DateTime('2021-02-04'),
+//            'description' => 'Ouais le véhicule tu connais',
+//            'licence' => 'permis 125',
+//            'helmetAvailable' => false
+//        ];
         // Création d'un nouveau véhicule
         $vehicleBuilder = new VehicleBuilder();
         $vehicleBuilder->setAndCheckVehicleType($data, $this->entityManager);
@@ -82,8 +92,8 @@ class ApiController extends AbstractController
 
 
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
-        dump($dataReceive);
         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
+
         $vehicleToEdit
             ->setLabel($data['label'])
             ->setBrand($data["brand"])
@@ -181,17 +191,12 @@ class ApiController extends AbstractController
                 return new JsonResponse('Erreur lors de la suppression, ce véhicule n\'exite pas', 500, [], true);
             }
             $this->entityManager->remove($vehicleToDelete);
-            $this->entityManager->flush();
+            // $this->entityManager->flush();
             
-            return new JsonResponse(
-                [
-                'message' => 'Vehicule supprimé !'
-                ], 200, [], false);
+            //$this->entityManager->remove($vehicleToDelete);
+            return new JsonResponse('Vehicule supprimé', 200, [], true);
         } else {
-            return new JsonResponse(
-                [
-                    'message' => 'La methode de requête est mauvaise',
-                ], 500, [], false);
+            return new JsonResponse('La methode de requête est mauvaise', 500, [], true);
         }
     }
 
@@ -206,7 +211,6 @@ class ApiController extends AbstractController
             // On récupère la valeur que nous renvoie le front.
             $dataInRequest = $request->getContent();
             $response = json_decode($dataInRequest, true);
-            dump($response);
             $valueStatusPrivacy = $response['valueStatusPrivacy'];
             // On cherche le véhicule avec l'id que l'on reçoit du front.
             $vehicleToChangeStatus = $this->vehicleRepository->find($idToEdit);
@@ -214,29 +218,16 @@ class ApiController extends AbstractController
             switch ($valueStatusPrivacy) {
                 case true:
                     $vehicleToChangeStatus->setIsPublic(true);
-                    $this->entityManager->persist($vehicleToChangeStatus);
-                    $this->entityManager->flush();
-                    return new JsonResponse(
-                        [
-                            'message' => 'Le véhicule est en statut : publique.'
-                        ], 200, [], false);
                     break;
                 case false:
                     $vehicleToChangeStatus->setIsPublic(false);
-                    $this->entityManager->persist($vehicleToChangeStatus);
-                    $this->entityManager->flush();
-                    return new JsonResponse(
-                        [
-                            'message' => 'Le véhicule est en statut : privé.'
-                        ], 200, [], false);
                     break;
             }
-            
+            $this->entityManager->persist($vehicleToChangeStatus);
+            $this->entityManager->flush();
+            return new JsonResponse('Le status du véhicule a changé', 200, [], true);
         } else {
-            return new JsonResponse(
-                [
-                    'message' => 'Mauvaise méthode de requete, méthode attendu : POST'
-                ], 404, [], false);
+            return new JsonResponse('Mauvaise méthode de requete, méthode attendu : POST', 404, [], true);
         }
     }
 }

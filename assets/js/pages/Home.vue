@@ -2,7 +2,9 @@
   <v-row justify="center">
     <v-col cols="12">
       <v-row class="customRow">
-        <v-btn rounded small color="primary" class="ma-2 white--text" @click="openDialog">
+        <v-btn rounded small color="primary" class="ma-2 white--text" @click="openDialog"
+         v-if="role === 'Manager'"
+         >
           Ajouter un véhicule
           <v-icon right>mdi-plus</v-icon>
         </v-btn>
@@ -16,7 +18,10 @@
             <th class="text-left">
               Marque
             </th>
-            <th class="text-left">
+            <th 
+              class="text-left"
+              v-if="role === 'Manager'"
+              >
               Modifier
             </th>
             <th class="text-left">
@@ -31,7 +36,7 @@
           >
             <td><strong>{{ item.label }}</strong></td>
             <td>{{ item.brand }}</td>
-            <td>
+            <td v-if="role === 'Manager'">
               <v-btn icon @click="redirectEdit(item.id)">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
@@ -61,28 +66,17 @@ export default {
   },
   data() {
     return {
-     vehicles: [
-          /*{
-            label: '206',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio 1',
-            brand: 'Renault',
-          },
-          {
-            label: '207',
-            brand: 'Peugeot',
-          },
-          {
-            label: 'Clio 2',
-            brand: 'Renault',
-          },*/
-      ],
+     vehicles: [],
       dialog: true,
+      role: ''
     };
   },
   mounted() {
+    this.checkRoleOfUser() // Récupère le role de l'utilisateur pour bloquer l'accès a des fonctionnalités.
+    this.$root.$on('Drawer', () => {
+      console.log("coucou");
+      this.checkRoleOfUser()
+    })
     this.listVehicleRequest() //Récupère les véhicules
   },
   beforeCreate() {
@@ -95,8 +89,16 @@ export default {
       this.$axios.get("/api/vehicle")
           .then(response => {
             this.vehicles = response.data["arrayOfVehicles"]
-            console.log(this.vehicles)
           })
+    },
+    checkRoleOfUser() {
+      let token = window.localStorage.getItem('token')
+      this.$axios.post("/admin/role/user", {
+        token: token
+      })
+        .then(response => {
+          this.role = response.data.role
+        })
     },
     redirectDetail (id) {
       this.$router.push({path: `/detail/${id}` });
