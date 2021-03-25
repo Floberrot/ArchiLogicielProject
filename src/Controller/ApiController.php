@@ -87,13 +87,9 @@ class ApiController extends AbstractController
      */
     public function editVehicle($idToEdit) : JsonResponse
     {
-        // TODO : On envoie au front toutes les informations du véhhicule à éditer. Dans le formulaire d'édition on renverra tous les champs, même ceux que l'utilisateur n'a pas changé.
         $vehicleToEdit = $this->vehicleRepository->find($idToEdit);
-
-
         $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
         $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
-
         $vehicleToEdit
             ->setLabel($data['label'])
             ->setBrand($data["brand"])
@@ -102,7 +98,6 @@ class ApiController extends AbstractController
             ->setFuel($data["fuel"])
             ->setLicence($data["licence"])
             ->setDescription($data["description"]);
-
         
         // Enregistre le véhicule standard.
         $this->entityManager->persist($vehicleToEdit);
@@ -141,7 +136,6 @@ class ApiController extends AbstractController
             $dataOfVehicles['licence'] = $licence;
             array_push($vehiclesToDisplay, $dataOfVehicles);
         }
-        // Voir avec Fabien ce qu'il veut comme valeur de retour.
         return new JsonResponse(
             [
                 'arrayOfVehicles' => $vehiclesToDisplay
@@ -191,9 +185,8 @@ class ApiController extends AbstractController
                 return new JsonResponse('Erreur lors de la suppression, ce véhicule n\'exite pas', 500, [], true);
             }
             $this->entityManager->remove($vehicleToDelete);
-            // $this->entityManager->flush();
+            $this->entityManager->flush();
             
-            //$this->entityManager->remove($vehicleToDelete);
             return new JsonResponse('Vehicule supprimé', 200, [], true);
         } else {
             return new JsonResponse('La methode de requête est mauvaise', 500, [], true);
