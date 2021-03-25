@@ -191,7 +191,7 @@ class ApiController extends AbstractController
                 return new JsonResponse('Erreur lors de la suppression, ce véhicule n\'exite pas', 500, [], true);
             }
             $this->entityManager->remove($vehicleToDelete);
-            $this->entityManager->flush();
+            // $this->entityManager->flush();
             
             //$this->entityManager->remove($vehicleToDelete);
             return new JsonResponse('Vehicule supprimé', 200, [], true);

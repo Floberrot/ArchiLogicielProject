@@ -28,6 +28,7 @@ class AuthController extends AbstractController
         $dataLogin = json_decode($dataLogin, true);
         $email = $dataLogin['email'];
         $user = $userRepository->findOneBy(['email' => $email]);
+        $role = $user->getRole();
         if (!$user || !$passwordEncoder->isPasswordValid($user, $dataLogin['mdp'])) {
             return $this->json([
                 'isValid' => false,
@@ -41,13 +42,14 @@ class AuthController extends AbstractController
                 'message' => 'Votre demande est en attente.',
             ]);
         }
+        // create token
         $key = "secret_key";
         $payload = [
             "email" => $email,
-            "exp" => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
+            "role" => $role,
+            "exp" => (new \DateTime())->modify("+120 minutes")->getTimestamp(),
         ];
-        $jwt = JWT::encode($payload, $key, 'HS256');
-        $role = $user->getRole();
+        $jwt = JWT::encode($payload, $key);
         return $this->json([
             'isValid' => true,
             'isAuthorized' => true,

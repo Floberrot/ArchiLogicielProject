@@ -3,30 +3,32 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
+use App\Services\DecodeTokenJwt;
 use Doctrine\ORM\EntityManagerInterface;
+use \Firebase\JWT\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Message;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Json;
 
 class UserController extends AbstractController
 {
     private $request;
     private $userRepository;
     private $entityManager;
+    private $decodeJwt;
 
     public function __construct(
         RequestStack $request,
         EntityManagerInterface $entityManager,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        DecodeTokenJwt $decodeJwt
     )
     {
         $this->request = $request;
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
+        $this->decodeJwt = $decodeJwt;
     }
 
     /**
@@ -72,26 +74,34 @@ class UserController extends AbstractController
         $allNewUser = $this->userRepository->findBy(['isAuthorize' => false]);
         return $this->json(["allNewUser" => $allNewUser, "code" => 200, true]);
     }
+
     /**
-     * @Route("/get/role/user", name="get_role", methods={"GET"})
+     * Récupère le role de l'utilisateur;
+     * Appelle une fonction qui détruit le token JWT
+     * @Route("/admin/role/user", name="get_role", methods={"POST"})
      * @return JsonResponse
      */
     public function getRolesOfCurrentUser()
     {
-        $user = $this->getUser();
+        // Get Token from front
+        $tokenJson = $this->request->getCurrentRequest()->getContent();
+        $token = json_decode($tokenJson, true);
+        $destructJwt = $this->decodeJwt->decodeJwt($token);
+        $user = $this->userRepository->findOneBy(['email' => $destructJwt['email']]);
+        
         if (empty($user)) {
             return new JsonResponse(
                 [
                     'role' => null,
                     'message' => 'L\'utilisateur n\'est pas connecté ou n\'a pas de role..'
-                ], 200, [], true
+                ], 200, [], false
             );
         }
         $role = $user->getRole();
         return new JsonResponse(
             [
                 'role' => $role
-            ], 200, [], true
+            ], 200, [], false
         );
     }
 }
