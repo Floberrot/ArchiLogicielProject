@@ -21,6 +21,7 @@ class VehicleBuilder
      */
     static function setAndCheckVehicleType($res, $entityManager): Vehicle
     {
+        dump($res);
         $vehicle = new Vehicle();
         $vehicle->setLabel($res["label"])
                 ->setBrand($res["brand"])
@@ -31,7 +32,7 @@ class VehicleBuilder
                 ->setIsPublic(true);
         $entityManager->persist($vehicle);
 
-        if ($res["type"] != "Car") {
+        if ($res["type"] != "") {
             $vehicleTypeBuilder = new VehicleTypeBuilder($entityManager);
             $vehicleTypeBuilder->determineVehicleType($res, $vehicle);
         }

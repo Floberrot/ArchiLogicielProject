@@ -65,7 +65,10 @@ class ApiController extends AbstractController
 
         $this->entityManager->flush();
 
-        return new JsonResponse('ok', 200, [], true);
+        return new JsonResponse(
+            [
+                'message' => 'Le véhicule a bien été enregistré !'
+            ], 200, [], false);
     }
 
 
