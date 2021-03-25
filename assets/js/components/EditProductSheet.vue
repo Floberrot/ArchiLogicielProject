@@ -84,6 +84,7 @@
             <v-card>
             <v-date-picker
               v-model="lastControl"
+              locale="fr-fr"
               color="blue lighten-1"
               :value= vehicle.lastControl
             ></v-date-picker>
