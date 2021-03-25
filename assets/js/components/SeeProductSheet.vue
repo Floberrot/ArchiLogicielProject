@@ -80,7 +80,7 @@ export default {
           })
     },
     redirectEdit () {
-      this.$router.push({ name: 'edit', params: { id: this.$route.params.id } })
+      this.$router.go(this.$router.push({ name: 'edit', params: { id: this.$route.params.id } }))
     }
   }
 };
