@@ -88,7 +88,7 @@
               :value= vehicle.lastControl
             ></v-date-picker>
             <v-divider></v-divider>
-            <v-card-title>Dernier controle du véhicule</v-card-title>
+            <v-card-title>Dernier contrôle technique</v-card-title>
             </v-card>
           </v-row>
         </template>
