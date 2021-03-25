@@ -10,8 +10,9 @@
             <v-row>
               <v-col cols="12" sm="6" md="6">
                 <v-select
-                  :items="['Motorcyle', 'UtilityVehicle', '30-54', '54+']"
-                  label="type"
+                v-model="type"
+                  :items="['Motorcyle', 'UtilityVehicle']"
+                  label="Type de véhicule"
                   required
                 ></v-select>
               </v-col>
@@ -50,6 +51,22 @@
                   label="Permis"
                   hint="Ex : Permis B"
                   required
+                ></v-text-field>
+                <v-text-field
+                  label="Casque disponible ?"
+                  hint="Ex : Permis B"
+                  required
+                  v-if="type === 'Motorcyle'"
+                ></v-text-field>
+                <v-text-field
+                  label="Charges maximum (en kg)"
+                  required
+                  v-if="type === 'UtilityVehicle'"
+                ></v-text-field>
+                <v-text-field
+                  label="Capacité du coffre (en m3)"
+                  required
+                  v-if="type === 'UtilityVehicle'"
                 ></v-text-field>
               </v-col>
             </v-row>
