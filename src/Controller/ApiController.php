@@ -194,9 +194,15 @@ class ApiController extends AbstractController
             // $this->entityManager->flush();
             
             //$this->entityManager->remove($vehicleToDelete);
-            return new JsonResponse('Vehicule supprimé', 200, [], true);
+            return new JsonResponse(
+                [
+                'message' => 'Vehicule supprimé !'
+                ], 200, [], false);
         } else {
-            return new JsonResponse('La methode de requête est mauvaise', 500, [], true);
+            return new JsonResponse(
+                [
+                    'message' => 'La methode de requête est mauvaise',
+                ], 500, [], false);
         }
     }
 
@@ -218,16 +224,26 @@ class ApiController extends AbstractController
             switch ($valueStatusPrivacy) {
                 case true:
                     $vehicleToChangeStatus->setIsPublic(true);
-                    break;
+                    $this->entityManager->persist($vehicleToChangeStatus);
+                    $this->entityManager->flush();
+                    return new JsonResponse(
+                        [
+                            'message' => 'Le véhicule est en statut : publique.'
+                        ], 200, [], false);
                 case false:
                     $vehicleToChangeStatus->setIsPublic(false);
-                    break;
+                    $this->entityManager->persist($vehicleToChangeStatus);
+                    $this->entityManager->flush();
+                    return new JsonResponse(
+                        [
+                            'message' => 'Le véhicule est en statut : privé.'
+                        ], 200, [], false);
             }
-            $this->entityManager->persist($vehicleToChangeStatus);
-            $this->entityManager->flush();
-            return new JsonResponse('Le status du véhicule a changé', 200, [], true);
         } else {
-            return new JsonResponse('Mauvaise méthode de requete, méthode attendu : POST', 404, [], true);
+            return new JsonResponse(
+                [
+                    'message' => 'Mauvaise méthode de requete, méthode attendu : POST'
+                ], 404, [], true);
         }
     }
 }
