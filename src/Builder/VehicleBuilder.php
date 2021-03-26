@@ -21,7 +21,6 @@ class VehicleBuilder
      */
     static function setAndCheckVehicleType($res, $entityManager): Vehicle
     {
-        dump($res);
         $vehicle = new Vehicle();
         $vehicle->setLabel($res["label"])
                 ->setBrand($res["brand"])

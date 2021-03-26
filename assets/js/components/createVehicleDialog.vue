@@ -7,9 +7,18 @@
       >
     <v-dialog v-model="dialog" max-width="600px">
       <v-card>
+        <v-alert
+            outlined
+            type="success"
+            text
+            v-if="success"
+        >
+          {{ this.message }}
+        </v-alert>
         <v-card-title>
-          <span class="headline">Ajouter un véhicule</span>
+          <span class="headline mx-auto">Ajouter un véhicule</span>
         </v-card-title>
+        <v-divider></v-divider>
         <v-card-text>
           <v-container>
             <v-row>
@@ -111,34 +120,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red darken-1" text @click="hide()"> Annuler </v-btn>
-          <v-btn :disabled="!valid" color="green darken-1" text @click="createVehicle()"> Sauvegarder </v-btn>
+          <v-btn :disabled="!valid" color="green darken-1" text @click="createVehicle()"> Créer le véhicule </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
     </v-form>
   </v-row>
-
 </template>
-
-<v-snackbar
-    color="success"
-    rounded="pill"
-    v-model="snackbar"
-    :timeout="timeout"
->
-{{ message }}
-
-<template v-slot:action="{ attrs }">
-  <v-btn
-      color="white"
-      text
-      v-bind="attrs"
-      @click="snackbar = false"
-  >
-    Close
-  </v-btn>
-</template>
-</v-snackbar>
 
 <script>
 export default {
@@ -160,6 +148,8 @@ export default {
       helmetAvailable: '',
       maxLoad: '',
       trunkCapacity: '',
+      success: false,
+      message: ''
       // date: new Date().toISOString().substr(0, 10),
     };
   },
@@ -172,6 +162,7 @@ export default {
     },
     hide() {
       this.dialog = false;
+      this.$router.go('/')
     },
     createVehicle() {
       if (this.type === 'Véhicule utilitaire') { this.type = 'UtilityVehicle'}
@@ -191,6 +182,8 @@ export default {
           resultDescription: 'A remplir'
         })
         .then((response) => {
+          this.success = true
+          this.message = response.data.message
         }).catch((error) => {
           console.log(error)
         });
