@@ -4,51 +4,83 @@
       <v-row justify="center" class="customColHeightTop">
         <v-col lg="6" class="customHeight100">
           <v-img
-            max-height="100%"
-            max-width="100%"
-            src="https://picsum.photos/id/514/1000/800?blur=2"
+              max-height="100%"
+              max-width="100%"
+              src="https://picsum.photos/id/514/1000/800?blur=2"
           ></v-img>
         </v-col>
-        <v-col lg="6">
-          <v-simple-table dense>
-            <template>
-              <tbody>
-                <tr>
-                  <td>Nom</td>
-                  <td class="alignEnd">{{ vehicle.label }}</td>
-                </tr>
-                <tr>
-                  <td>Marque</td>
-                  <td class="alignEnd">{{ vehicle.brand }}</td>
-                </tr>
-                <tr>
-                  <td>Année de conception</td>
-                  <td class="alignEnd">{{ vehicle.conception_date }}</td>
-                </tr>
-                <tr>
-                  <td>Dernier contrôle technique</td>
-                  <td class="alignEnd">{{ vehicle.last_control }}</td>
-                </tr>
-                <tr>
-                  <td>Carburant</td>
-                  <td class="alignEnd">{{ vehicle.fuel }}</td>
-                </tr>
-                <tr>
-                  <td>Permis</td>
-                  <td class="alignEnd">{{ vehicle.licence }}</td>
-                </tr>
-                <tr>
-                  <td>Visibilité</td>
-                  <td class="alignEnd">{{ vehicle.is_public ? "Public" : "Private"}}</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
+        <v-col lg="3">
+          <v-card class="pa-3">
+            <v-card-title
+            >
+              Informations du véhicule
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-text
+                label="Marque du véhicule"
+            >
+              Label : <strong>{{ vehicle.label }}</strong>
+            </v-card-text>
+            <v-card-text
+                label="Marque du véhicule"
+            >
+              Marque : <strong>{{ vehicle.brand }}</strong>
+            </v-card-text>
+            <v-card-text
+                label="Marque du véhicule"
+            >
+              Essence : <strong>{{ vehicle.fuel }}</strong>
+            </v-card-text>
+            <v-card-text
+                label="Marque du véhicule"
+            >
+              Permis : <strong>{{ vehicle.licence }}</strong>
+            </v-card-text>
+            <v-card-text
+                label="Marque du véhicule"
+            >
+              Date de conception : <strong>{{ vehicle.conception_date }}</strong>
+            </v-card-text>
+            <v-card-text
+                label="Marque du véhicule"
+            >
+              Dernier contrôle : <strong>{{ vehicle.last_control }}</strong>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col
+            lg="3"
+            v-if="vehicle.type !== ''">
+          <v-card>
+            <v-card-title>
+              Informations complémentaire
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-text
+                label="Marque du véhicule"
+                v-if="vehicle.type === 'Motorcycle'"
+            >
+              Casque disponible avec le véhicule : <strong>{{ this.valueHelmet }}</strong>
+            </v-card-text>
+            <v-card-text
+                label="Marque du véhicule"
+                v-if="vehicle.type === 'UtilityVehicle'"
+            >
+              Charge maximum du véhicule : <strong>{{ vehicle.max_load }} kg</strong>
+            </v-card-text>
+            <v-card-text
+                label="Marque du véhicule"
+                v-if="vehicle.type === 'UtilityVehicle'"
+            >
+              Capacité maximum du coffre : <strong>{{ vehicle.trunk_capacity }}</strong>
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
       <v-row justify="center" class="customColHeightMiddle">
         <v-col lg="12">
-          <v-textarea readonly solo name="textarea" label="Solo textarea" v-model="vehicle.label"></v-textarea>
+          <v-textarea readonly solo name="textarea" class="pt-5" label="Solo textarea"
+                      v-model="vehicle.label"></v-textarea>
         </v-col>
       </v-row>
       <v-row v-if="role !== 'Membre'" class="customColHeightBottom">
@@ -66,7 +98,8 @@ export default {
   data() {
     return {
       vehicle: '',
-      role: ''
+      role: '',
+      valueHelmet: '',
     };
   },
   created() {
@@ -76,10 +109,16 @@ export default {
     this.listVehicleRequest() //Récupère les véhicules
   },
   methods: {
-    listVehicleRequest () {
+    listVehicleRequest() {
       this.$axios.get("/api/vehicle/" + this.$route.params.id)
           .then(response => {
+            console.log(response)
             this.vehicle = response.data["detailVehicle"]
+            if (this.vehicle.helmet_available === true) {
+              this.valueHelmet = 'Oui'
+            } else {
+              this.valueHelmet = 'Non'
+            }
           })
     },
     checkRoleOfUser() {
@@ -92,8 +131,8 @@ export default {
             console.log(this.role)
           })
     },
-    redirectEdit () {
-      this.$router.go(this.$router.push({ name: 'edit', params: { id: this.$route.params.id } }))
+    redirectEdit() {
+      this.$router.go(this.$router.push({name: 'edit', params: {id: this.$route.params.id}}))
     }
   }
 };
@@ -103,16 +142,20 @@ export default {
 .customHeight100 {
   height: 100%
 }
+
 .customColHeightTop {
   height: 60%;
 }
+
 .customColHeightMiddle {
   height: 30%;
 }
+
 .customColHeightBottom {
   height: 10%;
 }
-.alignEnd{
+
+.alignEnd {
   text-align: end;
 }
 </style>

@@ -127,6 +127,13 @@ class ApiController extends AbstractController
             $dataOfVehicles['label'] = $label;
             $dataOfVehicles['brand'] = $brand;
             $dataOfVehicles['licence'] = $licence;
+            if ($oneVehicle->getMotorcycle()) {
+                $dataOfVehicles['type'] = 'Moto';
+            } else if ($oneVehicle->getUtilityVehicle()) {
+                $dataOfVehicles['type'] = 'Véhicule utilitaire';
+            } else {
+                $dataOfVehicles['type'] = 'Standard';
+            }
             array_push($vehiclesToDisplay, $dataOfVehicles);
         }
         return new JsonResponse(
@@ -145,7 +152,6 @@ class ApiController extends AbstractController
      */
     public function detailVehicle($idDetails) : JsonResponse
     {
-        $vehicleEntity = new Vehicle(); 
         // Cherche un véhicule grâce à son id.
         $vehicleEntity = $this->vehicleRepository->find($idDetails);
         $detailOneVehicle = [];
@@ -171,7 +177,6 @@ class ApiController extends AbstractController
     {
         // On vérifie que la méthode est bien "DELETE"
          if ($this->request->getCurrentRequest()->getMethod() === "DELETE") {
-            $vehicleToDelete = new Vehicle();
             // On fait une requête pour trouver l'entité associé à l'id.
             $vehicleToDelete = $this->vehicleRepository->find($idToDelete);
             if(!$vehicleToDelete) {

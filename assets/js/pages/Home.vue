@@ -16,6 +16,9 @@
             <strong>Label</strong>
           </th>
           <th class="text-left">
+            <strong>Type de véhicule</strong>
+          </th>
+          <th class="text-left">
             Marque
           </th>
           <th
@@ -35,6 +38,7 @@
             :key="item.label"
         >
           <td><strong>{{ item.label }}</strong></td>
+          <td>{{ item.type }}</td>
           <td>{{ item.brand }}</td>
           <td v-if="role !== 'Membre'">
             <v-btn icon @click="redirectEdit(item.id)">
@@ -83,7 +87,7 @@ export default {
       dialog: true,
       role: '',
       snackbar: false,
-      message: ''
+      message: '',
     };
   },
   mounted() {
