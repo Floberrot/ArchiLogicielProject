@@ -38,16 +38,18 @@ export default {
     },
     CheckTokenValue() {
       let token = window.localStorage.getItem('token')
-      this.$axios
-          .post("/admin/role/user", {
-            token: token
-          })
-          .then(response => {
-            this.role = response.data.role
-            if (!response.data.errorGetToken && this.role !== null) {
-              this.$router.push({path: '/'})
-            }
-          })
+      if (token !== null) {
+        this.$axios
+            .post("/admin/role/user", {
+              token: token
+            })
+            .then(response => {
+              this.role = response.data.role
+              if (!response.data.errorGetToken && this.role !== null) {
+                this.$router.push({path: '/'})
+              }
+            })
+      }
     }
   },
 };

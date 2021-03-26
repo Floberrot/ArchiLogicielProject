@@ -99,18 +99,22 @@ export default {
     },
     checkRoleOfUser() {
       let token = window.localStorage.getItem('token')
-      this.$axios.post("/admin/role/user", {
-        token: token
-      })
-          .then(response => {
-            if (response.data.errorGetToken) {
-              this.snackbar = true
-              this.message = response.data.message
-              setTimeout(() => {
-                this.$router.push({path: ('/login')})
-              }, 3000)
-            }
-          })
+      if (token === null) {
+        this.$router.push({path: ('/login')})
+      } else {
+        this.$axios.post("/admin/role/user", {
+          token: token
+        })
+            .then(response => {
+              if (response.data.errorGetToken) {
+                this.snackbar = true
+                this.message = response.data.message
+                setTimeout(() => {
+                  this.$router.push({path: ('/login')})
+                }, 3000)
+              }
+            })
+      }
     },
     redirectDetail(id) {
       this.$router.push({path: `/detail/${id}`});
