@@ -51,7 +51,7 @@
           <v-textarea readonly solo name="textarea" label="Solo textarea" v-model="vehicle.label"></v-textarea>
         </v-col>
       </v-row>
-      <v-row class="customColHeightBottom">
+      <v-row v-if="role !== 'Membre'" class="customColHeightBottom">
         <v-col lg="12" class="d-flex justify-end">
           <v-btn color="primary" @click="redirectEdit">Editer</v-btn>
         </v-col>
@@ -65,8 +65,12 @@ export default {
   name: "Detail",
   data() {
     return {
-      vehicle: null
+      vehicle: '',
+      role: ''
     };
+  },
+  created() {
+    this.checkRoleOfUser()
   },
   mounted() {
     this.listVehicleRequest() //Récupère les véhicules
@@ -76,7 +80,16 @@ export default {
       this.$axios.get("/api/vehicle/" + this.$route.params.id)
           .then(response => {
             this.vehicle = response.data["detailVehicle"]
-            console.log(this.vehicle)
+          })
+    },
+    checkRoleOfUser() {
+      let token = window.localStorage.getItem('token')
+      this.$axios.post("/admin/role/user", {
+        token: token
+      })
+          .then(response => {
+            this.role = response.data.role
+            console.log(this.role)
           })
     },
     redirectEdit () {
