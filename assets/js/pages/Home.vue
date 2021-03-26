@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-row class="customRow">
         <v-btn rounded small color="primary" class="ma-2 white--text" @click="openDialog"
-         v-if="role === 'Manager'"
+         v-if="role !== 'Membre'"
          >
           Ajouter un véhicule
           <v-icon right>mdi-plus</v-icon>
@@ -20,7 +20,7 @@
             </th>
             <th 
               class="text-left"
-              v-if="role === 'Manager'"
+              v-if="role !== 'Membre'"
               >
               Modifier
             </th>
@@ -36,7 +36,7 @@
           >
             <td><strong>{{ item.label }}</strong></td>
             <td>{{ item.brand }}</td>
-            <td v-if="role === 'Manager'">
+            <td v-if="role !== 'Membre'">
               <v-btn icon @click="redirectEdit(item.id)">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>

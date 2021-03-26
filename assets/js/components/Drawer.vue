@@ -10,12 +10,12 @@
           </v-list-item-icon>
           <v-list-item v-for="item in items" :key="item.title" link @click="redirect(item.path)">
             <v-list-item-icon
-            v-if="role === 'Manager' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules'"
+            v-if="role !== 'Membre' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules' || item.title === 'Administration' && role === 'Admin'"
             >
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content
-            v-if="role === 'Manager' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules'">
+            v-if="role !== 'Membre' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules' || item.title === 'Administration' && role === 'Admin'">
               <v-list-item-title :class="item.class">{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -36,7 +36,8 @@ export default {
     return {
       items: [
         { title: "Mes véhicules", icon: "mdi-car", path: "/"},
-        { title: "Gestion d'utilisateurs", icon: "mdi-account",  path: '/admin' },
+        { title: "Gestion d'utilisateurs", icon: "mdi-account",  path: '/user/manager' },
+        { title: "Administration", icon: "mdi-account",  path: '/admin' },
       ],
       drawer: false,
       role: ''
