@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Repository\UserRepository;
 use App\Services\DecodeTokenJwt;
 use Doctrine\ORM\EntityManagerInterface;
-use \Firebase\JWT\JWT;
+use Firebase\JWT\ExpiredException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -83,25 +83,40 @@ class UserController extends AbstractController
      */
     public function getRolesOfCurrentUser()
     {
-        // Get Token from front
-        $tokenJson = $this->request->getCurrentRequest()->getContent();
-        $token = json_decode($tokenJson, true);
-        $destructJwt = $this->decodeJwt->decodeJwt($token);
-        $user = $this->userRepository->findOneBy(['email' => $destructJwt['email']]);
-        
-        if (empty($user)) {
+        try {
+            // Get Token from front
+            $tokenJson = $this->request->getCurrentRequest()->getContent();
+            $token = json_decode($tokenJson, true);
+            $destructJwt = $this->decodeJwt->decodeJwt($token);
+            $user = $this->userRepository->findOneBy(['email' => $destructJwt['email']]);
+
+            if (empty($user)) {
+                return new JsonResponse(
+                    [
+                        'role' => null,
+                        'message' => 'L\'utilisateur n\'est pas connecté ou n\'a pas de role..',
+                        'errorGetToken' => false
+                    ], 200, [], false
+                );
+            }
+            $role = $user->getRole();
             return new JsonResponse(
                 [
-                    'role' => null,
-                    'message' => 'L\'utilisateur n\'est pas connecté ou n\'a pas de role..'
+                    'role' => $role,
+                    'email' => $destructJwt['email'],
+                    'errorGetToken' => false
                 ], 200, [], false
             );
+        } catch (ExpiredException $exception) {
+            if($exception->getMessage() == "Expired token"){
+                return new JsonResponse(
+                    [
+                        'role' => null,
+                        'errorGetToken' => true,
+                        'message' => 'Redirection a la page de connexion'
+                    ], 200, [], false
+                );
+            }
         }
-        $role = $user->getRole();
-        return new JsonResponse(
-            [
-                'role' => $role
-            ], 200, [], false
-        );
     }
 }
