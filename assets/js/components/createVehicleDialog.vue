@@ -117,7 +117,28 @@
     </v-dialog>
     </v-form>
   </v-row>
+
 </template>
+
+<v-snackbar
+    color="success"
+    rounded="pill"
+    v-model="snackbar"
+    :timeout="timeout"
+>
+{{ message }}
+
+<template v-slot:action="{ attrs }">
+  <v-btn
+      color="white"
+      text
+      v-bind="attrs"
+      @click="snackbar = false"
+  >
+    Close
+  </v-btn>
+</template>
+</v-snackbar>
 
 <script>
 export default {
@@ -170,7 +191,6 @@ export default {
           resultDescription: 'A remplir'
         })
         .then((response) => {
-          this.dialog = false;
         }).catch((error) => {
           console.log(error)
         });
