@@ -2,11 +2,11 @@
   <v-container class="customCenter">
     <v-card rounded>
       <v-card-text class="card" align="center" justify="center">
-          <login-form v-if="isLogin" />
-          <register-form v-if="!isLogin" />
-          <a class="d-flex justify-space-around mb-6" @click="switchForm()">
-            {{ btnTitle }}
-          </a>
+        <login-form v-if="isLogin"/>
+        <register-form v-if="!isLogin"/>
+        <a class="d-flex justify-space-around mb-6" @click="switchForm()">
+          {{ btnTitle }}
+        </a>
       </v-card-text>
     </v-card>
   </v-container>
@@ -15,11 +15,12 @@
 <script>
 import LoginForm from '../components/LoginForm.vue';
 import RegisterForm from '../components/RegisterForm.vue';
+
 export default {
   name: "Auth",
   components: {
-      LoginForm,
-      RegisterForm,
+    LoginForm,
+    RegisterForm,
   },
   data() {
     return {
@@ -27,16 +28,29 @@ export default {
       btnTitle: 'Inscription',
     };
   },
-  beforeCreate() {
-    if(window.localStorage.getItem('token') !== null) {
-      this.$router.push({ path: '/' })    
-      }
+  mounted() {
+    this.CheckTokenValue();
   },
   methods: {
-    switchForm () {
-        this.isLogin = !this.isLogin
-        this.btnTitle = this.isLogin ? 'Inscription' : 'Connexion'
+    switchForm() {
+      this.isLogin = !this.isLogin
+      this.btnTitle = this.isLogin ? 'Inscription' : 'Connexion'
     },
+    CheckTokenValue() {
+      let token = window.localStorage.getItem('token')
+      if (token !== null) {
+        this.$axios
+            .post("/admin/role/user", {
+              token: token
+            })
+            .then(response => {
+              this.role = response.data.role
+              if (!response.data.errorGetToken && this.role !== null) {
+                this.$router.push({path: '/'})
+              }
+            })
+      }
+    }
   },
 };
 </script>
@@ -52,7 +66,7 @@ export default {
   align-items: center;
 }
 
-.card{
+.card {
   width: 40vw;
 }
 </style>

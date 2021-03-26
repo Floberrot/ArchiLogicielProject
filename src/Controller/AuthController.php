@@ -47,7 +47,7 @@ class AuthController extends AbstractController
         $payload = [
             "email" => $email,
             "role" => $role,
-            "exp" => (new \DateTime())->modify("+120 minutes")->getTimestamp(),
+            "exp" => (new \DateTime())->modify("+1 day")->getTimestamp(),
         ];
         $jwt = JWT::encode($payload, $key);
         return $this->json([

@@ -8,15 +8,19 @@
               <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
           </v-list-item-icon>
+          <v-card-title
+          class="mx-auto">
+            Hello {{this.email}} !
+          </v-card-title>
           <v-list-item v-for="item in items" :key="item.title" link @click="redirect(item.path)">
             <v-list-item-icon
-            v-if="role === 'Manager' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules'"
+            v-if="role !== 'Membre' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules' || item.title === 'Administration' && role === 'Admin'"
             >
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content
-            v-if="role === 'Manager' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules'">
-              <v-list-item-title :class="item.class">{{ item.title }}</v-list-item-title>
+            v-if="role !== 'Membre' && item.title === 'Gestion d\'utilisateurs' || item.title === 'Mes véhicules' || item.title === 'Administration' && role === 'Admin'">
+              <v-list-item-title :class="item.class">{{ item.title }} {{item.add}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -36,10 +40,12 @@ export default {
     return {
       items: [
         { title: "Mes véhicules", icon: "mdi-car", path: "/"},
-        { title: "Gestion d'utilisateurs", icon: "mdi-account",  path: '/admin' },
+        { title: "Gestion d'utilisateurs", icon: "mdi-account",  path: '/user/manager' },
+        { title: "Administration", class:'disabled', add: '( soon... )', icon: "mdi-wrench",  path: '/admin' },
       ],
       drawer: false,
-      role: ''
+      role: '',
+      email: ''
     };
   },
   mounted() {
@@ -62,6 +68,7 @@ export default {
       })
         .then(response => {
           this.role = response.data.role
+          this.email = response.data.email
         })
     },
   },

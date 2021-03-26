@@ -109,7 +109,7 @@ export default {
         } else {
           this.authorize === "Oui" ? this.authorize = true : this.authorize = false
           this.errorMessage = null
-          this.successMessage = "Utilisateur authorisé"
+          this.successMessage = "Utilisateur autorisé"
           this.snackbar = true
           this.dialog = false
           // On set les données

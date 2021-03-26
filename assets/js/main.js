@@ -37,14 +37,10 @@ const routes = [
     {
         path: '/edit/:id', name:'edit',
         component: () => import('./pages/Detail.vue')
-    },
-    {
-        path: '/usermanager', name:'usermanager',
-        component: () => import('./pages/UserManager.vue')
     }
     ,
     {
-        path: '/admin', name:'admin',
+        path: '/user/manager', name:'userManager',
         component: () => import('./components/Admin.vue')
     }
 ]
