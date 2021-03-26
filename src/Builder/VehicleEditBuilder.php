@@ -23,7 +23,7 @@ class VehicleEditBuilder
         if ($moto) {
             $moto
                 ->setVehicle($vehicleToEdit)
-                ->setHelmetAvailable($data['resultHelmetAvailable']);
+                ->setHelmetAvailable($data['helmetAvailable']);
             $this->entityManager->persist($moto);
         }
     }
@@ -39,8 +39,8 @@ class VehicleEditBuilder
         if ($utilityVehicle) {
             $utilityVehicle
                 ->setVehicle($vehicleToEdit)
-                ->setMaxLoad($data['resultMaxLoad'])
-                ->setTrunkCapacity($data['resultTrunkCapacity']);
+                ->setMaxLoad($data['maxLoad'])
+                ->setTrunkCapacity($data['trunkCapacity']);
             $this->entityManager->persist($utilityVehicle);
         }
     }

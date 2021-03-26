@@ -31,7 +31,7 @@ class VehicleBuilder
                 ->setIsPublic(true);
         $entityManager->persist($vehicle);
 
-        if ($res["type"] != "Car") {
+        if ($res["type"] != "") {
             $vehicleTypeBuilder = new VehicleTypeBuilder($entityManager);
             $vehicleTypeBuilder->determineVehicleType($res, $vehicle);
         }

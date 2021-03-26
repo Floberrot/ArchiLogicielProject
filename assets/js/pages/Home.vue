@@ -74,7 +74,6 @@ export default {
   mounted() {
     this.checkRoleOfUser() // Récupère le role de l'utilisateur pour bloquer l'accès a des fonctionnalités.
     this.$root.$on('Drawer', () => {
-      console.log("coucou");
       this.checkRoleOfUser()
     })
     this.listVehicleRequest() //Récupère les véhicules

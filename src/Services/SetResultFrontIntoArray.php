@@ -46,13 +46,13 @@ class SetResultFrontIntoArray
                 $maxLoad = $data['resultMaxLoad'];
                 $trunkCapacity = $data['resultTrunkCapacity'];
                 //Ajoute les données dans le tableau
-                $dataArray["resultMaxLoad"] = $maxLoad;
-                $dataArray["resultTrunkCapacity"] = $trunkCapacity;
+                $dataArray["maxLoad"] = $maxLoad;
+                $dataArray["trunkCapacity"] = $trunkCapacity;
                 break;
             case "Motorcycle":
                 $helmetAvailable = $data['resultHelmetAvailable'];
                 //Ajoute les données dans le tableau
-                $dataArray["resultHelmetAvailable"] = $helmetAvailable;
+                $dataArray["helmetAvailable"] = $helmetAvailable;
                 break;
         }
         return $dataArray;
