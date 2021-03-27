@@ -110,6 +110,7 @@ export default {
           token: token
         })
             .then(response => {
+              this.role = response.data.role
               if (response.data.errorGetToken || response.data.errorUser) {
                 this.snackbar = true
                 this.message = response.data.message
