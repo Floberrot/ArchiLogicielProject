@@ -94,10 +94,11 @@ class UserController extends AbstractController
                     ], 200, [], false
                 );
             }
-            // Get Token from front
+            // Récupère le token via le local storage du front
             $tokenJson = $this->request->getCurrentRequest()->getContent();
             $token = json_decode($tokenJson, true);
             $destructJwt = $this->decodeJwt->decodeJwt($token);
+            // Requete pour savoir si l'utilisateur existe en BDD
             $user = $this->userRepository->findOneBy(['email' => $destructJwt['email']]);
 
             if (empty($user)) {

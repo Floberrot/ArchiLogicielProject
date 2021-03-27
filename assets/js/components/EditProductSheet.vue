@@ -169,7 +169,6 @@ export default {
       .then(response => {
       this.vehicle = response.data['detailVehicle']
       // Récupère et set les données de data qu'on reçoit du controller php
-      console.log(this.vehicle);
       this.type = this.vehicle.type
       this.label = this.vehicle.label
       this.brand = this.vehicle.brand

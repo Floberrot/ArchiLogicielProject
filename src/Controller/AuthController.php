@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AuthController extends AbstractController
 {
     /**
+     * Connexion
      * @param Request $request
      * @param UserRepository $userRepository
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -42,7 +43,7 @@ class AuthController extends AbstractController
                 'message' => 'Votre demande est en attente.',
             ]);
         }
-        // create token
+        // Créer le token jwT
         $key = "secret_key";
         $payload = [
             "email" => $email,
@@ -60,6 +61,7 @@ class AuthController extends AbstractController
     }
 
     /**
+     * Inscription
      * @param Request $request
      * @param UserRepository $userRepository
      * @param UserPasswordEncoderInterface $passwordEncoder
