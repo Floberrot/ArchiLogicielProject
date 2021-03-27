@@ -84,6 +84,16 @@ class UserController extends AbstractController
     public function getRolesOfCurrentUser()
     {
         try {
+            if ($this->userRepository->findAll() === []) {
+                return new JsonResponse(
+                    [
+                        'role' => null,
+                        'message' => 'Redirection',
+                        'errorUser' => true,
+                        'errorGetToken' => false
+                    ], 200, [], false
+                );
+            }
             // Get Token from front
             $tokenJson = $this->request->getCurrentRequest()->getContent();
             $token = json_decode($tokenJson, true);

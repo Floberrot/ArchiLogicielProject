@@ -110,7 +110,7 @@ export default {
           token: token
         })
             .then(response => {
-              if (response.data.errorGetToken) {
+              if (response.data.errorGetToken || response.data.errorUser) {
                 this.snackbar = true
                 this.message = response.data.message
                 setTimeout(() => {
