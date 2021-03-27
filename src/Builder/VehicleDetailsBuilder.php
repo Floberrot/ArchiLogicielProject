@@ -25,8 +25,9 @@ class VehicleDetailsBuilder
     /**
      * Cette fonction set les valeurs standard d'un véhicule dans un tableau.
      * Dans le cas ou le véhicule est "spécial" on set les champs associés.
-     * @param mixed $vehicleEnity
+     * @param $vehicleEntity
      * @param mixed $arrayOfVehicles
+     * @param $idDetails
      */
     public function detailsBuilder($vehicleEntity, &$arrayOfVehicles, $idDetails)
     {
@@ -53,6 +54,7 @@ class VehicleDetailsBuilder
     /**
      * Set les champs d'une moto dans un tableau
      * @param mixed $idDetails
+     * @param $arrayOfVehicles
      */
     public function detailsMotorcycle($idDetails, &$arrayOfVehicles)
     {
@@ -65,10 +67,10 @@ class VehicleDetailsBuilder
     /**
      * Set les champs d'un véhicule utilitaire dans un tableau.
      * @param mixed $idDetails
+     * @param $arrayOfVehicles
      */
     public function detailsUtilityVehicle($idDetails, &$arrayOfVehicles)
     {
-        $utilityVehicle = new UtilityVehicle();
         $utilityVehicle = $this->utilityVehicleRepository->findOneBy(['vehicle' => $idDetails]);
         $arrayOfVehicles['max_load'] = $utilityVehicle->getMaxLoad();
         $arrayOfVehicles['trunk_capacity'] = $utilityVehicle->getTrunkCapacity();

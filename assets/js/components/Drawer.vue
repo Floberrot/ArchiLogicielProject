@@ -41,7 +41,7 @@ export default {
       items: [
         { title: "Mes véhicules", icon: "mdi-car", path: "/"},
         { title: "Gestion d'utilisateurs", icon: "mdi-account",  path: '/user/manager' },
-        { title: "Administration", class:'disabled', add: '( soon... )', icon: "mdi-wrench",  path: '/admin' },
+        { title: "Administration", add: '( soon... )', icon: "mdi-wrench",  path: '/admin' },
       ],
       drawer: false,
       role: '',

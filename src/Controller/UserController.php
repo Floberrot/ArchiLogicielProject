@@ -35,7 +35,7 @@ class UserController extends AbstractController
      * Cette fonction permet d'autoriser ou non l'accès à un nouvel utilisateur et de lui assigner un role.
      * @Route("/admin/authorize/{idToAuthorize}", name="autorizeUser", methods={"POST"})
      * @param $idToAuthorize
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @return JsonResponse
      */
     public function authorizeUser($idToAuthorize): JsonResponse
     {
@@ -81,7 +81,7 @@ class UserController extends AbstractController
      * @Route("/admin/role/user", name="get_role", methods={"POST"})
      * @return JsonResponse
      */
-    public function getRolesOfCurrentUser()
+    public function getRolesOfCurrentUser(): JsonResponse
     {
         try {
             if ($this->userRepository->findAll() === []) {

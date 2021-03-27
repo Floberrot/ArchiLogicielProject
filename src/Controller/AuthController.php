@@ -61,6 +61,7 @@ class AuthController extends AbstractController
 
     /**
      * @param Request $request
+     * @param UserRepository $userRepository
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param EntityManagerInterface $em
      * @return JsonResponse
