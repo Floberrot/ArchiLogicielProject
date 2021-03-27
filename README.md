@@ -68,7 +68,7 @@ Pour l’architecture de notre projet, nous nous sommes inspirés du design patt
 
 
 ### Diagramme de classe :
-![Diagramme de cas d’utilisation](/assets/DiagCasUtilisation_updated.png)
+![Diagramme de cas d’utilisation](/assets/DiagClass.png)
 
 Nous avons fait le choix d’adapter le design pattern Builder afin qu’il corresponde au mieux à notre projet. C’est pourquoi certains aspects diffèrent.
 La partie que nous avons souhaité conserver est celle qui concerne la structure dite “générale” d’un véhicule.
@@ -88,10 +88,5 @@ To install the project :
 6. Aller en DB et importer la DB envoyé en .zip
 7. Lancer symfony server:start
 8. Dans un autre terminal lancer yarn watch
-
-
-#### Données
-
-#### Vue.js
 
 
