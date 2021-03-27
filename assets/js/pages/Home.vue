@@ -37,7 +37,8 @@
           <th class="text-left">
             Voir
           </th>
-          <th class="text-left">
+          <th class="text-left"
+              v-if="role !== 'Membre'">
             Supprimer
           </th>
         </tr>
