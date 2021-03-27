@@ -78,15 +78,17 @@ S’en suit les structures particulières se rapportant à d’autres types, ici
 #### Symfony
 
 # ArchiLogicielProject
-To install the project, begin by write these commands :
+To install the project :
 
-Composer install,
+1. git clone https://github.com/Floberrot/ArchiLogicielProject.git
+2. composer install
+3. yarn install
+4. Aller dans le .env et mettre à jour user et mdp de votre base de données
+5. php bin/console database:create
+6. Aller en DB et importer la DB envoyé en .zip
+7. Lancer symfony server:start
+8. Dans un autre terminal lancer yarn watch
 
-Yarn install
-
-# To compil with webpack :
-Yarn encore dev
-Or Yarn watch 
 
 #### Données
 
