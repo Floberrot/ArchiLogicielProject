@@ -75,6 +75,19 @@ S’en suit les structures particulières se rapportant à d’autres types, ici
 ## V - Installation :
 #### Symfony
 
+# ArchiLogicielProject
+To install the project, begin by write these commands :
+
+Composer install,
+
+Yarn install
+
+# To compil with webpack :
+Yarn encore dev
+Or Yarn watch 
+
 #### Données
 
 #### Vue.js
+
+
