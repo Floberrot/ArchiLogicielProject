@@ -17,13 +17,12 @@ class DecodeTokenJwt
     {
         
         $jwt = explode(' ', $token['token']);
+        // Récupère seulement le token et non le mot 'Bearer'
         $decryptJwt = $jwt[1];
         $decode = JWT::decode($decryptJwt, 'secret_key', ['HS256']);
-        $destructJwt = [
+        return [
             'email' => $decode->email,
             'role' => $decode->role
         ];
-
-        return $destructJwt;
     }
 }

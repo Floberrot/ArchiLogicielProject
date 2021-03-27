@@ -13,8 +13,11 @@ class VehicleEditBuilder
     {
         $this->entityManager = $entityManager;
     }
+
     /**
-     * Une moto est modifié dans le cas ou le véhicule a le champ motocyle qui existe
+     * Une moto est modifiée dans le cas ou le véhicule a le champ motorcycle qui existe
+     * @param $vehicleToEdit
+     * @param $data
      */
     public function editMotorcycle($vehicleToEdit, &$data)
     {
@@ -30,6 +33,8 @@ class VehicleEditBuilder
 
     /**
      * Une moto est modifié dans le cas ou le véhicule a le champ motocyle qui existe
+     * @param $vehicleToEdit
+     * @param $data
      */
     public function editUtilityVehicle($vehicleToEdit, &$data)
     {

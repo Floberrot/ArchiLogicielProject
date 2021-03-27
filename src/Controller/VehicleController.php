@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Builder\MotorcycleBuilder;
+use App\Builder\UtilityVehicleBuilder;
 use App\Builder\VehicleBuilder;
 use App\Services\SetResultFrontIntoArray;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,12 +17,10 @@ use Exception;
 use App\Repository\MotorcycleRepository;
 use App\Repository\UtilityVehicleRepository;
 use App\Repository\VehicleRepository;
-use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Validator\Constraints\Json;
 
-class ApiController extends AbstractController
+class VehicleController extends AbstractController
 {
 
     private $entityManager;
@@ -29,6 +29,8 @@ class ApiController extends AbstractController
     private $utilityVehicleRepository;
     protected $request;
     private $setResultFrontIntoArray;
+    private $motorcycle;
+    private $utilityVehicle;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -36,7 +38,9 @@ class ApiController extends AbstractController
         MotorcycleRepository $motorcycleRepository,
         UtilityVehicleRepository $utilityVehicleRepository,
         RequestStack $request,
-        SetResultFrontIntoArray $setResultFrontIntoArray)
+        SetResultFrontIntoArray $setResultFrontIntoArray,
+        MotorcycleBuilder $motorcycle,
+        UtilityVehicleBuilder $utilityVehicle)
     {
         $this->entityManager = $entityManager;
         $this->vehicleRepository = $vehicleRepository;
@@ -44,13 +48,13 @@ class ApiController extends AbstractController
         $this->utilityVehicleRepository = $utilityVehicleRepository;
         $this->request = $request;
         $this->setResultFrontIntoArray = $setResultFrontIntoArray;
+        $this->motorcycle = $motorcycle;
+        $this->utilityVehicle = $utilityVehicle;
     }
 
     /**
      * Créer un nouveau Vehicule
      * @Route ("/api/vehicle", name="create_vehicle", methods={"POST"})
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
      * @return JsonResponse
      * @throws Exception
      */
@@ -58,13 +62,10 @@ class ApiController extends AbstractController
   {
          $dataReceive = json_decode($this->request->getCurrentRequest()->getContent(), true);
          $data = $this->setResultFrontIntoArray->setResultIntoArray($dataReceive);
-
         // Création d'un nouveau véhicule
-        $vehicleBuilder = new VehicleBuilder();
-        $vehicleBuilder->setAndCheckVehicleType($data, $this->entityManager);
-
+        $vehicleBuilder = new VehicleBuilder($this->motorcycle,$this->utilityVehicle);
+        $vehicleBuilder->createStandardVehicle($data, $this->entityManager);
         $this->entityManager->flush();
-
         return new JsonResponse(
             [
                 'message' => 'Le véhicule a bien été enregistré !'
@@ -97,19 +98,16 @@ class ApiController extends AbstractController
         $vehicleEditBuilder = new VehicleEditBuilder($this->entityManager);
         $vehicleEditBuilder->editMotorcycle($vehicleToEdit, $data);
         $vehicleEditBuilder->editUtilityVehicle($vehicleToEdit, $data);
-        
         // Save en bdd
         $this->entityManager->flush();
-
         return new JsonResponse([
             'message' => 'Vos modifications ont bien été mises a jours.'
         ], 200, [], false);
     }
-    
+
     /**
      * Cette fonction affiche tous les véhicules de la DB
      * @Route("/api/vehicle", name="showVehicles", methods={"GET"})
-     * @param VehicleRepository $vehicleRepository
      * @return JsonResponse
      */
     public function showVehicles() : JsonResponse
@@ -169,8 +167,7 @@ class ApiController extends AbstractController
      * Supprime un véhicule de la DB.
      * Dans le cas ou il y a un véhicule particulier (véhicule utilitaire, moto etc...), il se supprime en cascade.
      * @Route ("/api/vehicle/{idToDelete}", name="delete_vehicle", methods={"DELETE"})
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
+     * @param $idToDelete
      * @return JsonResponse
      */
     public function deleteVehicle($idToDelete) :JsonResponse
@@ -199,8 +196,9 @@ class ApiController extends AbstractController
     /**
      * @Route("/change/privacy/{idToEdit}", name="privacy_vehicle", methods={"POST"})
      * @param $idToEdit
-     */
-    public function changeStatusOfVehiclePrivacy($idToEdit)
+     * @return JsonResponse
+     **/
+    public function changeStatusOfVehiclePrivacy($idToEdit): JsonResponse
     {
         $request = $this->request->getCurrentRequest();
         if ($request->getMethod() === "POST") {

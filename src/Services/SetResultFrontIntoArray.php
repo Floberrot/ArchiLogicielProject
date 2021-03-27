@@ -18,7 +18,7 @@ class SetResultFrontIntoArray
      */
     public function setResultIntoArray($data): array
     {
-        //Récupération des données
+        // Récupération des données
         $type = $data['resultType'];
         $label = $data['resultLabel'];
         $brand = $data['resultBrand'];
@@ -28,7 +28,7 @@ class SetResultFrontIntoArray
         $licence = $data['resultLicence'];
         $description = $data['resultDescription'];
 
-        //Création du tableau de données
+        // Création du tableau de données
         $dataArray = [
             "type" => $type,
             "label" => $label,
@@ -40,18 +40,18 @@ class SetResultFrontIntoArray
             "description" => $description
         ];
 
-        //Ajoute au tableau les données nécessaires
+        // Ajoute au tableau les données nécessaires
         switch ($type) {
             case "UtilityVehicle":
                 $maxLoad = $data['resultMaxLoad'];
                 $trunkCapacity = $data['resultTrunkCapacity'];
-                //Ajoute les données dans le tableau
+                // Ajoute les données dans le tableau
                 $dataArray["maxLoad"] = $maxLoad;
                 $dataArray["trunkCapacity"] = $trunkCapacity;
                 break;
             case "Motorcycle":
                 $helmetAvailable = $data['resultHelmetAvailable'];
-                //Ajoute les données dans le tableau
+                // Ajoute les données dans le tableau
                 $dataArray["helmetAvailable"] = $helmetAvailable;
                 break;
         }

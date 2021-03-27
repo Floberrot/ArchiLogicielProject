@@ -112,7 +112,6 @@ export default {
     listVehicleRequest() {
       this.$axios.get("/api/vehicle/" + this.$route.params.id)
           .then(response => {
-            console.log(response)
             this.vehicle = response.data["detailVehicle"]
             if (this.vehicle.helmet_available === true) {
               this.valueHelmet = 'Oui'
@@ -128,7 +127,6 @@ export default {
       })
           .then(response => {
             this.role = response.data.role
-            console.log(this.role)
           })
     },
     redirectEdit() {
