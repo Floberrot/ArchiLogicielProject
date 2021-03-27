@@ -1,7 +1,14 @@
-<template class="customWidth">
+<template>
   <v-row justify="center">
-    <v-col cols="12">
-      <v-row class="customRow">
+    <v-col cols="12 mt-5">
+      <v-card
+          elevation="10"
+      >
+        <v-card-title
+          >
+          Liste des véhicules de la société
+        </v-card-title>
+      <v-row class="customRow mb-4">
         <v-btn rounded small color="primary" class="ma-2 white--text" @click="openDialog"
                v-if="role !== 'Membre'"
         >
@@ -9,7 +16,7 @@
           <v-icon right>mdi-plus</v-icon>
         </v-btn>
       </v-row>
-      <v-simple-table fixed-header height="80vh">
+      <v-simple-table fixed-header height="70vh">
         <thead>
         <tr>
           <th class="text-left">
@@ -30,6 +37,9 @@
           <th class="text-left">
             Voir
           </th>
+          <th class="text-left">
+            Supprimer
+          </th>
         </tr>
         </thead>
         <tbody>
@@ -41,18 +51,24 @@
           <td>{{ item.type }}</td>
           <td>{{ item.brand }}</td>
           <td v-if="role !== 'Membre'">
-            <v-btn icon @click="redirectEdit(item.id)">
+            <v-btn color="primary" icon @click="redirectEdit(item.id)">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
           </td>
           <td>
-            <v-btn icon @click="redirectDetail(item.id)">
+            <v-btn color="primary"icon @click="redirectDetail(item.id)">
               <v-icon>mdi-eye</v-icon>
+            </v-btn>
+          </td>
+          <td v-if="role !== 'Membre'">
+            <v-btn color="error" icon @click="deleteVehicle(item.id)">
+              <v-icon>mdi-delete</v-icon>
             </v-btn>
           </td>
         </tr>
         </tbody>
       </v-simple-table>
+      </v-card>
     </v-col>
     <create-vehicle-dialog
         v-if="dialog"
@@ -66,8 +82,27 @@
       <template>
         <v-progress-circular
             indeterminate
+            right
             color="red"
         ></v-progress-circular>
+      </template>
+    </v-snackbar>
+
+    <v-snackbar
+        v-model="snackbarDelete"
+        color="warning"
+    >
+      {{ this.message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+            color="white"
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+        >
+          Close
+        </v-btn>
       </template>
     </v-snackbar>
   </v-row>
@@ -87,6 +122,7 @@ export default {
       dialog: true,
       role: '',
       snackbar: false,
+      snackbarDelete: false,
       message: '',
     };
   },
@@ -121,6 +157,19 @@ export default {
             })
       }
     },
+    deleteVehicle(id) {
+      if(confirm('Vous êtes sur ?')) {
+        this.$axios
+            .delete('api/vehicle/' + id)
+            .then((response) => {
+              this.snackbarDelete = true
+              this.message = response.data.message
+              setTimeout(() => {
+                this.$router.go('/')
+              }, 3000 )
+            })
+      }
+    },
     redirectDetail(id) {
       this.$router.push({path: `/detail/${id}`});
     },
@@ -142,5 +191,9 @@ export default {
 .customRow {
   justify-content: flex-end;
   padding: 0 15px 15px 0;
+}
+
+.background {
+  background: darkgrey;
 }
 </style>

@@ -13,7 +13,7 @@
     >
     </v-app-bar-nav-icon>
 
-    <v-toolbar-title>Vos véhicules</v-toolbar-title>
+    <v-toolbar-title>Gestion des véhicules</v-toolbar-title>
 
     <v-spacer></v-spacer>
     <drawer
