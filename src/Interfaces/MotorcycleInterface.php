@@ -9,5 +9,5 @@ use App\Entity\Vehicle;
  */
 class MotorcycleInterface extends Vehicle
 {
-    private $accessories;
+    private $helmetAvailable;
 }
