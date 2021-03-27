@@ -210,7 +210,9 @@ export default {
         .then((response) => {
           this.snackbar = true
           this.message = response.data.message
-          setTimeout(2000, this.$router.push({ path: '/' })  )
+          setTimeout(() => {
+            this.$router.go('/')
+          }, 3000)
         })
       }
     },

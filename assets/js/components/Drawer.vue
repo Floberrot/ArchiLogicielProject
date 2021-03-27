@@ -26,11 +26,15 @@
         </v-list>
         <v-btn
           color="error"
+          rounded
+          small
           class="mt-16 ml-6"
           centered
           v-on:click="logoutUser()"
         >
           Déconnexion
+
+          <v-icon right>mdi-logout</v-icon>
         </v-btn>
       </v-navigation-drawer>
     </v-card>

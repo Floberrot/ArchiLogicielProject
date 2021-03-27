@@ -184,6 +184,10 @@ export default {
         .then((response) => {
           this.success = true
           this.message = response.data.message
+          setTimeout(() => {
+            this.dialog = false;
+            this.$router.go('/')
+          }, 2500)
         }).catch((error) => {
           console.log(error)
         });
