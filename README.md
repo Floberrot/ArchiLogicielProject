@@ -68,7 +68,7 @@ Pour l’architecture de notre projet, nous nous sommes inspirés du design patt
 
 
 ### Diagramme de classe :
-![Diagramme de cas d’utilisation](/assets/DiagClass.png)
+![Diagramme de cas d’utilisation](/assets/DiagClasse_updated.png)
 
 Nous avons fait le choix d’adapter le design pattern Builder afin qu’il corresponde au mieux à notre projet. C’est pourquoi certains aspects diffèrent.
 La partie que nous avons souhaité conserver est celle qui concerne la structure dite “générale” d’un véhicule.
