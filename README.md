@@ -39,7 +39,7 @@ Concernant l’authentification, un formulaire de connexion permettra l’accès
 - (Création et gestion de comptes managers)
 
 ### Diagramme de cas d’utilisation :
-
+![Diagramme de cas d’utilisation](/assets/DiagCasUtilisation_updated.png)
 
 ## IV - Architecture :
 La particularité de ce sujet repose sur les différences entre les types de véhicules.
@@ -68,6 +68,8 @@ Pour l’architecture de notre projet, nous nous sommes inspirés du design patt
 
 
 ### Diagramme de classe :
+![Diagramme de cas d’utilisation](/assets/DiagCasUtilisation_updated.png)
+
 Nous avons fait le choix d’adapter le design pattern Builder afin qu’il corresponde au mieux à notre projet. C’est pourquoi certains aspects diffèrent.
 La partie que nous avons souhaité conserver est celle qui concerne la structure dite “générale” d’un véhicule.
 S’en suit les structures particulières se rapportant à d’autres types, ici Motorcycle et UtilityVehicle comme exemple.
