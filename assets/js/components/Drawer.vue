@@ -24,6 +24,14 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
+        <v-btn
+          color="error"
+          class="mt-16 ml-6"
+          centered
+          v-on:click="logoutUser()"
+        >
+          Déconnexion
+        </v-btn>
       </v-navigation-drawer>
     </v-card>
   </v-slide-x-transition>
@@ -71,6 +79,10 @@ export default {
           this.email = response.data.email
         })
     },
+    logoutUser() {
+      window.localStorage.clear();
+      window.location.reload();
+    }
   },
 };
 </script>

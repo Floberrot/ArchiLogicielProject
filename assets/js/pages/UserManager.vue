@@ -69,7 +69,7 @@ export default {
       selectedUserInfo: [],
       dialog: false,
       snackbar: false,
-      rolesOptions: ['Member', 'Manager'],
+      rolesOptions: ['Membre', 'Manager'],
       authorizeOptions: ['Oui', 'Non'],
       errorMessage: null,
       successMessage: null
@@ -100,7 +100,7 @@ export default {
       this.id = submitEvent.target.elements.id.value
       //Si les deux select sont séléctionnés
       if(this.role && this.authorize) {
-        if(this.authorize != "Oui") {
+        if(this.authorize !== "Oui") {
           //Si le manager clique sur "Non"
           this.errorMessage = "Utilisateur refusé"
           this.snackbar = true
