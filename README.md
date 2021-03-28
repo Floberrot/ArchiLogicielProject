@@ -75,9 +75,6 @@ La partie que nous avons souhaité conserver est celle qui concerne la structure
 S’en suit les structures particulières se rapportant à d’autres types, ici Motorcycle et UtilityVehicle comme exemple.
 
 ## V - Installation :
-#### Symfony
-
-# ArchiLogicielProject
 To install the project :
 
 1. git clone https://github.com/Floberrot/ArchiLogicielProject.git
