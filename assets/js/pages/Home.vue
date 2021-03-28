@@ -41,6 +41,10 @@
               v-if="role !== 'Membre'">
             Supprimer
           </th>
+          <th class="text-left"
+              v-if="role !== 'Membre'">
+            Public
+          </th>
         </tr>
         </thead>
         <tbody>
@@ -67,6 +71,20 @@
             <v-btn color="error" icon @click="deleteVehicle(item.id)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
+          </td>
+          <td
+              v-if="item.isPublic === true && role !== 'Membre'"
+          >
+            <v-icon
+            color="success">
+              mdi-check</v-icon>
+          </td>
+          <td
+          v-if="role !== 'Membre' && item.isPublic === false">
+            <v-icon
+                color="error"
+            >
+              mdi-close</v-icon>
           </td>
         </tr>
         </tbody>
