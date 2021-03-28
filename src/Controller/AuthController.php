@@ -29,13 +29,13 @@ class AuthController extends AbstractController
         $dataLogin = json_decode($dataLogin, true);
         $email = $dataLogin['email'];
         $user = $userRepository->findOneBy(['email' => $email]);
-        $role = $user->getRole();
         if (!$user || !$passwordEncoder->isPasswordValid($user, $dataLogin['mdp'])) {
             return $this->json([
                 'isValid' => false,
                 'message' => 'Email or password is wrong.',
             ]);
         }
+        $role = $user->getRole();
         if ($user->getIsAuthorize() === false) {
             return $this->json([
                 'isValid' => true,
