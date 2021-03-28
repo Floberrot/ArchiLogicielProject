@@ -121,10 +121,12 @@ class VehicleController extends AbstractController
             $label = $oneVehicle->getLabel();
             $brand = $oneVehicle->getBrand();
             $licence = $oneVehicle->getLicence();
+            $isPublic = $oneVehicle->getIsPublic();
             $dataOfVehicles['id'] = $id;
             $dataOfVehicles['label'] = $label;
             $dataOfVehicles['brand'] = $brand;
             $dataOfVehicles['licence'] = $licence;
+            $dataOfVehicles['isPublic'] = $isPublic;
             if ($oneVehicle->getMotorcycle()) {
                 $dataOfVehicles['type'] = 'Moto';
             } else if ($oneVehicle->getUtilityVehicle()) {

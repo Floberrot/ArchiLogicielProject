@@ -46,7 +46,9 @@
         <tbody>
         <tr
             v-for="item in vehicles"
+            v-if="role !== 'Membre' || role === 'Membre' && item.isPublic === true"
             :key="item.label"
+
         >
           <td><strong>{{ item.label }}</strong></td>
           <td>{{ item.type }}</td>
@@ -125,6 +127,7 @@ export default {
       snackbar: false,
       snackbarDelete: false,
       message: '',
+      isPublic: true
     };
   },
   mounted() {
@@ -136,6 +139,7 @@ export default {
       this.$axios.get("/api/vehicle")
           .then(response => {
             this.vehicles = response.data["arrayOfVehicles"]
+            this.isPublic = this.vehicles['isPublic']
           })
     },
     checkRoleOfUser() {
