@@ -95,9 +95,10 @@ class VehicleController extends AbstractController
         
         // Enregistre le véhicule standard.
         $this->entityManager->persist($vehicleToEdit);
-        $vehicleEditBuilder = new VehicleEditBuilder($this->entityManager);
-        $vehicleEditBuilder->editMotorcycle($vehicleToEdit, $data);
-        $vehicleEditBuilder->editUtilityVehicle($vehicleToEdit, $data);
+        $motorcycleBuilder = new MotorcycleBuilder($this->entityManager);
+        $utilityVehiculeBuilder = new UtilityVehicleBuilder($this->entityManager);
+        $motorcycleBuilder->editMotorcycle($vehicleToEdit, $data);
+        $utilityVehiculeBuilder->editUtilityVehicle($vehicleToEdit, $data);
         // Save en bdd
         $this->entityManager->flush();
         return new JsonResponse([
@@ -156,8 +157,8 @@ class VehicleController extends AbstractController
         $vehicleEntity = $this->vehicleRepository->find($idDetails);
         $detailOneVehicle = [];
         // Appel la class pour afficher les détails d'un véhicule.
-        $vehicleDetailClass = new VehicleDetailsBuilder($this->motorcycleRepository, $this->utilityVehicleRepository);
-        $vehicleDetailClass->detailsBuilder($vehicleEntity, $detailOneVehicle, $idDetails);
+        $vehicleDetailClass = new VehicleBuilder($this->motorcycle, $this->utilityVehicle);
+        $vehicleDetailClass->detailsBuilder($vehicleEntity, $detailOneVehicle, $idDetails, $this->entityManager, $this->motorcycleRepository, $this->utilityVehicleRepository);
         return new JsonResponse(
             [
                 'detailVehicle' => $detailOneVehicle

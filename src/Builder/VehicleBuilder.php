@@ -5,6 +5,8 @@ namespace App\Builder;
 use App\Entity\Motorcycle;
 use App\Entity\UtilityVehicle;
 use App\Entity\Vehicle;
+use App\Repository\MotorcycleRepository;
+use App\Repository\UtilityVehicleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -45,5 +47,40 @@ class VehicleBuilder
             $vehicleTypeBuilder->determineVehicleType($res, $vehicle);
         }
         return $vehicle;
+    }
+
+
+    /**
+     * Cette fonction set les valeurs standard d'un véhicule dans un tableau.
+     * Dans le cas ou le véhicule est "spécial" on set les champs associés.
+     * @param $vehicleEntity
+     * @param mixed $arrayOfVehicles
+     * @param $idDetails
+     * @param EntityManagerInterface $entityManager
+     * @param MotorcycleRepository $motorcycleRepository
+     * @param UtilityVehicleRepository $utilityVehicleRepository
+     */
+    public function detailsBuilder($vehicleEntity, &$arrayOfVehicles, $idDetails, EntityManagerInterface $entityManager, MotorcycleRepository $motorcycleRepository, UtilityVehicleRepository $utilityVehicleRepository)
+    {
+        // Set un véhicule standard
+        $arrayOfVehicles['label'] = $vehicleEntity->getLabel();
+        $arrayOfVehicles['brand'] = $vehicleEntity->getBrand();
+        $arrayOfVehicles['licence'] = $vehicleEntity->getLicence();
+        $arrayOfVehicles['conception_date'] = date_format($vehicleEntity->getConceptionDate(), 'Y-m-d');
+        $arrayOfVehicles['last_control'] = date_format($vehicleEntity->getLastControl(), 'Y-m-d');
+        $arrayOfVehicles['fuel'] = $vehicleEntity->getFuel();
+        $arrayOfVehicles['description'] = $vehicleEntity->getDescription();
+        $arrayOfVehicles['type'] = '';
+        $arrayOfVehicles['is_public'] = $vehicleEntity->getIsPublic();
+        // Si le véhicule a le champ motorcycle non vide, c'est que c'est une moto, on affiche donc ces données
+        $motorcycle = new MotorcycleBuilder($entityManager);
+        if ($vehicleEntity->getMotorcycle()) {
+            $motorcycle->detailsMotorcycle($idDetails, $arrayOfVehicles, $motorcycleRepository);
+        }
+        // Idem pour un véhicule utilitaire.
+        $utilityVehicle = new UtilityVehicleBuilder($entityManager);
+        if ($vehicleEntity->getUtilityVehicle()) {
+            $utilityVehicle->detailsUtilityVehicle($idDetails, $arrayOfVehicles, $utilityVehicleRepository);
+        }
     }
 }
